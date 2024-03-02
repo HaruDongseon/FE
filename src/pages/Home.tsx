@@ -10,9 +10,7 @@ interface HomeScreenProps {
     navigation: HomeScreenNavigationProp;
 }
 
-export const Home: React.FunctionComponent<HomeScreenProps> = ({
-    navigation,
-}) => {
+export const Home = ({ navigation }: HomeScreenProps) => {
     return (
         <View>
             <Text>Home Screen</Text>

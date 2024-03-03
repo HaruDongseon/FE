@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "@/pages/Home";
-import { Login } from "@/pages/Login";
+import Login from "@/pages/Login";
 import { RootStackParamList } from "@/types/homeTypes";
 
 const Stack = createStackNavigator<RootStackParamList>();

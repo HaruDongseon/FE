@@ -1,17 +1,28 @@
 import KakaoLogin from "@/components/Auth/KakaoLogin";
+import NaverLogin from "@/components/Auth/NaverLogin";
 import React, { useState } from "react";
 import { View, Button } from "react-native";
 
 const Login = () => {
-    const [loginVisible, setLoginVisible] = useState(false);
+    const [kakaoLoginVisible, setKakaoLoginVisible] = useState(false);
+    const [naverLoginVisible, setNaverLoginVisible] = useState(false);
 
     return (
         <View style={{ flex: 1 }}>
             <Button
                 title="Kakao 로그인"
-                onPress={() => setLoginVisible(true)}
+                onPress={() => setKakaoLoginVisible(true)}
             />
-            {loginVisible && <KakaoLogin setLoginVisible={setLoginVisible} />}
+            <Button
+                title="Naver 로그인"
+                onPress={() => setNaverLoginVisible(true)}
+            />
+            {kakaoLoginVisible && (
+                <KakaoLogin setLoginVisible={setKakaoLoginVisible} />
+            )}
+            {naverLoginVisible && (
+                <NaverLogin setLoginVisible={setNaverLoginVisible} />
+            )}
         </View>
     );
 };

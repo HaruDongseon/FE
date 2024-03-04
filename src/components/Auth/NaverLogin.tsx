@@ -1,14 +1,14 @@
 import React, { SetStateAction } from "react";
-import { KAKAO_REST_API_KEY, REDIRECT_URI } from "@env";
+import { REDIRECT_URI, NAVER_REST_API_KEY } from "@env";
 import WebView from "react-native-webview";
 
 const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
 
-const KakaoLogin: React.FC<{
+const NaverLogin: React.FC<{
     setLoginVisible: React.Dispatch<SetStateAction<boolean>>;
 }> = ({ setLoginVisible }) => {
     const getCode = (target: string) => {
-        const exp = "code=";
+        const exp = "oauth_token=";
         const condition = target.indexOf(exp);
         if (condition !== -1) {
             const requestCode = target.substring(condition + exp.length);
@@ -28,7 +28,9 @@ const KakaoLogin: React.FC<{
         <WebView
             style={{ flex: 1 }}
             source={{
-                uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}`,
+                uri: `https://nid.naver.com/oauth2.0/authorize?client_id=${NAVER_REST_API_KEY}&response_type=code&redirect_uri=${REDIRECT_URI}&state=${Math.random()
+                    .toString(36)
+                    .substring(3, 14)}`,
             }}
             onMessage={(event) => {
                 const data = event.nativeEvent.url;
@@ -41,4 +43,4 @@ const KakaoLogin: React.FC<{
     );
 };
 
-export default KakaoLogin;
+export default NaverLogin;

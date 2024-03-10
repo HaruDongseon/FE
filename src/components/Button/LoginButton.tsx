@@ -3,16 +3,13 @@ import React from "react";
 import { TouchableOpacity, Text, ViewStyle, StyleSheet } from "react-native";
 
 interface LoginButtonProps {
-    // icon: string;
     text: string;
-    // onPress: () => void;
     style?: ViewStyle;
     textStyle?: ViewStyle;
 }
 
 const LoginButton: React.FC<LoginButtonProps> = ({
     text,
-    // onPress,
     style,
     textStyle,
 }) => {

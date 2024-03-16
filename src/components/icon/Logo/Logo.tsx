@@ -1,7 +1,13 @@
 import * as React from "react";
+import { StyleProp, ViewStyle } from "react-native";
 import Svg, { G, Path, Defs, ClipPath } from "react-native-svg";
-const Logo = () => (
-    <Svg width={172} height={36} fill="none">
+
+interface LogoProps {
+    style?: StyleProp<ViewStyle>;
+}
+
+const Logo = ({ style }: LogoProps) => (
+    <Svg width={172} height={36} fill="none" style={style}>
         <G clipPath="url(#a)">
             <Path
                 fill="#00C3B6"

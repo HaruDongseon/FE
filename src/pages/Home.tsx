@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View } from "react-native";
 import Colors from "@/styles/Color";
 import KakaoLogin from "@/components/Auth/KakaoLogin";
+import NaverLogin from "@/components/Auth/NaverLogin";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -14,7 +15,7 @@ interface HomeScreenProps {
     navigation: HomeScreenNavigationProp;
 }
 
-export const Home = ({ navigation }: HomeScreenProps) => {
+export const Home = () => {
     const [loginVisible, setLoginVisible] = useState<SNSType | null>(null);
 
     return (
@@ -42,6 +43,10 @@ export const Home = ({ navigation }: HomeScreenProps) => {
                     />
                 </View>
                 <KakaoLogin
+                    loginVisible={loginVisible}
+                    setLoginVisible={setLoginVisible}
+                />
+                <NaverLogin
                     loginVisible={loginVisible}
                     setLoginVisible={setLoginVisible}
                 />

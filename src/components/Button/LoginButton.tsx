@@ -1,19 +1,26 @@
 import Colors from "@/styles/Color";
-import React, { ReactNode } from "react";
+import React, { useState } from "react";
 import {
     TouchableOpacity,
     Text,
     ViewStyle,
     StyleSheet,
-    View,
+    GestureResponderEvent,
 } from "react-native";
 import Google from "../icon/SNS/Google";
 import Naver from "../icon/SNS/Naver";
 import Kakao from "../icon/SNS/Kakao";
 
+export enum SNSType {
+    KAKAO = "KAKAO",
+    NAVER = "NAVER",
+    GOOGLE = "GOOGLE",
+}
+
 interface LoginButtonProps {
     text: string;
-    type: "KAKAO" | "NAVER" | "GOOGLE";
+    type: SNSType;
+    onPress: (event: GestureResponderEvent) => void;
     style?: ViewStyle;
     textStyle?: ViewStyle;
 }
@@ -23,8 +30,11 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     type,
     style,
     textStyle,
+    onPress,
 }) => {
     let IconComponent = null;
+    const [loginVisible, setLoginVisible] = useState<SNSType | null>(null);
+
     switch (type) {
         case "KAKAO":
             IconComponent = Kakao;
@@ -40,7 +50,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     }
 
     return (
-        <TouchableOpacity style={[styles.container, style]}>
+        <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
             {IconComponent && <IconComponent />}
             <Text style={[styles.text, textStyle]}>{text}</Text>
         </TouchableOpacity>

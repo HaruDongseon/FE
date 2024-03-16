@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/types/homeTypes";
-import LoginButton from "@/components/Button/LoginButton";
+import LoginButton, { SNSType } from "@/components/Button/LoginButton";
 import Logo from "@/components/icon/Logo/Logo";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View } from "react-native";
 import Colors from "@/styles/Color";
-import Kakao from "@/components/icon/SNS/Kakao";
+import KakaoLogin from "@/components/Auth/KakaoLogin";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -15,27 +15,36 @@ interface HomeScreenProps {
 }
 
 export const Home = ({ navigation }: HomeScreenProps) => {
+    const [loginVisible, setLoginVisible] = useState<SNSType | null>(null);
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <Logo style={styles.logo} />
                 <View style={styles.buttonContainer}>
                     <LoginButton
-                        type={"KAKAO"}
+                        type={SNSType.KAKAO}
                         text="KAKAO 로그인"
                         style={styles.button}
+                        onPress={() => setLoginVisible(SNSType.KAKAO)}
                     />
                     <LoginButton
-                        type={"NAVER"}
+                        type={SNSType.NAVER}
                         text="NAVER 로그인"
                         style={styles.button}
+                        onPress={() => setLoginVisible(SNSType.NAVER)}
                     />
                     <LoginButton
-                        type={"GOOGLE"}
+                        type={SNSType.GOOGLE}
                         text="Google 로그인"
                         style={styles.button}
+                        onPress={() => setLoginVisible(SNSType.GOOGLE)}
                     />
                 </View>
+                <KakaoLogin
+                    loginVisible={loginVisible}
+                    setLoginVisible={setLoginVisible}
+                />
             </View>
         </SafeAreaView>
     );
@@ -58,7 +67,6 @@ const styles = StyleSheet.create({
     buttonContainer: {
         position: "absolute",
         bottom: 24,
-        width: "100%",
         alignItems: "center",
     },
     button: {

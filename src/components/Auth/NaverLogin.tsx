@@ -1,11 +1,12 @@
 import React, { SetStateAction } from "react";
 import { REDIRECT_URI, NAVER_REST_API_KEY } from "@env";
 import WebView from "react-native-webview";
+import { SNSType } from "../Button/LoginButton";
 
 const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
 
 const NaverLogin: React.FC<{
-    setLoginVisible: React.Dispatch<SetStateAction<boolean>>;
+    setLoginVisible: React.Dispatch<SetStateAction<SNSType | null>>;
 }> = ({ setLoginVisible }) => {
     const getCode = (target: string) => {
         const exp = "oauth_token=";
@@ -13,7 +14,7 @@ const NaverLogin: React.FC<{
         if (condition !== -1) {
             const requestCode = target.substring(condition + exp.length);
             console.log("code = ", requestCode);
-            setLoginVisible(false);
+            setLoginVisible(null);
         }
     };
 

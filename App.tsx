@@ -3,11 +3,16 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "@/pages/Home";
-import { RootStackParamList } from "@/types/homeTypes";
+import Mypage from "@/pages/Mypage";
+
+export type RootStackParamList = {
+    Home: undefined;
+    Mypage: undefined;
+};
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function App() {
+export default function App({}) {
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -23,6 +28,7 @@ export default function App() {
                     component={Home}
                     options={{ headerShown: false }}
                 />
+                <Stack.Screen name="Mypage" component={Mypage} />
             </Stack.Navigator>
         </NavigationContainer>
     );

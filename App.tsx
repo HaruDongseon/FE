@@ -1,9 +1,13 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useRef } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import {
+    NavigationContainer,
+    NavigationContainerRef,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "@/pages/Home";
 import Mypage from "@/pages/Mypage";
+import Before from "@/components/icon/General/Before";
 
 export type RootStackParamList = {
     Home: undefined;
@@ -13,14 +17,23 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App({}) {
+    const navigationRef =
+        useRef<NavigationContainerRef<RootStackParamList>>(null);
+
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <Stack.Navigator
                 initialRouteName="Home"
                 screenOptions={{
-                    headerStyle: {
-                        height: 52,
-                    },
+                    headerShadowVisible: false,
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            onPress={() => navigationRef.current?.goBack()}
+                            style={{ marginLeft: 20 }}
+                        >
+                            <Before />
+                        </TouchableOpacity>
+                    ),
                 }}
             >
                 <Stack.Screen
@@ -28,7 +41,13 @@ export default function App({}) {
                     component={Home}
                     options={{ headerShown: false }}
                 />
-                <Stack.Screen name="Mypage" component={Mypage} />
+                <Stack.Screen
+                    name="Mypage"
+                    component={Mypage}
+                    options={{
+                        title: "내 정보",
+                    }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

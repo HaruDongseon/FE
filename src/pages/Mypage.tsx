@@ -6,6 +6,7 @@ import Icon from "@/components/icon/Common";
 import { SNSType } from "@/components/Button/LoginButton";
 import { IconType } from "@/components/icon/Common";
 import { RouteProp } from "@react-navigation/native";
+import Input from "@/components/Input";
 
 type MypageParams = {
     Mypage: {
@@ -51,6 +52,7 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
                 <Text style={styles.nicknameText}>닉네임</Text>
                 <Text style={styles.nicknameCount}>0/10</Text>
             </View>
+            <Input size="M" placeholder="사용할 닉네임을 입력해주세요" />
         </View>
     );
 };
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.white,
         alignItems: "center",
+        paddingHorizontal: 20,
     },
     avatarContainer: {
         marginTop: 40,
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         marginTop: 72,
-        width: "90%",
+        width: "100%",
     },
     accountText: {},
     emailContainer: {
@@ -83,7 +86,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 32,
-        width: "90%",
+        marginBottom: 8,
+        width: "100%",
     },
     nicknameText: {},
     nicknameCount: {},

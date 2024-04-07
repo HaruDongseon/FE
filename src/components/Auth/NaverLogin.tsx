@@ -21,7 +21,7 @@ const NaverLogin: React.FC<{
             const requestCode = target.substring(condition + exp.length);
             console.log("code = ", requestCode);
             setLoginVisible(null);
-            navigation.navigate("Mypage");
+            navigation.navigate("Mypage", { snsType: SNSType.NAVER });
         }
     };
 

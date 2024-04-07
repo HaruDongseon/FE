@@ -3,8 +3,38 @@ import { StyleSheet, Text, View } from "react-native";
 import Avatar from "@/components/Avatar/Avatar";
 import Colors from "@/styles/Color";
 import Icon from "@/components/icon/Common";
+import { SNSType } from "@/components/Button/LoginButton";
+import { IconType } from "@/components/icon/Common";
+import { RouteProp } from "@react-navigation/native";
 
-const Mypage = () => {
+type MypageParams = {
+    Mypage: {
+        snsType: SNSType;
+    };
+};
+
+type MypageProps = {
+    route: RouteProp<MypageParams, "Mypage">;
+};
+
+const Mypage: React.FC<MypageProps> = ({ route }) => {
+    const { snsType } = route.params;
+
+    const getIconType = (type: SNSType): IconType | null => {
+        switch (type) {
+            case SNSType.KAKAO:
+                return "R" as IconType;
+            case SNSType.NAVER:
+                return "SNSNaverR" as IconType;
+            case SNSType.GOOGLE:
+                return "SNSGoogleR" as IconType;
+            default:
+                return null;
+        }
+    };
+
+    const iconType = getIconType(snsType);
+
     return (
         <View style={styles.container}>
             <View style={styles.avatarContainer}>
@@ -13,7 +43,7 @@ const Mypage = () => {
             <View style={styles.accountContainer}>
                 <Text style={styles.accountText}>연결한 계정</Text>
                 <View style={styles.emailContainer}>
-                    <Icon type="SNSKakaoM" />
+                    {iconType && <Icon type={iconType} />}
                     <Text style={styles.emailText}>abcdef@gmail.com</Text>
                 </View>
             </View>

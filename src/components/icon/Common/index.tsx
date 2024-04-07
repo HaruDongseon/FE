@@ -9,7 +9,7 @@ import Svg, {
     Rect,
 } from "react-native-svg";
 
-type IconType =
+export type IconType =
     | "Before1LineM"
     | "Next1LineM"
     | "Next1LineR"

@@ -358,7 +358,7 @@ const Icon: React.FC<IconProps> = ({ type, color = "#1D1F1F", ...props }) => {
                     />
                 </Svg>
             );
-        case "PickOnR":
+        case "PickOnL":
             return (
                 <Svg width={32} height={32} fill="none" {...props}>
                     <Path

@@ -7,6 +7,7 @@ import { SNSType } from "@/components/Button/LoginButton";
 import { IconType } from "@/components/icon/Common";
 import { RouteProp } from "@react-navigation/native";
 import Input from "@/components/Input";
+import Button from "@/components/Button";
 
 type MypageParams = {
     Mypage: {
@@ -53,6 +54,15 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
                 <Text style={styles.nicknameCount}>0/10</Text>
             </View>
             <Input size="M" placeholder="사용할 닉네임을 입력해주세요" />
+            <View style={styles.buttonContainer}>
+                <Button
+                    title={"확인"}
+                    onPress={() => console.log(1)}
+                    type={"filled"}
+                    size={"l"}
+                    color={"Gray"}
+                />
+            </View>
         </View>
     );
 };
@@ -88,6 +98,10 @@ const styles = StyleSheet.create({
         marginTop: 32,
         marginBottom: 8,
         width: "100%",
+    },
+    buttonContainer: {
+        position: "absolute",
+        bottom: 34,
     },
     nicknameText: {},
     nicknameCount: {},

@@ -3,7 +3,6 @@ import {
     StyleSheet,
     TextInput,
     View,
-    TouchableOpacity,
     Text,
     TextInputProps,
 } from "react-native";
@@ -21,6 +20,7 @@ interface InputProps extends TextInputProps {
     placeholder: string;
     iconPosition?: IconPosition;
     inputState?: InputState;
+    errorMessage?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -28,6 +28,7 @@ const Input: React.FC<InputProps> = ({
     placeholder,
     iconPosition = "default",
     inputState = "default",
+    errorMessage,
     ...textInputProps
 }) => {
     const [isFocused, setIsFocused] = useState(false);
@@ -40,7 +41,7 @@ const Input: React.FC<InputProps> = ({
         size === "L" ? styles.large : styles.medium,
         inputState === "error" && styles.error,
         inputState === "disabled" && styles.disabled,
-        isFocused && styles.focused,
+        isFocused && inputState !== "error" && styles.focused,
         (iconPosition === "leading" || iconPosition === "both") &&
             styles.paddingLeft,
         (iconPosition === "trailing" || iconPosition === "both") &&
@@ -75,26 +76,34 @@ const Input: React.FC<InputProps> = ({
                         style={[styles.icon, styles.iconTrailing]}
                     />
                 ) : null}
-                {iconPosition === "both" ? (
+                {iconPosition === "both" && inputState !== "error" ? (
                     <Icon
                         type="TextCancelR"
                         style={[styles.icon, styles.iconTrailing]}
                     />
                 ) : null}
+                {iconPosition === "both" && inputState === "error" ? (
+                    <Icon
+                        type="MessageErrorR"
+                        style={[styles.icon, styles.iconTrailing]}
+                    />
+                ) : null}
             </View>
+            {inputState === "error" && errorMessage && (
+                <Text style={styles.errorText}>{errorMessage}</Text>
+            )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row",
-        alignItems: "center",
+        position: "relative",
+        flexDirection: "column",
         width: "100%",
     },
     inputContainer: {
         position: "relative",
-        flex: 1,
         flexDirection: "row",
         alignItems: "center",
     },
@@ -128,10 +137,12 @@ const styles = StyleSheet.create({
         left: 14,
     },
     iconTrailing: {
-        right: 20,
+        right: 16,
     },
     error: {
-        borderColor: "red",
+        backgroundColor: Colors.feedbackR25,
+        borderWidth: 0,
+        color: Colors.feedbackR200,
     },
     disabled: {
         backgroundColor: "#f2f2f2",
@@ -139,6 +150,11 @@ const styles = StyleSheet.create({
     focused: {
         borderColor: Colors.grayScale75,
         borderWidth: 1,
+    },
+    errorText: {
+        color: Colors.feedbackR300,
+        fontSize: 12,
+        marginTop: 2,
     },
 });
 

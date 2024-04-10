@@ -52,7 +52,13 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
                 <Text style={styles.nicknameText}>닉네임</Text>
                 <Text style={styles.nicknameCount}>0/10</Text>
             </View>
-            <Input size="M" placeholder="사용할 닉네임을 입력해주세요" />
+            <Input
+                size="M"
+                placeholder="사용할 닉네임을 입력해주세요"
+                inputState="error"
+                errorMessage="Error Message"
+                iconPosition="both"
+            />
         </View>
     );
 };

@@ -58,7 +58,7 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
                 <Button
                     title={"확인"}
                     onPress={() => console.log(1)}
-                    type={"filled"}
+                    type={"text"}
                     size={"l"}
                     color={"Gray"}
                 />

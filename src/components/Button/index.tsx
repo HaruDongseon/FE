@@ -1,28 +1,79 @@
-import React from "react";
+import Colors from "@/styles/Color";
+import React, { useState } from "react";
 import {
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
-    ViewStyle,
+    GestureResponderEvent,
 } from "react-native";
 
 type ButtonType = "filled" | "outline" | "text";
 type ButtonSize = "l" | "m" | "r" | "s";
 type ButtonColor = "Primary" | "Gray";
 type IconPosition = "none" | "leading" | "trailing";
-type ButtonState = "default" | "pressed" | "disabled";
 
 interface ButtonProps {
     title: string;
-    onPress: () => void;
+    onPress: (event: GestureResponderEvent) => void;
     type: ButtonType;
     size: ButtonSize;
     color: ButtonColor;
     iconPosition?: IconPosition;
-    state?: ButtonState;
-    icon?: JSX.Element; // Icon component
+    disabled?: boolean;
+    icon?: JSX.Element;
 }
+
+const colors = {
+    Primary: {
+        background: {
+            default: Colors.primary300,
+            pressed: Colors.primary500,
+            disabled: Colors.primary50,
+        },
+        text: {
+            filled: {
+                default: Colors.white,
+                pressed: Colors.white,
+                disabled: Colors.white,
+            },
+            outline: {
+                default: Colors.primary300,
+                pressed: Colors.primary500,
+                disabled: Colors.primary50,
+            },
+            text: {
+                default: Colors.primary300,
+                pressed: Colors.primary500,
+                disabled: Colors.primary50,
+            },
+        },
+    },
+    Gray: {
+        background: {
+            default: Colors.grayScale50,
+            pressed: Colors.grayScale100,
+            disabled: Colors.grayScale50,
+        },
+        text: {
+            filled: {
+                default: Colors.grayScale400,
+                pressed: Colors.grayScale600,
+                disabled: Colors.white,
+            },
+            outline: {
+                default: Colors.grayScale400,
+                pressed: Colors.grayScale500,
+                disabled: Colors.grayScale50,
+            },
+            text: {
+                default: Colors.grayScale400,
+                pressed: Colors.grayScale500,
+                disabled: Colors.grayScale50,
+            },
+        },
+    },
+};
 
 const Button: React.FC<ButtonProps> = ({
     title,
@@ -31,68 +82,87 @@ const Button: React.FC<ButtonProps> = ({
     size,
     color,
     iconPosition = "none",
-    state = "default",
+    disabled = false,
     icon,
 }) => {
-    // Define dynamic styles based on props
-    const dynamicStyles = StyleSheet.create({
-        button: {
-            ...baseStyles.button,
-            ...sizeStyles[size],
-            ...(type === "filled" && {
-                backgroundColor: colorStyles[color].background,
-            }),
-            ...(type === "outline" && {
-                borderWidth: 1,
-                borderColor: colorStyles[color].border,
-            }),
-            ...(type === "text" && {}),
-            ...(state === "disabled" && { opacity: 0.5 }),
-        },
-        text: {
-            color: type === "text" ? colorStyles[color].text : "white",
-        },
-        iconStyle: {
-            marginRight: iconPosition === "leading" ? 8 : 0,
-            marginLeft: iconPosition === "trailing" ? 8 : 0,
-        },
-    });
+    const [isPressed, setIsPressed] = useState(false);
+
+    const getBackgroundColor = () => {
+        const state = disabled ? "disabled" : isPressed ? "pressed" : "default";
+        return type === "filled"
+            ? colors[color].background[state]
+            : "transparent";
+    };
+
+    const getTextStyle = () => {
+        const textDecorationLine =
+            type === "text" && isPressed ? "underline" : "none";
+        return textDecorationLine;
+    };
+
+    const getTextColor = () => {
+        const state = disabled ? "disabled" : isPressed ? "pressed" : "default";
+        return colors[color].text[type][state];
+    };
+
+    const handlePressIn = () => {
+        if (!disabled) setIsPressed(true);
+    };
+
+    const handlePressOut = () => {
+        setIsPressed(false);
+    };
 
     return (
         <TouchableOpacity
             onPress={onPress}
-            disabled={state === "disabled"}
-            style={dynamicStyles.button}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            disabled={disabled}
+            style={[
+                styles.button,
+                styles[size],
+                { backgroundColor: getBackgroundColor() },
+                type === "outline" && {
+                    borderWidth: 1,
+                    borderColor: colors[color].background.default,
+                },
+            ]}
         >
-            <View style={baseStyles.flexRow}>
-                {icon && iconPosition === "leading" && (
-                    <View style={dynamicStyles.iconStyle}>{icon}</View>
-                )}
-                <Text style={dynamicStyles.text}>{title}</Text>
-                {icon && iconPosition === "trailing" && (
-                    <View style={dynamicStyles.iconStyle}>{icon}</View>
-                )}
+            <View style={styles.content}>
+                {icon && iconPosition === "leading" && icon}
+                <Text
+                    style={[
+                        styles.text,
+                        {
+                            color: getTextColor(),
+                            textDecorationLine: getTextStyle(),
+                        },
+                    ]}
+                >
+                    {title}
+                </Text>
+                {icon && iconPosition === "trailing" && icon}
             </View>
         </TouchableOpacity>
     );
 };
 
-const baseStyles = StyleSheet.create({
-    flexRow: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-    },
+const styles = StyleSheet.create({
     button: {
         borderRadius: 8,
-        alignItems: "center",
         justifyContent: "center",
+        alignItems: "center",
         paddingHorizontal: 24,
         paddingVertical: 16,
     },
-});
-
-const sizeStyles: Record<ButtonSize, ViewStyle> = {
+    content: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    text: {
+        fontWeight: "bold",
+    },
     l: {
         height: 56,
         paddingVertical: 16,
@@ -117,14 +187,6 @@ const sizeStyles: Record<ButtonSize, ViewStyle> = {
         paddingHorizontal: 12,
         borderRadius: 8,
     },
-};
-
-const colorStyles: Record<
-    ButtonColor,
-    { background: string; border: string; text: string }
-> = {
-    Primary: { background: "blue", border: "blue", text: "white" },
-    Gray: { background: "gray", border: "gray", text: "black" },
-};
+});
 
 export default Button;

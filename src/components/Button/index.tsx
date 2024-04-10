@@ -7,6 +7,7 @@ import {
     View,
     GestureResponderEvent,
 } from "react-native";
+import Icon from "../icon/Common";
 
 type ButtonType = "filled" | "outline" | "text";
 type ButtonSize = "l" | "m" | "r" | "s";
@@ -21,7 +22,6 @@ interface ButtonProps {
     color: ButtonColor;
     iconPosition?: IconPosition;
     disabled?: boolean;
-    icon?: JSX.Element;
 }
 
 const colors = {
@@ -83,7 +83,6 @@ const Button: React.FC<ButtonProps> = ({
     color,
     iconPosition = "none",
     disabled = false,
-    icon,
 }) => {
     const [isPressed, setIsPressed] = useState(false);
 
@@ -130,19 +129,25 @@ const Button: React.FC<ButtonProps> = ({
             ]}
         >
             <View style={styles.content}>
-                {icon && iconPosition === "leading" && icon}
+                {iconPosition === "leading" && (
+                    <Icon type="Before1LineM" style={styles.iconLeading} />
+                )}
                 <Text
                     style={[
                         styles.text,
                         {
                             color: getTextColor(),
                             textDecorationLine: getTextStyle(),
+                            marginLeft: iconPosition === "leading" ? 4 : 0,
+                            marginRight: iconPosition === "trailing" ? 4 : 0,
                         },
                     ]}
                 >
                     {title}
                 </Text>
-                {icon && iconPosition === "trailing" && icon}
+                {iconPosition === "trailing" && (
+                    <Icon type="Next1LineM" style={styles.iconTrailing} />
+                )}
             </View>
         </TouchableOpacity>
     );
@@ -161,7 +166,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     text: {
-        fontWeight: "bold",
+        fontWeight: "500",
+        fontSize: 16,
+    },
+    iconLeading: {
+        marginRight: 4,
+    },
+    iconTrailing: {
+        marginLeft: 4,
     },
     l: {
         height: 56,

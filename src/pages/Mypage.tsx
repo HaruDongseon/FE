@@ -58,9 +58,9 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
                 <Button
                     title={"확인"}
                     onPress={() => console.log(1)}
-                    type={"text"}
+                    type={"filled"}
                     size={"l"}
-                    color={"Gray"}
+                    color={"Primary"}
                 />
             </View>
         </View>
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     buttonContainer: {
+        width: "100%",
         position: "absolute",
         bottom: 34,
     },

@@ -8,6 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "@/pages/Home";
 import Mypage from "@/pages/Mypage";
 import Before from "@/components/icon/General/Before";
+import Mainpage from "@/pages/Mainpage";
 
 export type RootStackParamList = {
     Home: undefined;
@@ -47,6 +48,11 @@ export default function App({}) {
                     options={{
                         title: "내 정보",
                     }}
+                />
+                <Stack.Screen
+                    name="Mainpage"
+                    component={Mainpage}
+                    options={{ headerShown: false }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

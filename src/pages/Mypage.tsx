@@ -5,9 +5,14 @@ import Colors from "@/styles/Color";
 import Icon from "@/components/icon/Common";
 import { SNSType } from "@/components/Button/LoginButton";
 import { IconType } from "@/components/icon/Common";
-import { RouteProp } from "@react-navigation/native";
+import {
+    ParamListBase,
+    RouteProp,
+    useNavigation,
+} from "@react-navigation/native";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type MypageParams = {
     Mypage: {
@@ -23,6 +28,8 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
     const [nickname, setNickname] = useState("");
 
     const { snsType } = route.params;
+
+    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
     const getIconType = (type: SNSType): IconType | null => {
         switch (type) {
@@ -63,7 +70,7 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
             <View style={styles.buttonContainer}>
                 <Button
                     title={"확인"}
-                    onPress={() => console.log(1)}
+                    onPress={() => navigation.navigate("Mainpage")}
                     disabled={nickname.length === 0}
                     type={"filled"}
                     size={"l"}

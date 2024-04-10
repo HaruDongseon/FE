@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Avatar from "@/components/Avatar/Avatar";
 import Colors from "@/styles/Color";
@@ -20,6 +20,8 @@ type MypageProps = {
 };
 
 const Mypage: React.FC<MypageProps> = ({ route }) => {
+    const [nickname, setNickname] = useState("");
+
     const { snsType } = route.params;
 
     const getIconType = (type: SNSType): IconType | null => {
@@ -53,11 +55,16 @@ const Mypage: React.FC<MypageProps> = ({ route }) => {
                 <Text style={styles.nicknameText}>닉네임</Text>
                 <Text style={styles.nicknameCount}>0/10</Text>
             </View>
-            <Input size="M" placeholder="사용할 닉네임을 입력해주세요" />
+            <Input
+                onChangeText={(newNickname) => setNickname(newNickname)} // 수정된 부분
+                size="M"
+                placeholder="사용할 닉네임을 입력해주세요"
+            />
             <View style={styles.buttonContainer}>
                 <Button
                     title={"확인"}
                     onPress={() => console.log(1)}
+                    disabled={nickname.length === 0}
                     type={"filled"}
                     size={"l"}
                     color={"Primary"}

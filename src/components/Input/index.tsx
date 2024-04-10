@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
     StyleSheet,
     TextInput,
@@ -18,6 +18,7 @@ type InputState = "default" | "touch" | "pressed" | "error" | "disabled";
 interface InputProps extends TextInputProps {
     size: InputSize;
     placeholder: string;
+    onChangeText: Dispatch<SetStateAction<string>>;
     iconPosition?: IconPosition;
     inputState?: InputState;
     errorMessage?: string;
@@ -28,6 +29,7 @@ const Input: React.FC<InputProps> = ({
     placeholder,
     iconPosition = "default",
     inputState = "default",
+    onChangeText,
     errorMessage,
     ...textInputProps
 }) => {
@@ -65,6 +67,7 @@ const Input: React.FC<InputProps> = ({
                 <TextInput
                     {...textInputProps}
                     placeholder={placeholder}
+                    onChangeText={onChangeText}
                     style={inputStyles}
                     onFocus={handleFocus}
                     onBlur={handleBlur}

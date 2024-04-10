@@ -14,7 +14,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type MypageParams = {
+export type MypageParams = {
     Mypage: {
         snsType: SNSType;
     };
@@ -24,7 +24,7 @@ type MypageProps = {
     route: RouteProp<MypageParams, "Mypage">;
 };
 
-const Mypage: React.FC<MypageProps> = ({ route }) => {
+const Mypage = ({ route }: MypageProps) => {
     const [nickname, setNickname] = useState("");
 
     const { snsType } = route.params;

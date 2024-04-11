@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/types/homeTypes";
 import LoginButton, { SNSType } from "@/components/Button/LoginButton";
 import Logo from "@/components/icon/Logo/Logo";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,12 +7,6 @@ import Colors from "@/styles/Color";
 import KakaoLogin from "@/components/Auth/KakaoLogin";
 import NaverLogin from "@/components/Auth/NaverLogin";
 import Icon from "@/components/icon/Common";
-
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
-
-interface HomeScreenProps {
-    navigation: HomeScreenNavigationProp;
-}
 
 export const Home = () => {
     const [loginVisible, setLoginVisible] = useState<SNSType | null>(null);

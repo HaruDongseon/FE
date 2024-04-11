@@ -1,26 +1,58 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useRef } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import {
+    NavigationContainer,
+    NavigationContainerRef,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "@/pages/Home";
-import { RootStackParamList } from "@/types/homeTypes";
+import Mypage, { MypageParams } from "@/pages/Mypage";
+import Before from "@/components/icon/General/Before";
+import Mainpage from "@/pages/Mainpage";
+
+export type RootStackParamList = {
+    Home: undefined;
+    Mypage: MypageParams["Mypage"];
+    Mainpage: undefined;
+};
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function App() {
+export default function App({}) {
+    const navigationRef =
+        useRef<NavigationContainerRef<RootStackParamList>>(null);
+
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <Stack.Navigator
                 initialRouteName="Home"
                 screenOptions={{
-                    headerStyle: {
-                        height: 52,
-                    },
+                    headerShadowVisible: false,
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            onPress={() => navigationRef.current?.goBack()}
+                            style={{ marginLeft: 20 }}
+                        >
+                            <Before />
+                        </TouchableOpacity>
+                    ),
                 }}
             >
                 <Stack.Screen
                     name="Home"
                     component={Home}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Mypage"
+                    component={Mypage}
+                    options={{
+                        title: "내 정보",
+                    }}
+                />
+                <Stack.Screen
+                    name="Mainpage"
+                    component={Mainpage}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

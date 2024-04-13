@@ -6,6 +6,7 @@ import { Modal, StyleSheet } from "react-native";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { oauthLogin, convertNaverCodeToToken } from "@/apis/auth";
+import * as SecureStore from "expo-secure-store";
 
 const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
 
@@ -27,12 +28,14 @@ const NaverLogin: React.FC<{
                 code: requestCode,
                 state: Math.random().toString(36).substring(3, 14),
             });
-            setLoginVisible(null);
-            await oauthLogin({
+            const accessToken = await oauthLogin({
                 loginType: "naver",
                 token,
                 deviceId: "123",
             });
+            await SecureStore.setItemAsync("accessToken", accessToken);
+
+            setLoginVisible(null);
             navigation.navigate("Mypage", { snsType: SNSType.NAVER });
         }
     };

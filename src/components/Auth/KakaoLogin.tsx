@@ -6,6 +6,7 @@ import { SNSType } from "../Button/LoginButton";
 import { convertKakaoCodeToToken, oauthLogin } from "@/apis/auth";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import * as SecureStore from "expo-secure-store";
 
 const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
 
@@ -26,11 +27,13 @@ const KakaoLogin: React.FC<{
                 redirect_uri: REDIRECT_URI,
                 code: requestCode,
             });
-            await oauthLogin({
+            const accessToken = await oauthLogin({
                 loginType: "kakao",
                 token,
                 deviceId: "123",
             });
+            await SecureStore.setItemAsync("accessToken", accessToken);
+
             setLoginVisible(null);
             navigation.navigate("Mypage", { snsType: SNSType.KAKAO });
         }

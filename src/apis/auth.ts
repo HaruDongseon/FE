@@ -29,7 +29,7 @@ export const oauthLogin = async ({
                 deviceId,
             },
         );
-        return response.data.access_token;
+        return response.data.accessToken;
     } catch (error) {
         console.error("Login request failed:", error);
         throw error;

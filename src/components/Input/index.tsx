@@ -19,6 +19,7 @@ interface InputProps extends TextInputProps {
     size: InputSize;
     placeholder: string;
     onChangeText: Dispatch<SetStateAction<string>>;
+    defaultValue?: string;
     iconPosition?: IconPosition;
     inputState?: InputState;
     errorMessage?: string;
@@ -27,6 +28,7 @@ interface InputProps extends TextInputProps {
 const Input: React.FC<InputProps> = ({
     size,
     placeholder,
+    defaultValue,
     iconPosition = "default",
     inputState = "default",
     onChangeText,
@@ -66,6 +68,7 @@ const Input: React.FC<InputProps> = ({
                 ) : null}
                 <TextInput
                     {...textInputProps}
+                    defaultValue={defaultValue}
                     placeholder={placeholder}
                     onChangeText={onChangeText}
                     style={inputStyles}

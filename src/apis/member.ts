@@ -1,26 +1,28 @@
 import { API_BASE_URL, axiosInstance } from "./apiClient";
 
-interface UserProfile {
+interface UserResponseProfile {
     email: string;
     nickname: string;
     profileImageUrl: string;
 }
 
-export async function updateUserProfile() {
-    const url = API_BASE_URL + "/members/me";
-    const headers = {
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwibWVtYmVySWQiOjIsImlhdCI6MTUxNjIzOTAyMn0.B71yavddo1fTGjN7KLFlZQJgO9A78ipmNau_Lt8US17RzoVL2Gshjd7BhIPRT2JsQp8nlcAAiLfXSruj7Q0FHw`,
-    };
-    const data = {
-        nickname: "",
-        profileImageUrl: "",
-    };
+interface UserRequestProfile {
+    nickname: string;
+    profileImageUrl: string;
+}
 
+export async function updateUserProfile({
+    nickname,
+    profileImageUrl,
+}: UserRequestProfile) {
     try {
-        const response = await axiosInstance.patch(url, data, {
-            headers: headers,
-        });
-        console.log("Profile updated successfully:", response.data);
+        const response = await axiosInstance.patch(
+            `${API_BASE_URL}/members/me`,
+            {
+                nickname,
+                profileImageUrl,
+            },
+        );
         return response.data;
     } catch (error) {
         console.error("Error updating profile:", error);
@@ -28,7 +30,7 @@ export async function updateUserProfile() {
     }
 }
 
-export async function getUserProfile(): Promise<UserProfile> {
+export async function getUserProfile(): Promise<UserResponseProfile> {
     try {
         const response = await axiosInstance.get(`${API_BASE_URL}/members/me`);
         return response.data;

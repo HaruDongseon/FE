@@ -64,7 +64,10 @@ const Mypage = ({ route }: MypageProps) => {
     const iconType = getIconType(snsType);
 
     const handleUpdateUserProfile = async () => {
-        await updateUserProfile();
+        await updateUserProfile({
+            nickname,
+            profileImageUrl: avatar,
+        });
         navigation.navigate("Mainpage");
     };
 

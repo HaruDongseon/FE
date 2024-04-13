@@ -35,7 +35,7 @@ const Mypage = ({ route }: MypageProps) => {
     const getIconType = (type: SNSType): IconType | null => {
         switch (type) {
             case SNSType.KAKAO:
-                return "R" as IconType;
+                return "SNSKakaoR" as IconType;
             case SNSType.NAVER:
                 return "SNSNaverR" as IconType;
             case SNSType.GOOGLE:

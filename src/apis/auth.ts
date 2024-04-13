@@ -1,10 +1,25 @@
 import { API_BASE_URL, axiosInstance } from "./apiClient";
 
-export const login = async (
-    loginType: "google" | "naver" | "kakao",
-    token: string,
-    deviceId: string,
-) => {
+interface LoginParams {
+    loginType: "google" | "naver" | "kakao";
+    token: string;
+    deviceId: string;
+}
+
+interface convertCodeToTokenParams {
+    grant_type: string;
+    client_id: string;
+    client_secret?: string;
+    redirect_uri?: string;
+    code: string;
+    state?: string;
+}
+
+export const oauthLogin = async ({
+    loginType,
+    token,
+    deviceId,
+}: LoginParams) => {
     try {
         const response = await axiosInstance.post(
             `${API_BASE_URL}/oauth-login`,
@@ -14,7 +29,6 @@ export const login = async (
                 deviceId,
             },
         );
-
         return response.data.access_token;
     } catch (error) {
         console.error("Login request failed:", error);
@@ -22,12 +36,12 @@ export const login = async (
     }
 };
 
-export const kakaoCodeToToken = async (
-    grant_type: string,
-    client_id: string,
-    redirect_uri: string,
-    code: string,
-) => {
+export const convertKakaoCodeToToken = async ({
+    grant_type,
+    redirect_uri,
+    client_id,
+    code,
+}: convertCodeToTokenParams) => {
     try {
         const response = await axiosInstance.post(
             "https://kauth.kakao.com/oauth/token",
@@ -51,13 +65,13 @@ export const kakaoCodeToToken = async (
     }
 };
 
-export const naverCodeToToken = async (
-    grant_type: string,
-    client_id: string,
-    client_secret: string,
-    code: string,
-    state: string,
-) => {
+export const convertNaverCodeToToken = async ({
+    grant_type,
+    client_id,
+    client_secret,
+    code,
+    state,
+}: convertCodeToTokenParams) => {
     try {
         const response = await axiosInstance.post(
             "https://nid.naver.com/oauth2.0/token",
@@ -75,7 +89,6 @@ export const naverCodeToToken = async (
                 },
             },
         );
-        console.log(response.data);
         return response.data.access_token;
     } catch (error) {
         console.error("Login request failed:", error);

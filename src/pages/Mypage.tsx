@@ -13,6 +13,7 @@ import {
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { updateUserProfile } from "@/apis/member";
 
 export type MypageParams = {
     Mypage: {
@@ -46,6 +47,11 @@ const Mypage = ({ route }: MypageProps) => {
 
     const iconType = getIconType(snsType);
 
+    const handleUpdateUserProfile = async () => {
+        await updateUserProfile();
+        navigation.navigate("Mainpage");
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.avatarContainer}>
@@ -70,7 +76,7 @@ const Mypage = ({ route }: MypageProps) => {
             <View style={styles.buttonContainer}>
                 <Button
                     title={"확인"}
-                    onPress={() => navigation.navigate("Mainpage")}
+                    onPress={handleUpdateUserProfile}
                     disabled={nickname.length === 0}
                     type={"filled"}
                     size={"l"}

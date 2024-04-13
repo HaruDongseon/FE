@@ -3,6 +3,7 @@ import { KAKAO_REST_API_KEY, REDIRECT_URI } from "@env";
 import WebView from "react-native-webview";
 import { StyleSheet, Modal } from "react-native";
 import { SNSType } from "../Button/LoginButton";
+import { kakaoCodeToToken, login } from "@/apis/auth";
 
 const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
 
@@ -10,12 +11,18 @@ const KakaoLogin: React.FC<{
     loginVisible: SNSType | null;
     setLoginVisible: React.Dispatch<SetStateAction<SNSType | null>>;
 }> = ({ loginVisible, setLoginVisible }) => {
-    const getCode = (target: string) => {
+    const getCode = async (target: string) => {
         const exp = "code=";
         const condition = target.indexOf(exp);
         if (condition !== -1) {
             const requestCode = target.substring(condition + exp.length);
-            console.log("code = ", requestCode);
+            const data = await kakaoCodeToToken(
+                "authorization_code",
+                KAKAO_REST_API_KEY,
+                REDIRECT_URI,
+                requestCode,
+            );
+            await login("kakao", data, "123");
             setLoginVisible(null);
         }
     };

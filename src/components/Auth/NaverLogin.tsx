@@ -1,10 +1,11 @@
 import React, { SetStateAction } from "react";
-import { REDIRECT_URI, NAVER_REST_API_KEY } from "@env";
+import { REDIRECT_URI, NAVER_REST_API_KEY, NAVER_CLIENT_SECRET } from "@env";
 import WebView from "react-native-webview";
 import { SNSType } from "../Button/LoginButton";
 import { Modal, StyleSheet } from "react-native";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { naverCodeToToken } from "@/apis/auth";
 
 const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
 
@@ -14,12 +15,19 @@ const NaverLogin: React.FC<{
 }> = ({ loginVisible, setLoginVisible }) => {
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-    const getCode = (target: string) => {
+    const getCode = async (target: string) => {
         const exp = "oauth_token=";
         const condition = target.indexOf(exp);
         if (condition !== -1) {
             const requestCode = target.substring(condition + exp.length);
             console.log("code = ", requestCode);
+            const data = await naverCodeToToken(
+                "authorization_code",
+                NAVER_REST_API_KEY,
+                NAVER_CLIENT_SECRET,
+                requestCode,
+                Math.random().toString(36).substring(3, 14),
+            );
             setLoginVisible(null);
             navigation.navigate("Mypage", { snsType: SNSType.NAVER });
         }

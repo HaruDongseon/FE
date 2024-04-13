@@ -1,5 +1,11 @@
 import { API_BASE_URL, axiosInstance } from "./apiClient";
 
+interface UserProfile {
+    email: string;
+    nickname: string;
+    profileImageUrl: string;
+}
+
 export async function updateUserProfile() {
     const url = API_BASE_URL + "/members/me";
     const headers = {
@@ -18,6 +24,16 @@ export async function updateUserProfile() {
         return response.data;
     } catch (error) {
         console.error("Error updating profile:", error);
+        throw error;
+    }
+}
+
+export async function getUserProfile(): Promise<UserProfile> {
+    try {
+        const response = await axiosInstance.get(`${API_BASE_URL}/members/me`);
+        return response.data;
+    } catch (error) {
+        console.error("Error getting profile:", error);
         throw error;
     }
 }

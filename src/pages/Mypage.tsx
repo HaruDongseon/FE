@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Avatar from "@/components/Avatar/Avatar";
 import Colors from "@/styles/Color";
@@ -13,7 +13,7 @@ import {
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { updateUserProfile } from "@/apis/member";
+import { getUserProfile, updateUserProfile } from "@/apis/member";
 
 export type MypageParams = {
     Mypage: {
@@ -26,7 +26,23 @@ type MypageProps = {
 };
 
 const Mypage = ({ route }: MypageProps) => {
+    const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
+    const [avatar, setAvatar] = useState("");
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const profile = await getUserProfile();
+                setAvatar(profile.profileImageUrl);
+                setNickname(profile.nickname);
+                setEmail(profile.email);
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+            }
+        };
+        fetchUserProfile();
+    }, []);
 
     const { snsType } = route.params;
 
@@ -55,22 +71,24 @@ const Mypage = ({ route }: MypageProps) => {
     return (
         <View style={styles.container}>
             <View style={styles.avatarContainer}>
-                <Avatar />
+                <Avatar avatarUrl={avatar} />
             </View>
             <View style={styles.accountContainer}>
                 <Text style={styles.accountText}>연결한 계정</Text>
                 <View style={styles.emailContainer}>
                     {iconType && <Icon type={iconType} />}
-                    <Text style={styles.emailText}>abcdef@gmail.com</Text>
+                    <Text style={styles.emailText}>{email}</Text>
                 </View>
             </View>
             <View style={styles.nicknameContainer}>
                 <Text style={styles.nicknameText}>닉네임</Text>
-                <Text style={styles.nicknameCount}>0/10</Text>
+                <Text style={styles.nicknameCount}>{nickname.length}/10</Text>
             </View>
             <Input
-                onChangeText={(newNickname) => setNickname(newNickname)} // 수정된 부분
+                onChangeText={(newNickname) => setNickname(newNickname)}
                 size="M"
+                maxLength={10}
+                defaultValue={nickname}
                 placeholder="사용할 닉네임을 입력해주세요"
             />
             <View style={styles.buttonContainer}>

@@ -1,12 +1,20 @@
 import Colors from "@/styles/Color";
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import Icon from "../icon/Common";
 
-const Avatar = () => {
+interface AvatarProps {
+    avatarUrl: string;
+}
+
+const Avatar: React.FC<AvatarProps> = ({ avatarUrl }) => {
     return (
         <View style={styles.circle}>
-            <Icon type="PickOnL" />
+            {avatarUrl ? (
+                <Image source={{ uri: avatarUrl }} style={styles.image} />
+            ) : (
+                <Icon type="PickOnL" />
+            )}
             <View style={styles.innerCircle}>
                 <Icon type="CameraR" />
             </View>
@@ -16,7 +24,6 @@ const Avatar = () => {
 
 export default Avatar;
 
-// 스타일을 별도로 분리
 const styles = StyleSheet.create({
     circle: {
         position: "relative",
@@ -37,5 +44,13 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         backgroundColor: Colors.grayScale75,
+    },
+    image: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        position: "relative",
+        justifyContent: "center",
+        alignItems: "center",
     },
 });

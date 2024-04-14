@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Colors from "@/styles/Color"; // 경로에 맞게 수정해주세요.
+import Icon from "../icon/Common";
 
 // 날짜 배열을 반환하는 함수
 const getWeekDates = (date: Date): Date[] => {
@@ -21,9 +22,11 @@ const Calendar: React.FC = () => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
+                <Icon type="AddL" />
                 <Text style={styles.monthYearText}>
                     {currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
                 </Text>
+                <Icon type="CalendarL" />
             </View>
             <View style={styles.weekDays}>
                 {["일", "월", "화", "수", "목", "금", "토"].map(
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between",
         width: "100%",
         marginBottom: 4,
         paddingHorizontal: 20,

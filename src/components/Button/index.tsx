@@ -22,6 +22,7 @@ interface ButtonProps {
     color: ButtonColor;
     iconPosition?: IconPosition;
     disabled?: boolean;
+    width?: number;
 }
 
 const colors = {
@@ -83,6 +84,7 @@ const Button: React.FC<ButtonProps> = ({
     color,
     iconPosition = "none",
     disabled = false,
+    width,
 }) => {
     const [isPressed, setIsPressed] = useState(false);
 
@@ -126,6 +128,7 @@ const Button: React.FC<ButtonProps> = ({
                     borderWidth: 1,
                     borderColor: colors[color].background.default,
                 },
+                { width: width },
             ]}
         >
             <View style={styles.content}>

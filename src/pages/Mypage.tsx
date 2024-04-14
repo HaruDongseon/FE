@@ -9,6 +9,7 @@ import {
     ParamListBase,
     RouteProp,
     useNavigation,
+    useRoute,
 } from "@react-navigation/native";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
@@ -21,14 +22,12 @@ export type MypageParams = {
     };
 };
 
-type MypageProps = {
-    route: RouteProp<MypageParams, "Mypage">;
-};
-
-const Mypage = ({ route }: MypageProps) => {
+const Mypage = () => {
     const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
     const [avatar, setAvatar] = useState("");
+    const route = useRoute<RouteProp<MypageParams, "Mypage">>();
+    const snsType = route.params?.snsType;
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -43,8 +42,6 @@ const Mypage = ({ route }: MypageProps) => {
         };
         fetchUserProfile();
     }, []);
-
-    const { snsType } = route.params;
 
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 

@@ -19,7 +19,7 @@ export default function App() {
 
     return (
         <NavigationContainer ref={navigationRef}>
-            <TabNavigator />
+            <TabNavigator navigationRef={navigationRef} />
         </NavigationContainer>
     );
 }

@@ -5,15 +5,30 @@ import Mainpage from "@/pages/Mainpage";
 import Icon, { IconType } from "@/components/icon/Common";
 import Colors from "@/styles/Color";
 import HomeStack from "../StackNavigator";
+import { TouchableOpacity } from "react-native";
+import { NavigationContainerRef } from "@react-navigation/native";
+import { RootStackParamList } from "../../../App";
 
 const Tab = createBottomTabNavigator();
 
-function TabNavigator() {
+type TabNavigatorProps = {
+    navigationRef: React.RefObject<NavigationContainerRef<RootStackParamList>>;
+};
+
+function TabNavigator({ navigationRef }: TabNavigatorProps) {
     return (
         <Tab.Navigator
             initialRouteName="HomeStack"
             screenOptions={({ route }) => ({
                 headerShadowVisible: false,
+                headerLeft: () => (
+                    <TouchableOpacity
+                        onPress={() => navigationRef.current?.goBack()}
+                        style={{ marginLeft: 20 }}
+                    >
+                        <Icon type="Before1LineM" />
+                    </TouchableOpacity>
+                ),
                 tabBarStyle: {
                     height: 80,
                     boxShadow: "0px -2px 10px 0px #0428261A",

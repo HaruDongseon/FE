@@ -31,9 +31,10 @@ function TabNavigator({ navigationRef }: TabNavigatorProps) {
                 ),
                 tabBarStyle: {
                     height: 80,
+                    position: "relative",
                     boxShadow: "0px -2px 10px 0px #0428261A",
                 },
-                tabBarIcon: ({ focused }) => {
+                tabBarIcon: () => {
                     let iconName = null;
                     if (route.name === "Mainpage") {
                         iconName = "NVHaruM" as IconType;
@@ -47,9 +48,7 @@ function TabNavigator({ navigationRef }: TabNavigatorProps) {
                 tabBarLabelStyle: {
                     fontSize: 11,
                 },
-                tabBarIconStyle: {
-                    marginBottom: 2,
-                },
+                tabBarIconStyle: {},
                 tabBarActiveTintColor: Colors.primary300,
                 tabBarInactiveTintColor: Colors.grayScale200,
             })}
@@ -74,6 +73,7 @@ function TabNavigator({ navigationRef }: TabNavigatorProps) {
                 options={{
                     title: "내 정보",
                     tabBarStyle: { display: "none" },
+                    headerTitleAlign: "center",
                 }}
             />
         </Tab.Navigator>

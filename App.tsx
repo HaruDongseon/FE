@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/native";
 
 import TabNavigator from "@/components/TabNavigator";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export type RootStackParamList = {
     Root: undefined;
@@ -18,8 +19,10 @@ export default function App() {
         useRef<NavigationContainerRef<RootStackParamList>>(null);
 
     return (
-        <NavigationContainer ref={navigationRef}>
-            <TabNavigator navigationRef={navigationRef} />
-        </NavigationContainer>
+        <SafeAreaProvider>
+            <NavigationContainer ref={navigationRef}>
+                <TabNavigator navigationRef={navigationRef} />
+            </NavigationContainer>
+        </SafeAreaProvider>
     );
 }

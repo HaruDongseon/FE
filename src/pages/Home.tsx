@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         position: "absolute",
-        bottom: 24,
+        bottom: 96,
         alignItems: "center",
     },
     button: {

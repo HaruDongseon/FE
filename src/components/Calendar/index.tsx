@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Colors from "@/styles/Color"; // 경로에 맞게 수정해주세요.
+import PagerView from "react-native-pager-view";
+import Colors from "@/styles/Color";
 import Icon from "../icon/Common";
 
-// 날짜 배열을 반환하는 함수
-const getWeekDates = (date: Date): Date[] => {
-    const weekStart = new Date(date.setDate(date.getDate() - date.getDay()));
+const getWeekDates = (baseDate: Date): Date[] => {
+    const startOfWeek = new Date(
+        baseDate.setDate(baseDate.getDate() - baseDate.getDay()),
+    );
     return Array.from({ length: 7 }, (_, index) => {
-        const day = new Date(weekStart);
+        const day = new Date(startOfWeek);
         day.setDate(day.getDate() + index);
         return day;
     });
@@ -16,8 +18,35 @@ const getWeekDates = (date: Date): Date[] => {
 const Calendar: React.FC = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const today = new Date();
+    const pagerRef = useRef<PagerView>(null);
 
-    const weekDates = getWeekDates(new Date(currentDate));
+    const getThreeWeeks = (date: Date) => [
+        getWeekDates(
+            new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7),
+        ),
+        getWeekDates(
+            new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+        ),
+        getWeekDates(
+            new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7),
+        ),
+    ];
+
+    const weeks = getThreeWeeks(currentDate);
+
+    const handlePageSelected = (e: any) => {
+        const position = e.nativeEvent.position;
+        if (position === 0) {
+            setCurrentDate(
+                (prev) => new Date(prev.setDate(prev.getDate() - 7)),
+            );
+        } else if (position === 2) {
+            setCurrentDate(
+                (prev) => new Date(prev.setDate(prev.getDate() + 7)),
+            );
+        }
+        pagerRef.current?.setPageWithoutAnimation(1);
+    };
 
     return (
         <View style={styles.container}>
@@ -37,22 +66,31 @@ const Calendar: React.FC = () => {
                     ),
                 )}
             </View>
-            <View style={styles.weekDates}>
-                {weekDates.map((date, index) => (
-                    <View key={index} style={styles.dateContainer}>
-                        <Text
-                            style={[
-                                styles.dateText,
-                                isSameDay(date, today)
-                                    ? styles.currentDateText
-                                    : null,
-                            ]}
-                        >
-                            {date.getDate()}
-                        </Text>
+            <PagerView
+                ref={pagerRef}
+                style={styles.pagerView}
+                initialPage={1}
+                onPageSelected={handlePageSelected}
+            >
+                {weeks.map((week, index) => (
+                    <View key={index} style={styles.weekDates}>
+                        {week.map((date, idx) => (
+                            <View key={idx} style={styles.dateContainer}>
+                                <Text
+                                    style={[
+                                        styles.dateText,
+                                        isSameDay(date, today)
+                                            ? styles.currentDateText
+                                            : null,
+                                    ]}
+                                >
+                                    {date.getDate()}
+                                </Text>
+                            </View>
+                        ))}
                     </View>
                 ))}
-            </View>
+            </PagerView>
         </View>
     );
 };
@@ -67,16 +105,7 @@ const isSameDay = (d1: Date, d2: Date): boolean => {
 
 const styles = StyleSheet.create({
     container: {
-        position: "relative",
-        alignItems: "center",
-        height: 112,
-        width: "100%",
         backgroundColor: Colors.white,
-        shadowColor: "#042826",
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 10,
     },
     header: {
         flexDirection: "row",
@@ -99,13 +128,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         height: 22,
     },
+    pagerView: {
+        height: 36,
+    },
     weekDates: {
         alignItems: "center",
         flexDirection: "row",
         justifyContent: "space-around",
         width: "100%",
         paddingHorizontal: 8,
-        height: 36,
     },
     dayContainer: {
         width: 44,

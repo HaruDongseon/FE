@@ -71,7 +71,7 @@ const Mypage = () => {
     return (
         <View style={styles.container}>
             <View style={styles.avatarContainer}>
-                <Avatar avatarUrl={avatar} />
+                <Avatar avatarUrl={avatar} setAvatar={setAvatar} />
             </View>
             <View style={styles.accountContainer}>
                 <Text style={styles.accountText}>연결한 계정</Text>

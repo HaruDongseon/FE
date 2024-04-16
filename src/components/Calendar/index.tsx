@@ -1,13 +1,11 @@
 import React, { useState, useRef } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import PagerView from "react-native-pager-view";
+import { View, Text, StyleSheet, PanResponder, Animated } from "react-native";
 import Colors from "@/styles/Color";
 import Icon from "../icon/Common";
 
-const getWeekDates = (baseDate: Date): Date[] => {
-    const startOfWeek = new Date(
-        baseDate.setDate(baseDate.getDate() - baseDate.getDay()),
-    );
+const getWeekDates = (baseDate: string | number | Date) => {
+    const startOfWeek = new Date(baseDate);
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
     return Array.from({ length: 7 }, (_, index) => {
         const day = new Date(startOfWeek);
         day.setDate(day.getDate() + index);
@@ -15,38 +13,35 @@ const getWeekDates = (baseDate: Date): Date[] => {
     });
 };
 
-const Calendar: React.FC = () => {
+const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const today = new Date();
-    const pagerRef = useRef<PagerView>(null);
+    const position = useRef(new Animated.ValueXY()).current;
 
-    const getThreeWeeks = (date: Date) => [
-        getWeekDates(
-            new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7),
-        ),
-        getWeekDates(
-            new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-        ),
-        getWeekDates(
-            new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7),
-        ),
-    ];
+    const panResponder = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onPanResponderMove: Animated.event([null, { dx: position.x }], {
+                useNativeDriver: false,
+            }),
+            onPanResponderRelease: (_, gestureState) => {
+                if (gestureState.dx > 50) {
+                    setCurrentDate((prevDate) => {
+                        const newDate = new Date(prevDate);
+                        return new Date(newDate.setDate(newDate.getDate() - 7));
+                    });
+                } else if (gestureState.dx < -50) {
+                    setCurrentDate((prevDate) => {
+                        const newDate = new Date(prevDate);
+                        return new Date(newDate.setDate(newDate.getDate() + 7));
+                    });
+                }
+                position.setValue({ x: 0, y: 0 });
+            },
+        }),
+    ).current;
 
-    const weeks = getThreeWeeks(currentDate);
-
-    const handlePageSelected = (e: any) => {
-        const position = e.nativeEvent.position;
-        if (position === 0) {
-            setCurrentDate(
-                (prev) => new Date(prev.setDate(prev.getDate() - 7)),
-            );
-        } else if (position === 2) {
-            setCurrentDate(
-                (prev) => new Date(prev.setDate(prev.getDate() + 7)),
-            );
-        }
-        pagerRef.current?.setPageWithoutAnimation(1);
-    };
+    const week = getWeekDates(currentDate);
 
     return (
         <View style={styles.container}>
@@ -66,42 +61,33 @@ const Calendar: React.FC = () => {
                     ),
                 )}
             </View>
-            <PagerView
-                ref={pagerRef}
-                style={styles.pagerView}
-                initialPage={1}
-                onPageSelected={handlePageSelected}
+            <Animated.View
+                {...panResponder.panHandlers}
+                style={[styles.weekView, position.getLayout()]}
             >
-                {weeks.map((week, index) => (
-                    <View key={index} style={styles.weekDates}>
-                        {week.map((date, idx) => (
-                            <View key={idx} style={styles.dateContainer}>
-                                <Text
-                                    style={[
-                                        styles.dateText,
-                                        isSameDay(date, today)
-                                            ? styles.currentDateText
-                                            : null,
-                                    ]}
-                                >
-                                    {date.getDate()}
-                                </Text>
-                            </View>
-                        ))}
+                {week.map((date, idx) => (
+                    <View key={idx} style={styles.dateContainer}>
+                        <Text
+                            style={[
+                                styles.dateText,
+                                isSameDay(date, today)
+                                    ? styles.currentDateText
+                                    : null,
+                            ]}
+                        >
+                            {date.getDate()}
+                        </Text>
                     </View>
                 ))}
-            </PagerView>
+            </Animated.View>
         </View>
     );
 };
 
-const isSameDay = (d1: Date, d2: Date): boolean => {
-    return (
-        d1.getDate() === d2.getDate() &&
-        d1.getMonth() === d2.getMonth() &&
-        d1.getFullYear() === d2.getFullYear()
-    );
-};
+const isSameDay = (d1: Date, d2: Date) =>
+    d1.getDate() === d2.getDate() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getFullYear() === d2.getFullYear();
 
 const styles = StyleSheet.create({
     container: {
@@ -128,22 +114,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         height: 22,
     },
-    pagerView: {
+    weekView: {
         height: 36,
-    },
-    weekDates: {
-        alignItems: "center",
         flexDirection: "row",
         justifyContent: "space-around",
         width: "100%",
         paddingHorizontal: 8,
     },
-    dayContainer: {
+    dateContainer: {
         width: 44,
         justifyContent: "center",
         alignItems: "center",
     },
-    dateContainer: {
+    dayContainer: {
         width: 44,
         justifyContent: "center",
         alignItems: "center",

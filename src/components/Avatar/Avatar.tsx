@@ -25,6 +25,7 @@ const Avatar: React.FC<AvatarProps> = ({ avatarUrl, setAvatar }) => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
+            base64: true,
             aspect: [1, 1],
             quality: 1,
         });
@@ -34,12 +35,16 @@ const Avatar: React.FC<AvatarProps> = ({ avatarUrl, setAvatar }) => {
         }
 
         const formData = new FormData();
-        formData.append(
-            "image",
-            new File([result.assets[0].uri], "image.png", {
-                type: "image/png" || "image/jpg" || "image/jpeg",
-            }),
-        );
+
+        const imageUri = result.assets[0].uri;
+        const imageName = result.assets[0].fileName;
+
+        formData.append("image", {
+            uri: imageUri,
+            name: imageName,
+            type: "image/jpeg",
+        } as any);
+
         const { imageUrl } = await uploadUserProfileImage(formData);
         setAvatar(imageUrl);
     };

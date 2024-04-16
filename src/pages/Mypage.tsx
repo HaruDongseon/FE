@@ -15,6 +15,8 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { getUserProfile, updateUserProfile } from "@/apis/member";
+import { AxiosError } from "axios";
+import { validNicknameRegex } from "@/utils/authUtils";
 
 export type MypageParams = {
     Mypage: {
@@ -26,6 +28,7 @@ const Mypage = () => {
     const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
     const [avatar, setAvatar] = useState("");
+    const [error, setError] = useState("");
     const route = useRoute<RouteProp<MypageParams, "Mypage">>();
     const snsType = route.params?.snsType;
 
@@ -42,6 +45,10 @@ const Mypage = () => {
         };
         fetchUserProfile();
     }, []);
+
+    useEffect(() => {
+        setError("");
+    }, [nickname]);
 
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -61,11 +68,27 @@ const Mypage = () => {
     const iconType = getIconType(snsType);
 
     const handleUpdateUserProfile = async () => {
-        await updateUserProfile({
-            nickname,
-            profileImageUrl: avatar,
-        });
-        navigation.navigate("Mainpage");
+        if (!validNicknameRegex.test(nickname)) {
+            setError("한글, 영문, 숫자, 띄어쓰기 포함 3~10자로 입력하세요.");
+            return;
+        }
+
+        try {
+            await updateUserProfile({
+                nickname,
+                profileImageUrl: avatar,
+            });
+            navigation.navigate("Mainpage");
+        } catch (error) {
+            const { response } = error as unknown as AxiosError;
+            if (response && response.status === 400) {
+                setError("중복된 닉네임입니다. 다른 닉네임을 사용해주세요.");
+            } else {
+                setError(
+                    "예상치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.",
+                );
+            }
+        }
     };
 
     return (
@@ -90,6 +113,8 @@ const Mypage = () => {
                 maxLength={10}
                 defaultValue={nickname}
                 placeholder="사용할 닉네임을 입력해주세요"
+                inputState={error ? "error" : "default"}
+                errorMessage={error}
             />
             <View style={styles.buttonContainer}>
                 <Button

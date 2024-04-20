@@ -1,14 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Calendar from "@/components/Calendar";
 import Colors from "@/styles/Color";
 import Button from "@/components/Button";
+import CalendarHorizontal from "@/components/CalendarHorizontal";
 
 const Mainpage: React.FC = () => {
     return (
         <SafeAreaView style={styles.safeArea}>
-            <Calendar />
+            <CalendarHorizontal />
             <Text style={styles.centeredText}>
                 등록된 하루동선이 없습니다.{"\n"} 나의 하루동선을 만들어보세요.
             </Text>
@@ -23,7 +23,6 @@ const Mainpage: React.FC = () => {
         </SafeAreaView>
     );
 };
-
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
@@ -37,6 +36,7 @@ const styles = StyleSheet.create({
         color: Colors.grayScale600,
         fontWeight: "500",
         marginBottom: 16,
+        textAlign: "center",
     },
 });
 

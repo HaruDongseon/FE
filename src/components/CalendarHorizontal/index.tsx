@@ -13,7 +13,7 @@ const getWeekDates = (baseDate: string | number | Date) => {
     });
 };
 
-const Calendar = () => {
+const CalendarHorizontal = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const today = new Date();
     const position = useRef(new Animated.ValueXY()).current;
@@ -92,6 +92,12 @@ const isSameDay = (d1: Date, d2: Date) =>
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.white,
+        shadowColor: "#042826",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 10,
+        height: 112,
     },
     header: {
         flexDirection: "row",
@@ -153,4 +159,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Calendar;
+export default CalendarHorizontal;

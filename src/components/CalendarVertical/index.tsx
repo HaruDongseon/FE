@@ -8,9 +8,8 @@ const screenWidth = Dimensions.get("window").width;
 const todayDate = new Date().toISOString().split("T")[0];
 
 const CalendarVertical = () => {
-    const [currentMonth, setCurrentMonth] = useState(
-        new Date().toISOString().split("T")[0],
-    );
+    const [currentMonth, setCurrentMonth] = useState(todayDate);
+    const [selectedDate, setSelectedDate] = useState(todayDate);
 
     const handleScroll = (event: {
         nativeEvent: { contentOffset: { y: any } };
@@ -30,6 +29,31 @@ const CalendarVertical = () => {
         setCurrentMonth(newDate.toISOString().split("T")[0]);
     };
 
+    const onDayPress = (day: { dateString: React.SetStateAction<string> }) => {
+        setSelectedDate(day.dateString);
+    };
+
+    const getMarkedDates = () => {
+        return {
+            [todayDate]: {
+                selected: true,
+                selectedColor:
+                    todayDate === selectedDate
+                        ? Colors.primary300
+                        : Colors.grayScale75,
+                selectedTextColor:
+                    todayDate === selectedDate
+                        ? Colors.white
+                        : Colors.grayScale600,
+            },
+            [selectedDate]: {
+                selected: true,
+                selectedColor: Colors.primary300,
+                selectedTextColor: Colors.white,
+            },
+        };
+    };
+
     return (
         <ScrollView
             horizontal
@@ -46,13 +70,8 @@ const CalendarVertical = () => {
                 showScrollIndicator={false}
                 pastScrollRange={50 * 12}
                 futureScrollRange={50 * 12}
-                markedDates={{
-                    [todayDate]: {
-                        selected: true,
-                        selectedColor: Colors.primary300,
-                        selectedTextColor: Colors.white,
-                    },
-                }}
+                markedDates={getMarkedDates()}
+                onDayPress={onDayPress}
             />
         </ScrollView>
     );

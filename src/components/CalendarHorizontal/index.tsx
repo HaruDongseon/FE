@@ -1,7 +1,18 @@
-import React, { useState, useRef } from "react";
-import { View, Text, StyleSheet, PanResponder, Animated } from "react-native";
+import React, { useState, useRef, Dispatch, SetStateAction } from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    PanResponder,
+    Animated,
+    TouchableOpacity,
+} from "react-native";
 import Colors from "@/styles/Color";
 import Icon from "../icon/Common";
+
+interface CalendarHorizontalProps {
+    setShowCalendar: Dispatch<SetStateAction<boolean>>;
+}
 
 const getWeekDates = (baseDate: string | number | Date) => {
     const startOfWeek = new Date(baseDate);
@@ -13,7 +24,9 @@ const getWeekDates = (baseDate: string | number | Date) => {
     });
 };
 
-const CalendarHorizontal = () => {
+const CalendarHorizontal: React.FC<CalendarHorizontalProps> = ({
+    setShowCalendar,
+}) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const today = new Date();
     const position = useRef(new Animated.ValueXY()).current;
@@ -50,7 +63,9 @@ const CalendarHorizontal = () => {
                 <Text style={styles.monthYearText}>
                     {currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
                 </Text>
-                <Icon type="CalendarL" />
+                <TouchableOpacity onPress={() => setShowCalendar(true)}>
+                    <Icon type="CalendarL" />
+                </TouchableOpacity>
             </View>
             <View style={styles.weekDays}>
                 {["일", "월", "화", "수", "목", "금", "토"].map(

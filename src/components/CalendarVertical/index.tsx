@@ -1,8 +1,9 @@
 import Colors from "@/styles/Color";
 import React, { useState } from "react";
-import { ScrollView, Dimensions } from "react-native";
+import { ScrollView, View, Text, StyleSheet, Dimensions } from "react-native";
 import { CalendarList } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
+import Button from "../Button";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -99,36 +100,66 @@ const CalendarVertical = () => {
     };
 
     return (
-        <ScrollView
-            horizontal
-            pagingEnabled
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            showsHorizontalScrollIndicator={false}
-            style={{ width: screenWidth }}
-        >
-            <CalendarList
-                current={currentMonth}
-                monthFormat={"yy년 M월"}
-                scrollEnabled
-                showScrollIndicator={false}
-                pastScrollRange={50 * 12}
-                futureScrollRange={50 * 12}
-                markedDates={getMarkedDates()}
-                onDayPress={onDayPress}
-                theme={{
-                    textMonthFontSize: 16,
-                    textMonthFontWeight: "700",
-                    monthTextColor: Colors.grayScale700,
-                    textDayFontWeight: "500",
-                    textDayFontSize: 14,
-                    dayTextColor: Colors.grayScale600,
-                    textDayHeaderFontSize: 12,
-                    textDayHeaderFontWeight: "500",
-                }}
-            />
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView
+                horizontal
+                pagingEnabled
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+                showsHorizontalScrollIndicator={false}
+                style={{ width: screenWidth }}
+            >
+                <CalendarList
+                    style={{ backgroundColor: "transparent" }}
+                    current={currentMonth}
+                    monthFormat={"yy년 M월"}
+                    scrollEnabled
+                    showScrollIndicator={false}
+                    pastScrollRange={50 * 12}
+                    futureScrollRange={50 * 12}
+                    markedDates={getMarkedDates()}
+                    onDayPress={onDayPress}
+                    theme={{
+                        textMonthFontSize: 16,
+                        textMonthFontWeight: "700",
+                        monthTextColor: Colors.grayScale700,
+                        textDayFontWeight: "500",
+                        textDayFontSize: 14,
+                        dayTextColor: Colors.grayScale600,
+                        textDayHeaderFontSize: 12,
+                        textDayHeaderFontWeight: "500",
+                        calendarBackground: Colors.grayScale25,
+                    }}
+                />
+            </ScrollView>
+            <View style={styles.fixedButtonContainer}>
+                <Button
+                    title="날짜 선택"
+                    onPress={() => {}}
+                    color="Primary"
+                    size="l"
+                    type="filled"
+                    width={320}
+                />
+            </View>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    fixedButtonContainer: {
+        alignItems: "center",
+        height: 94,
+        width: "100%",
+        backgroundColor: Colors.grayScale25,
+        position: "absolute",
+        alignSelf: "center",
+        bottom: 0,
+        paddingTop: 4,
+    },
+});
 
 export default CalendarVertical;

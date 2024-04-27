@@ -23,11 +23,13 @@ const Mainpage: React.FC<{ navigation: any }> = ({ navigation }) => {
                 title="나의 하루동선 만들기"
                 width={216}
             />
-            {showCalendar && (
-                <Modal onRequestClose={() => setShowCalendar(false)}>
-                    <CalendarVertical />
-                </Modal>
-            )}
+            <Modal
+                visible={showCalendar}
+                onRequestClose={() => setShowCalendar(false)}
+                presentationStyle="fullScreen"
+            >
+                <CalendarVertical />
+            </Modal>
         </SafeAreaView>
     );
 };

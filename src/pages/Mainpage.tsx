@@ -28,7 +28,7 @@ const Mainpage: React.FC<{ navigation: any }> = () => {
                 onRequestClose={() => setShowCalendar(false)}
                 presentationStyle="fullScreen"
             >
-                <CalendarVertical />
+                <CalendarVertical setShowCalendar={setShowCalendar} />
             </Modal>
         </SafeAreaView>
     );

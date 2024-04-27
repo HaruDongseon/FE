@@ -14,6 +14,10 @@ import Button from "../Button";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "../icon/Common";
 
+interface CalendarVerticalProps {
+    setShowCalendar: (show: boolean) => void;
+}
+
 const screenWidth = Dimensions.get("window").width;
 
 const todayDate = new Date().toISOString().split("T")[0];
@@ -61,7 +65,9 @@ LocaleConfig.locales["ko"] = {
 };
 LocaleConfig.defaultLocale = "ko";
 
-const CalendarVertical = () => {
+const CalendarVertical: React.FC<CalendarVerticalProps> = ({
+    setShowCalendar,
+}) => {
     const insets = useSafeAreaInsets();
 
     const [currentMonth, setCurrentMonth] = useState(todayDate);
@@ -114,7 +120,9 @@ const CalendarVertical = () => {
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.header}>
                 <TouchableOpacity
-                    onPress={() => {}}
+                    onPress={() => {
+                        setShowCalendar(false);
+                    }}
                     style={styles.iconContainer}
                 >
                     <Icon type="CancelM" />
@@ -155,7 +163,9 @@ const CalendarVertical = () => {
             <View style={styles.fixedButtonContainer}>
                 <Button
                     title="날짜 선택"
-                    onPress={() => {}}
+                    onPress={() => {
+                        setShowCalendar(false);
+                    }}
                     color="Primary"
                     size="l"
                     type="filled"

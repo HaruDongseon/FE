@@ -1,9 +1,18 @@
 import Colors from "@/styles/Color";
 import React, { useState } from "react";
-import { ScrollView, View, Text, StyleSheet, Dimensions } from "react-native";
+import {
+    ScrollView,
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    TouchableOpacity,
+} from "react-native";
 import { CalendarList } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
 import Button from "../Button";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from "../icon/Common";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -53,6 +62,8 @@ LocaleConfig.locales["ko"] = {
 LocaleConfig.defaultLocale = "ko";
 
 const CalendarVertical = () => {
+    const insets = useSafeAreaInsets();
+
     const [currentMonth, setCurrentMonth] = useState(todayDate);
     const [selectedDate, setSelectedDate] = useState(todayDate);
 
@@ -100,7 +111,16 @@ const CalendarVertical = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
+            <View style={styles.header}>
+                <TouchableOpacity
+                    onPress={() => {}}
+                    style={styles.iconContainer}
+                >
+                    <Icon type="CancelM" />
+                </TouchableOpacity>
+                <Text style={styles.headerText}>날짜 등록</Text>
+            </View>
             <ScrollView
                 horizontal
                 pagingEnabled
@@ -149,6 +169,24 @@ const CalendarVertical = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    iconContainer: {
+        position: "absolute",
+        left: 24,
+    },
+    header: {
+        height: 44,
+        flexDirection: "row",
+        width: "100%",
+        backgroundColor: Colors.white,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingVertical: 10,
+    },
+    headerText: {
+        fontSize: 16,
+        fontWeight: "500",
+        color: Colors.grayScale600,
     },
     fixedButtonContainer: {
         alignItems: "center",

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Modal, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/styles/Color";
 import Button from "@/components/Button";
 import CalendarHorizontal from "@/components/CalendarHorizontal";
 import CalendarVertical from "@/components/CalendarVertical";
 
-const Mainpage: React.FC<{ navigation: any }> = ({ navigation }) => {
+const Mainpage: React.FC<{ navigation: any }> = () => {
     const [showCalendar, setShowCalendar] = useState(false);
 
     return (

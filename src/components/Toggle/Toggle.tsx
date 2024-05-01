@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: Colors.white,
         borderBottomWidth: 1,
-        borderBottomColor: "#F0F2F2",
+        borderBottomColor: Colors.grayScale50,
         opacity: 1,
     },
     title: {

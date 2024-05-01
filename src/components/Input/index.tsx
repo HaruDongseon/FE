@@ -17,8 +17,8 @@ type InputState = "default" | "touch" | "pressed" | "error" | "disabled";
 
 interface InputProps extends TextInputProps {
     size: InputSize;
-    placeholder: string;
-    onChangeText: Dispatch<SetStateAction<string>>;
+    placeholder?: string;
+    onChangeText?: Dispatch<SetStateAction<string>>;
     defaultValue?: string;
     iconPosition?: IconPosition;
     inputState?: InputState;

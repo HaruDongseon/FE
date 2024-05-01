@@ -8,6 +8,8 @@ import HomeStack from "../StackNavigator";
 import { TouchableOpacity } from "react-native";
 import { NavigationContainerRef } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
+import MakingPage from "@/pages/Makingpage";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,11 +18,21 @@ type TabNavigatorProps = {
 };
 
 function TabNavigator({ navigationRef }: TabNavigatorProps) {
+    const insets = useSafeAreaInsets();
+
     return (
         <Tab.Navigator
             initialRouteName="HomeStack"
             screenOptions={({ route }) => ({
                 headerShadowVisible: false,
+                headerStyle: {
+                    height: 44 + insets.top,
+                },
+                headerTitleStyle: {
+                    fontWeight: "500",
+                    fontSize: 16,
+                    color: Colors.grayScale600,
+                },
                 headerLeft: () => (
                     <TouchableOpacity
                         onPress={() => navigationRef.current?.goBack()}
@@ -74,6 +86,15 @@ function TabNavigator({ navigationRef }: TabNavigatorProps) {
                     title: "내 정보",
                     tabBarStyle: { display: "none" },
                     headerTitleAlign: "center",
+                }}
+            />
+            <Tab.Screen
+                name="Makingpage"
+                component={MakingPage}
+                options={{
+                    title: "나의 하루동선",
+                    tabBarButton: () => null,
+                    tabBarStyle: { display: "none" },
                 }}
             />
         </Tab.Navigator>

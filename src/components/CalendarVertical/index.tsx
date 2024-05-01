@@ -13,6 +13,8 @@ import { LocaleConfig } from "react-native-calendars";
 import Button from "../Button";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "../icon/Common";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
 
 interface CalendarVerticalProps {
     setShowCalendar: (show: boolean) => void;
@@ -69,6 +71,7 @@ const CalendarVertical: React.FC<CalendarVerticalProps> = ({
     setShowCalendar,
 }) => {
     const insets = useSafeAreaInsets();
+    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
     const [currentMonth, setCurrentMonth] = useState(todayDate);
     const [selectedDate, setSelectedDate] = useState(todayDate);
@@ -165,6 +168,9 @@ const CalendarVertical: React.FC<CalendarVerticalProps> = ({
                     title="날짜 선택"
                     onPress={() => {
                         setShowCalendar(false);
+                        navigation.navigate("Makingpage", {
+                            date: selectedDate,
+                        });
                     }}
                     color="Primary"
                     size="l"

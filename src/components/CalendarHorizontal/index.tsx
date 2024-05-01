@@ -59,13 +59,13 @@ const CalendarHorizontal: React.FC<CalendarHorizontalProps> = ({
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Icon type="AddL" />
+                <TouchableOpacity onPress={() => setShowCalendar(true)}>
+                    <Icon type="AddL" />
+                </TouchableOpacity>
                 <Text style={styles.monthYearText}>
                     {currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
                 </Text>
-                <TouchableOpacity onPress={() => setShowCalendar(true)}>
-                    <Icon type="CalendarL" />
-                </TouchableOpacity>
+                <Icon type="CalendarL" />
             </View>
             <View style={styles.weekDays}>
                 {["일", "월", "화", "수", "목", "금", "토"].map(

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -7,6 +7,9 @@ import Colors from "@/styles/Color";
 import Input from "@/components/Input";
 import ButtonAction from "@/components/Button/ButtonAction";
 import DropBox from "@/components/DropBox";
+import Button from "@/components/Button";
+import { RouteTag, getRouteTags } from "@/apis/routeTags";
+import debounce from "lodash.debounce";
 
 export type MypageParams = {
     Makingpage: {
@@ -21,7 +24,10 @@ const Makingpage: React.FC = () => {
     const date = route.params?.date;
     const [firstToggleOpen, setFirstToggleOpen] = useState(true);
     const [secondToggleOpen, setSecondToggleOpen] = useState(false);
-    const [dropBoxVisible, setDropBoxVisible] = useState(false);
+    const [tagInputFocused, setTagInputFocused] = useState(false);
+    const [tagInput, setTagInput] = useState("");
+    const [title, setTitle] = useState("");
+    const [routeTags, setRouteTags] = useState<RouteTag[]>([]);
     const [buttonStates, setButtonStates] = useState({
         대중교통: "default",
         도보: "default",
@@ -40,10 +46,6 @@ const Makingpage: React.FC = () => {
         return new Intl.DateTimeFormat("ko-KR", options).format(date);
     };
 
-    const handleToggleDropBox = () => {
-        setDropBoxVisible(true);
-    };
-
     const handleButtonAction = (buttonName: TransportType) => {
         const activeCount = Object.values(buttonStates).filter(
             (status) => status === "active",
@@ -60,6 +62,27 @@ const Makingpage: React.FC = () => {
             [buttonName]: newStatus,
         }));
     };
+
+    const debouncedFetchRouteTags = useCallback(
+        debounce(async (input: string) => {
+            if (input.length > 0) {
+                try {
+                    const data = await getRouteTags(input);
+                    setRouteTags(data);
+                } catch (error) {
+                    console.error("Failed to fetch route tags", error);
+                }
+            }
+        }, 500),
+        [],
+    );
+
+    useEffect(() => {
+        if (tagInputFocused) {
+            debouncedFetchRouteTags(tagInput);
+        }
+        return () => debouncedFetchRouteTags.cancel();
+    }, [tagInputFocused, tagInput, debouncedFetchRouteTags]);
 
     return (
         <View style={styles.container}>
@@ -83,7 +106,8 @@ const Makingpage: React.FC = () => {
                         <Input
                             size={"M"}
                             placeholder={"제목을 입력해주세요"}
-                            onChangeText={() => {}}
+                            onChangeText={setTitle}
+                            maxLength={15}
                         />
                     </Frame>
                     <View style={styles.tagConatiner}>
@@ -91,10 +115,14 @@ const Makingpage: React.FC = () => {
                             <Input
                                 size={"M"}
                                 placeholder={"#태그를 입력해주세요"}
-                                onChangeText={() => {}}
-                                onFocus={handleToggleDropBox}
+                                value={tagInput}
+                                onChangeText={setTagInput}
+                                onFocus={() => setTagInputFocused(true)}
+                                onBlur={() => setTagInputFocused(false)}
                             />
-                            {/* <DropBox hashtags={["#성수", "#성수2"]} /> */}
+                            {tagInputFocused && (
+                                <DropBox hashtags={routeTags} />
+                            )}
                         </Frame>
                     </View>
                     <Frame title="이동수단">
@@ -129,6 +157,17 @@ const Makingpage: React.FC = () => {
                     setSecondToggleOpen((prev) => !prev);
                 }}
             />
+            <View style={styles.buttonContainer}>
+                <Button
+                    title={"동선 만들기"}
+                    onPress={() => {}}
+                    disabled={!title}
+                    type={"filled"}
+                    size={"l"}
+                    color={"Primary"}
+                    width={320}
+                />
+            </View>
         </View>
     );
 };
@@ -152,6 +191,12 @@ const styles = StyleSheet.create({
     tagConatiner: {
         position: "relative",
         zIndex: 9999,
+    },
+    buttonContainer: {
+        alignItems: "center",
+        position: "absolute",
+        alignSelf: "center",
+        bottom: 34,
     },
 });
 

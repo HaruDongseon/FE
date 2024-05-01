@@ -23,6 +23,8 @@ interface InputProps extends TextInputProps {
     iconPosition?: IconPosition;
     inputState?: InputState;
     errorMessage?: string;
+    onBlur?: () => void;
+    onFocus?: () => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -33,12 +35,11 @@ const Input: React.FC<InputProps> = ({
     inputState = "default",
     onChangeText,
     errorMessage,
+    onFocus,
+    onBlur,
     ...textInputProps
 }) => {
     const [isFocused, setIsFocused] = useState(false);
-
-    const handleFocus = () => setIsFocused(true);
-    const handleBlur = () => setIsFocused(false);
 
     const inputStyles = [
         styles.input,
@@ -51,6 +52,20 @@ const Input: React.FC<InputProps> = ({
         (iconPosition === "trailing" || iconPosition === "both") &&
             styles.paddingRight,
     ];
+
+    const handleFocus = () => {
+        if (onFocus) {
+            onFocus();
+        }
+        setIsFocused(true);
+    };
+
+    const handleBlur = () => {
+        if (onBlur) {
+            onBlur();
+        }
+        setIsFocused(false);
+    };
 
     return (
         <View style={styles.container}>

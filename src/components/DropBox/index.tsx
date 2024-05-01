@@ -1,3 +1,4 @@
+import { RouteTag } from "@/apis/routeTags";
 import Colors from "@/styles/Color";
 import React, { useState } from "react";
 import {
@@ -9,7 +10,7 @@ import {
 } from "react-native";
 
 type DropBoxProps = {
-    hashtags: string[];
+    hashtags: RouteTag[];
 };
 
 const DropBox: React.FC<DropBoxProps> = ({ hashtags }) => {
@@ -19,14 +20,12 @@ const DropBox: React.FC<DropBoxProps> = ({ hashtags }) => {
     return (
         <View style={styles.container}>
             <ScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.contentContainer}
                 showsVerticalScrollIndicator={isScrollEnabled}
                 scrollEnabled={isScrollEnabled}
             >
                 {hashtags.map((hashtag, index) => (
                     <TouchableOpacity
-                        key={index}
+                        key={hashtag.id}
                         style={[
                             styles.hashtag,
                             selected === index && styles.selected,
@@ -37,7 +36,10 @@ const DropBox: React.FC<DropBoxProps> = ({ hashtags }) => {
                             setTimeout(() => setSelected(null), 100);
                         }}
                     >
-                        <Text style={styles.hashtagText}>{hashtag}</Text>
+                        <Text style={styles.hashtagText}># {hashtag.name}</Text>
+                        <Text style={styles.hashtagCount}>
+                            {hashtag.selectCount}
+                        </Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
@@ -48,20 +50,18 @@ const DropBox: React.FC<DropBoxProps> = ({ hashtags }) => {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        height: 208,
+        height: 200,
         borderRadius: 4,
         backgroundColor: Colors.white,
-        overflow: "hidden",
         position: "absolute",
-        zIndex: 9999,
         top: 40,
+        shadowColor: "#042826",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 3,
     },
-    scrollView: {
-        paddingVertical: 8,
-    },
-    contentContainer: {
-        paddingBottom: 20,
-    },
+
     hashtag: {
         width: "100%",
         height: 40,
@@ -69,12 +69,18 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: "#EBEDED",
-        justifyContent: "center",
+        flexDirection: "row",
     },
     hashtagText: {
         fontSize: 14,
         fontWeight: "400",
         color: Colors.grayScale800,
+        marginRight: 8,
+    },
+    hashtagCount: {
+        fontSize: 14,
+        fontWeight: "400",
+        color: Colors.grayScale300,
     },
     selected: {
         backgroundColor: Colors.primary25,

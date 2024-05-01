@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import {
+    View,
+    StyleSheet,
+    Keyboard,
+    TouchableWithoutFeedback,
+} from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import Frame from "@/components/Frame/Frame";
@@ -85,90 +90,98 @@ const Makingpage: React.FC = () => {
     }, [tagInputFocused, tagInput, debouncedFetchRouteTags]);
 
     return (
-        <View style={styles.container}>
-            <Toggle
-                title="동선 기본 정보"
-                expanded={firstToggleOpen}
-                handlePress={() => {
-                    setFirstToggleOpen((prev) => !prev);
-                }}
-            />
-            {firstToggleOpen && (
-                <View style={styles.frameContainer}>
-                    <Frame title="날짜">
-                        <Input
-                            size={"M"}
-                            defaultValue={formatDate(date)}
-                            inputState="disabled"
-                        />
-                    </Frame>
-                    <Frame title="제목">
-                        <Input
-                            size={"M"}
-                            placeholder={"제목을 입력해주세요"}
-                            onChangeText={setTitle}
-                            maxLength={15}
-                        />
-                    </Frame>
-                    <View style={styles.tagConatiner}>
-                        <Frame title="태그">
+        <TouchableWithoutFeedback
+            style={{ flex: 1 }}
+            onPress={Keyboard.dismiss}
+            accessible={false}
+        >
+            <View style={styles.container}>
+                <Toggle
+                    title="동선 기본 정보"
+                    expanded={firstToggleOpen}
+                    handlePress={() => {
+                        setFirstToggleOpen((prev) => !prev);
+                    }}
+                />
+                {firstToggleOpen && (
+                    <View style={styles.frameContainer}>
+                        <Frame title="날짜">
                             <Input
                                 size={"M"}
-                                placeholder={"#태그를 입력해주세요"}
-                                value={tagInput}
-                                onChangeText={setTagInput}
-                                onFocus={() => setTagInputFocused(true)}
-                                onBlur={() => setTagInputFocused(false)}
+                                defaultValue={formatDate(date)}
+                                inputState="disabled"
                             />
-                            {tagInputFocused && (
-                                <DropBox hashtags={routeTags} />
-                            )}
+                        </Frame>
+                        <Frame title="제목">
+                            <Input
+                                size={"M"}
+                                placeholder={"제목을 입력해주세요"}
+                                onChangeText={setTitle}
+                                maxLength={15}
+                            />
+                        </Frame>
+                        <View style={styles.tagConatiner}>
+                            <Frame title="태그">
+                                <Input
+                                    size={"M"}
+                                    placeholder={"#태그를 입력해주세요"}
+                                    value={tagInput}
+                                    onChangeText={setTagInput}
+                                    onFocus={() => setTagInputFocused(true)}
+                                    onBlur={() => setTagInputFocused(false)}
+                                />
+                                {tagInputFocused && (
+                                    <DropBox hashtags={routeTags} />
+                                )}
+                            </Frame>
+                        </View>
+                        <Frame title="이동수단">
+                            {(
+                                [
+                                    "대중교통",
+                                    "도보",
+                                    "자전거",
+                                    "자동차",
+                                ] as TransportType[]
+                            ).map((transport) => (
+                                <ButtonAction
+                                    key={transport}
+                                    title={transport}
+                                    status={
+                                        buttonStates[transport] as
+                                            | "default"
+                                            | "active"
+                                            | "disabled"
+                                    }
+                                    onPress={() =>
+                                        handleButtonAction(transport)
+                                    }
+                                />
+                            ))}
                         </Frame>
                     </View>
-                    <Frame title="이동수단">
-                        {(
-                            [
-                                "대중교통",
-                                "도보",
-                                "자전거",
-                                "자동차",
-                            ] as TransportType[]
-                        ).map((transport) => (
-                            <ButtonAction
-                                key={transport}
-                                title={transport}
-                                status={
-                                    buttonStates[transport] as
-                                        | "default"
-                                        | "active"
-                                        | "disabled"
-                                }
-                                onPress={() => handleButtonAction(transport)}
-                            />
-                        ))}
-                    </Frame>
-                </View>
-            )}
-            <View style={styles.gap} />
-            <Toggle
-                title="동선 만들기"
-                expanded={secondToggleOpen}
-                handlePress={() => {
-                    setSecondToggleOpen((prev) => !prev);
-                }}
-            />
-            <View style={styles.buttonContainer}>
-                <Button
-                    title={"동선 만들기"}
-                    onPress={() => {}}
-                    disabled={!title}
-                    type={"filled"}
-                    size={"l"}
-                    color={"Primary"}
-                    width={320}
+                )}
+                <View style={styles.gap} />
+                <Toggle
+                    title="동선 만들기"
+                    expanded={secondToggleOpen}
+                    handlePress={() => {
+                        setSecondToggleOpen((prev) => !prev);
+                    }}
                 />
+                <View style={styles.buttonContainer}>
+                    <Button
+                        title={"동선 만들기"}
+                        onPress={() => {}}
+                        disabled={!title}
+                        type={"filled"}
+                        size={"l"}
+                        color={"Primary"}
+                        width={320}
+                    />
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 

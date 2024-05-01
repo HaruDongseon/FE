@@ -6,6 +6,7 @@ import Frame from "@/components/Frame/Frame";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
 import ButtonAction from "@/components/Button/ButtonAction";
+import DropBox from "@/components/DropBox";
 
 export type MypageParams = {
     Makingpage: {
@@ -20,6 +21,7 @@ const Makingpage: React.FC = () => {
     const date = route.params?.date;
     const [firstToggleOpen, setFirstToggleOpen] = useState(true);
     const [secondToggleOpen, setSecondToggleOpen] = useState(false);
+    const [dropBoxVisible, setDropBoxVisible] = useState(false);
     const [buttonStates, setButtonStates] = useState({
         대중교통: "default",
         도보: "default",
@@ -36,6 +38,10 @@ const Makingpage: React.FC = () => {
             weekday: "long",
         };
         return new Intl.DateTimeFormat("ko-KR", options).format(date);
+    };
+
+    const handleToggleDropBox = () => {
+        setDropBoxVisible(true);
     };
 
     const handleButtonAction = (buttonName: TransportType) => {
@@ -80,13 +86,17 @@ const Makingpage: React.FC = () => {
                             onChangeText={() => {}}
                         />
                     </Frame>
-                    <Frame title="태그">
-                        <Input
-                            size={"M"}
-                            placeholder={"#태그를 입력해주세요"}
-                            onChangeText={() => {}}
-                        />
-                    </Frame>
+                    <View style={styles.tagConatiner}>
+                        <Frame title="태그">
+                            <Input
+                                size={"M"}
+                                placeholder={"#태그를 입력해주세요"}
+                                onChangeText={() => {}}
+                                onFocus={handleToggleDropBox}
+                            />
+                            {/* <DropBox hashtags={["#성수", "#성수2"]} /> */}
+                        </Frame>
+                    </View>
                     <Frame title="이동수단">
                         {(
                             [
@@ -134,9 +144,14 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.grayScale50,
         padding: 20,
         rowGap: 24,
+        zIndex: 99999,
     },
     gap: {
         height: 8,
+    },
+    tagConatiner: {
+        position: "relative",
+        zIndex: 9999,
     },
 });
 

@@ -11,6 +11,10 @@ interface UserRequestProfile {
     profileImageUrl: string;
 }
 
+interface UserResponseProfileImage {
+    imageUrl: string;
+}
+
 export async function updateUserProfile({
     nickname,
     profileImageUrl,
@@ -36,6 +40,26 @@ export async function getUserProfile(): Promise<UserResponseProfile> {
         return response.data;
     } catch (error) {
         console.error("Error getting profile:", error);
+        throw error;
+    }
+}
+
+export async function uploadUserProfileImage(
+    formData: FormData,
+): Promise<UserResponseProfileImage> {
+    try {
+        const response = await axiosInstance.post(
+            `${API_BASE_URL}/members/image`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            },
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error uploading profile image:", error);
         throw error;
     }
 }

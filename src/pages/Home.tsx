@@ -6,7 +6,6 @@ import { StyleSheet, View } from "react-native";
 import Colors from "@/styles/Color";
 import KakaoLogin from "@/components/Auth/KakaoLogin";
 import NaverLogin from "@/components/Auth/NaverLogin";
-import Icon from "@/components/icon/Common";
 
 export const Home = () => {
     const [loginVisible, setLoginVisible] = useState<SNSType | null>(null);
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         position: "absolute",
-        bottom: 24,
+        bottom: 96,
         alignItems: "center",
     },
     button: {

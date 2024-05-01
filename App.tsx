@@ -1,72 +1,28 @@
 import React, { useRef } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
 import {
     NavigationContainer,
     NavigationContainerRef,
 } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Home } from "@/pages/Home";
-import Mypage, { MypageParams } from "@/pages/Mypage";
-import Before from "@/components/icon/General/Before";
-import Mainpage from "@/pages/Mainpage";
+
+import TabNavigator from "@/components/TabNavigator";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export type RootStackParamList = {
-    Home: undefined;
-    Mypage: MypageParams["Mypage"];
+    Root: undefined;
+    Mypage: undefined;
     Mainpage: undefined;
+    HomeStack: undefined;
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
-
-export default function App({}) {
+export default function App() {
     const navigationRef =
         useRef<NavigationContainerRef<RootStackParamList>>(null);
 
     return (
-        <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator
-                initialRouteName="Home"
-                screenOptions={{
-                    headerShadowVisible: false,
-                    headerLeft: () => (
-                        <TouchableOpacity
-                            onPress={() => navigationRef.current?.goBack()}
-                            style={{ marginLeft: 20 }}
-                        >
-                            <Before />
-                        </TouchableOpacity>
-                    ),
-                }}
-            >
-                <Stack.Screen
-                    name="Home"
-                    component={Home}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="Mypage"
-                    component={Mypage}
-                    options={{
-                        title: "내 정보",
-                    }}
-                />
-                <Stack.Screen
-                    name="Mainpage"
-                    component={Mainpage}
-                    options={{ headerShown: false }}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <SafeAreaProvider>
+            <NavigationContainer ref={navigationRef}>
+                <TabNavigator navigationRef={navigationRef} />
+            </NavigationContainer>
+        </SafeAreaProvider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});

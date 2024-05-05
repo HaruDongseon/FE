@@ -1,16 +1,11 @@
-import React, { useState, useRef, Dispatch, SetStateAction } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    PanResponder,
-    Animated,
-    TouchableOpacity,
-} from "react-native";
+import React, { Dispatch, SetStateAction, useRef } from "react";
+import { View, Text, StyleSheet, PanResponder, Animated } from "react-native";
 import Colors from "@/styles/Color";
-import Icon from "../icon/Common";
-import { ParamListBase, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+
+interface WeeklyCalendarType {
+    currentDate: Date;
+    setCurrentDate: Dispatch<SetStateAction<Date>>;
+}
 
 const getWeekDates = (baseDate: string | number | Date) => {
     const startOfWeek = new Date(baseDate);
@@ -22,10 +17,10 @@ const getWeekDates = (baseDate: string | number | Date) => {
     });
 };
 
-const CalendarHorizontal: React.FC = () => {
-    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
-    const [currentDate, setCurrentDate] = useState(new Date());
+const WeeklyCalendar: React.FC<WeeklyCalendarType> = ({
+    currentDate,
+    setCurrentDate,
+}) => {
     const today = new Date();
     const position = useRef(new Animated.ValueXY()).current;
 
@@ -55,18 +50,7 @@ const CalendarHorizontal: React.FC = () => {
     const week = getWeekDates(currentDate);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("Calendarpage")}
-                >
-                    <Icon type="AddL" />
-                </TouchableOpacity>
-                <Text style={styles.monthYearText}>
-                    {currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
-                </Text>
-                <Icon type="CalendarL" />
-            </View>
+        <View>
             <View style={styles.weekDays}>
                 {["일", "월", "화", "수", "목", "금", "토"].map(
                     (day, index) => (
@@ -105,29 +89,6 @@ const isSameDay = (d1: Date, d2: Date) =>
     d1.getFullYear() === d2.getFullYear();
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: Colors.white,
-        shadowColor: "#042826",
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 10,
-        height: 112,
-    },
-    header: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        marginBottom: 4,
-        paddingHorizontal: 20,
-        paddingVertical: 6,
-        height: 44,
-    },
-    monthYearText: {
-        fontSize: 18,
-        color: Colors.grayScale600,
-    },
     weekDays: {
         flexDirection: "row",
         justifyContent: "space-around",
@@ -174,4 +135,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CalendarHorizontal;
+export default WeeklyCalendar;

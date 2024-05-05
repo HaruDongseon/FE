@@ -6,7 +6,12 @@ import {
     TouchableWithoutFeedback,
 } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import {
+    ParamListBase,
+    RouteProp,
+    useNavigation,
+    useRoute,
+} from "@react-navigation/native";
 import Frame from "@/components/Frame/Frame";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
@@ -15,6 +20,7 @@ import DropBox from "@/components/DropBox";
 import Button from "@/components/Button";
 import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 export type MypageParams = {
     Makingpage: {
@@ -25,6 +31,8 @@ export type MypageParams = {
 type TransportType = "대중교통" | "도보" | "자전거" | "자동차";
 
 const Makingpage: React.FC = () => {
+    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
     const route = useRoute<RouteProp<MypageParams, "Makingpage">>();
     const date = route.params?.date;
     const [firstToggleOpen, setFirstToggleOpen] = useState(true);
@@ -108,8 +116,11 @@ const Makingpage: React.FC = () => {
                         <Frame title="날짜">
                             <Input
                                 size={"M"}
+                                readOnly={true}
                                 defaultValue={formatDate(date)}
-                                inputState="disabled"
+                                onTouchStart={() =>
+                                    navigation.navigate("Calendarpage")
+                                }
                             />
                         </Frame>
                         <Frame title="제목">

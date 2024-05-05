@@ -6,10 +6,9 @@ import Icon, { IconType } from "@/components/icon/Common";
 import Colors from "@/styles/Color";
 import HomeStack from "../StackNavigator";
 import { TouchableOpacity } from "react-native";
-import { NavigationContainerRef } from "@react-navigation/native";
-import { RootStackParamList } from "../../../App";
 import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Calendarpage from "@/pages/Calendarpage";
 
 const Tab = createBottomTabNavigator();
 
@@ -90,6 +89,15 @@ function TabNavigator() {
                 component={MakingPage}
                 options={{
                     title: "나의 하루동선",
+                    tabBarButton: () => null,
+                    tabBarStyle: { display: "none" },
+                }}
+            />
+            <Tab.Screen
+                name="Calendarpage"
+                component={Calendarpage}
+                options={{
+                    title: "날짜 등록",
                     tabBarButton: () => null,
                     tabBarStyle: { display: "none" },
                 }}

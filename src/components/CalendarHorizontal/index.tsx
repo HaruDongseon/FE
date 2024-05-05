@@ -9,10 +9,8 @@ import {
 } from "react-native";
 import Colors from "@/styles/Color";
 import Icon from "../icon/Common";
-
-interface CalendarHorizontalProps {
-    setShowCalendar: Dispatch<SetStateAction<boolean>>;
-}
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const getWeekDates = (baseDate: string | number | Date) => {
     const startOfWeek = new Date(baseDate);
@@ -24,9 +22,9 @@ const getWeekDates = (baseDate: string | number | Date) => {
     });
 };
 
-const CalendarHorizontal: React.FC<CalendarHorizontalProps> = ({
-    setShowCalendar,
-}) => {
+const CalendarHorizontal: React.FC = () => {
+    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
     const [currentDate, setCurrentDate] = useState(new Date());
     const today = new Date();
     const position = useRef(new Animated.ValueXY()).current;
@@ -59,7 +57,9 @@ const CalendarHorizontal: React.FC<CalendarHorizontalProps> = ({
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => setShowCalendar(true)}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("Calendarpage")}
+                >
                     <Icon type="AddL" />
                 </TouchableOpacity>
                 <Text style={styles.monthYearText}>

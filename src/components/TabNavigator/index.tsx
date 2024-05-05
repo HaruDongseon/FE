@@ -13,17 +13,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
-type TabNavigatorProps = {
-    navigationRef: React.RefObject<NavigationContainerRef<RootStackParamList>>;
-};
-
-function TabNavigator({ navigationRef }: TabNavigatorProps) {
+function TabNavigator() {
     const insets = useSafeAreaInsets();
 
     return (
         <Tab.Navigator
+            backBehavior="history"
             initialRouteName="HomeStack"
-            screenOptions={({ route }) => ({
+            screenOptions={({ route, navigation }) => ({
                 headerShadowVisible: false,
                 headerStyle: {
                     height: 44 + insets.top,
@@ -35,7 +32,7 @@ function TabNavigator({ navigationRef }: TabNavigatorProps) {
                 },
                 headerLeft: () => (
                     <TouchableOpacity
-                        onPress={() => navigationRef.current?.goBack()}
+                        onPress={() => navigation.goBack()}
                         style={{ marginLeft: 20 }}
                     >
                         <Icon type="Before1LineM" />

@@ -1,8 +1,5 @@
 import React, { useRef } from "react";
-import {
-    NavigationContainer,
-    NavigationContainerRef,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 
 import TabNavigator from "@/components/TabNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -15,13 +12,10 @@ export type RootStackParamList = {
 };
 
 export default function App() {
-    const navigationRef =
-        useRef<NavigationContainerRef<RootStackParamList>>(null);
-
     return (
         <SafeAreaProvider>
-            <NavigationContainer ref={navigationRef}>
-                <TabNavigator navigationRef={navigationRef} />
+            <NavigationContainer>
+                <TabNavigator />
             </NavigationContainer>
         </SafeAreaProvider>
     );

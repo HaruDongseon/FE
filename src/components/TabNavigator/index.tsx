@@ -39,8 +39,9 @@ function TabNavigator() {
                 ),
                 tabBarStyle: {
                     height: 80,
-                    position: "relative",
+                    position: "absolute",
                     boxShadow: "0px -2px 10px 0px #0428261A",
+                    backgroundColor: "transparent",
                 },
                 tabBarIcon: () => {
                     let iconName = null;

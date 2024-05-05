@@ -7,8 +7,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Button from "@/components/Button";
 import WeeklyCalendar from "@/components/WeeklyCalendar";
 import Icon from "@/components/icon/Common";
+import MonthlyCalendar from "@/components/MonthlyCalendar";
 
 const Mainpage: React.FC = () => {
+    const [monthlyCalendarOpen, setMonthlyCalendarOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState(new Date());
 
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -26,12 +28,23 @@ const Mainpage: React.FC = () => {
                         {currentDate.getFullYear()}년{" "}
                         {currentDate.getMonth() + 1}월
                     </Text>
-                    <Icon type="CalendarL" />
+                    <TouchableOpacity
+                        onPress={() => setMonthlyCalendarOpen((prev) => !prev)}
+                    >
+                        <Icon type="CalendarL" />
+                    </TouchableOpacity>
                 </View>
-                <WeeklyCalendar
-                    currentDate={currentDate}
-                    setCurrentDate={setCurrentDate}
-                />
+                {monthlyCalendarOpen ? (
+                    <MonthlyCalendar
+                        currentDate={currentDate}
+                        setCurrentDate={setCurrentDate}
+                    />
+                ) : (
+                    <WeeklyCalendar
+                        currentDate={currentDate}
+                        setCurrentDate={setCurrentDate}
+                    />
+                )}
             </View>
             <Text style={styles.centeredText}>
                 등록된 하루동선이 없습니다.{"\n"} 나의 하루동선을 만들어보세요.
@@ -62,6 +75,7 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 10,
         height: 112,
+        zIndex: 9999,
     },
     centeredText: {
         lineHeight: 24,

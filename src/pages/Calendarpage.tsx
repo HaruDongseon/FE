@@ -110,6 +110,7 @@ const Calendarpage: React.FC = () => {
                 pagingEnabled
                 onScrollEndDrag={handleScroll}
                 scrollEventThrottle={16}
+                scrollEnabled={false}
                 showsHorizontalScrollIndicator={false}
                 style={{ width: screenWidth }}
             >
@@ -123,6 +124,7 @@ const Calendarpage: React.FC = () => {
                     futureScrollRange={50 * 12}
                     markedDates={getMarkedDates()}
                     onDayPress={onDayPress}
+                    enableSwipeMonths={false}
                     theme={{
                         textMonthFontSize: 16,
                         textMonthFontWeight: "700",

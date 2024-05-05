@@ -1,44 +1,58 @@
-import React, { useState } from "react";
+import Colors from "@/styles/Color";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Calendar } from "react-native-calendars";
-import { StyleSheet, View } from "react-native";
-import {
-    GestureHandlerRootView,
-    Swipeable,
-} from "react-native-gesture-handler";
 
-const MonthlyCalendar = () => {
-    const [currentDate, setCurrentDate] = useState(
-        new Date().toISOString().split("T")[0],
-    );
+interface MonthlyCalendarType {
+    currentDate: Date;
+    setCurrentDate: Dispatch<SetStateAction<Date>>;
+}
 
-    const handlePrevMonth = () => {
-        const newDate = new Date(currentDate);
-        newDate.setMonth(newDate.getMonth() - 1);
-        setCurrentDate(newDate.toISOString().split("T")[0]);
+const todayDate = new Date().toISOString().split("T")[0];
+
+const MonthlyCalendar: React.FC<MonthlyCalendarType> = ({
+    currentDate,
+    setCurrentDate,
+}) => {
+    const [selectedDate, setSelectedDate] = useState(todayDate);
+
+    const getMarkedDates = () => {
+        return {
+            [todayDate]: {
+                selected: true,
+                selectedColor:
+                    todayDate === selectedDate
+                        ? Colors.primary300
+                        : Colors.grayScale75,
+                selectedTextColor:
+                    todayDate === selectedDate
+                        ? Colors.white
+                        : Colors.grayScale600,
+            },
+            [selectedDate]: {
+                selected: true,
+                selectedColor: Colors.primary300,
+                selectedTextColor: Colors.white,
+            },
+        };
     };
 
-    const handleNextMonth = () => {
-        const newDate = new Date(currentDate);
-        newDate.setMonth(newDate.getMonth() + 1);
-        setCurrentDate(newDate.toISOString().split("T")[0]);
+    const onDayPress = (day: { dateString: React.SetStateAction<string> }) => {
+        setSelectedDate(day.dateString);
     };
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <Swipeable
-                onSwipeableLeftOpen={handleNextMonth}
-                onSwipeableRightOpen={handlePrevMonth}
-                renderLeftActions={() => <View />}
-                renderRightActions={() => <View />}
-            >
-                <Calendar
-                    current={currentDate}
-                    onMonthChange={(month) => {
-                        setCurrentDate(month.dateString);
-                    }}
-                />
-            </Swipeable>
-        </GestureHandlerRootView>
+        <Calendar
+            enableSwipeMonths={true}
+            current={currentDate.toString()}
+            hideArrows={true}
+            onMonthChange={(month) => {
+                setCurrentDate(new Date(month.dateString));
+            }}
+            onDayPress={onDayPress}
+            markedDates={getMarkedDates()}
+            renderHeader={() => null}
+            hideExtraDays={true}
+        />
     );
 };
 

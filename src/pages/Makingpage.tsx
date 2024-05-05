@@ -76,20 +76,6 @@ const Makingpage: React.FC = () => {
         }));
     };
 
-    const debouncedFetchRouteTags = useCallback(
-        debounce(async (input: string) => {
-            if (input.length > 0) {
-                try {
-                    const data = await getRouteTags(input);
-                    setRouteTags(data);
-                } catch (error) {
-                    console.error("Failed to fetch route tags", error);
-                }
-            }
-        }, 500),
-        [],
-    );
-
     const handleTagInputBlur = () => {
         const tags = tagInput
             .split(" ")
@@ -104,9 +90,25 @@ const Makingpage: React.FC = () => {
         setTagInputFocused(false);
     };
 
+    const debouncedFetchRouteTags = debounce(async (input: string) => {
+        if (input.length > 0) {
+            try {
+                const data = await getRouteTags(input);
+                setRouteTags(data);
+            } catch (error) {
+                console.error("Failed to fetch route tags", error);
+            }
+        }
+    }, 500);
+
     useEffect(() => {
         if (tagInputFocused) {
-            debouncedFetchRouteTags(tagInput);
+            const splittedTagInput = tagInput.split(" ");
+            let lastTag = splittedTagInput[splittedTagInput.length - 1];
+            if (lastTag.startsWith("#")) {
+                lastTag = lastTag.slice(1);
+            }
+            debouncedFetchRouteTags(lastTag);
         }
         return () => debouncedFetchRouteTags.cancel();
     }, [tagInputFocused, tagInput, debouncedFetchRouteTags]);

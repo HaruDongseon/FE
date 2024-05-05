@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+    Keyboard,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    View,
+} from "react-native";
 import Avatar from "@/components/Avatar/Avatar";
 import Colors from "@/styles/Color";
 import Icon from "@/components/icon/Common";
@@ -92,41 +98,49 @@ const Mypage = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.avatarContainer}>
-                <Avatar avatarUrl={avatar} setAvatar={setAvatar} />
-            </View>
-            <View style={styles.accountContainer}>
-                <Text style={styles.accountText}>연결한 계정</Text>
-                <View style={styles.emailContainer}>
-                    {iconType && <Icon type={iconType} />}
-                    <Text style={styles.emailText}>{email}</Text>
+        <TouchableWithoutFeedback
+            style={{ flex: 1 }}
+            onPress={Keyboard.dismiss}
+            accessible={false}
+        >
+            <View style={styles.container}>
+                <View style={styles.avatarContainer}>
+                    <Avatar avatarUrl={avatar} setAvatar={setAvatar} />
+                </View>
+                <View style={styles.accountContainer}>
+                    <Text style={styles.accountText}>연결한 계정</Text>
+                    <View style={styles.emailContainer}>
+                        {iconType && <Icon type={iconType} />}
+                        <Text style={styles.emailText}>{email}</Text>
+                    </View>
+                </View>
+                <View style={styles.nicknameContainer}>
+                    <Text style={styles.nicknameText}>닉네임</Text>
+                    <Text style={styles.nicknameCount}>
+                        {nickname.length}/10
+                    </Text>
+                </View>
+                <Input
+                    onChangeText={(newNickname) => setNickname(newNickname)}
+                    size="M"
+                    maxLength={10}
+                    defaultValue={nickname}
+                    placeholder="사용할 닉네임을 입력해주세요"
+                    inputState={error ? "error" : "default"}
+                    errorMessage={error}
+                />
+                <View style={styles.buttonContainer}>
+                    <Button
+                        title={"확인"}
+                        onPress={handleUpdateUserProfile}
+                        disabled={nickname.length === 0}
+                        type={"filled"}
+                        size={"l"}
+                        color={"Primary"}
+                    />
                 </View>
             </View>
-            <View style={styles.nicknameContainer}>
-                <Text style={styles.nicknameText}>닉네임</Text>
-                <Text style={styles.nicknameCount}>{nickname.length}/10</Text>
-            </View>
-            <Input
-                onChangeText={(newNickname) => setNickname(newNickname)}
-                size="M"
-                maxLength={10}
-                defaultValue={nickname}
-                placeholder="사용할 닉네임을 입력해주세요"
-                inputState={error ? "error" : "default"}
-                errorMessage={error}
-            />
-            <View style={styles.buttonContainer}>
-                <Button
-                    title={"확인"}
-                    onPress={handleUpdateUserProfile}
-                    disabled={nickname.length === 0}
-                    type={"filled"}
-                    size={"l"}
-                    color={"Primary"}
-                />
-            </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 

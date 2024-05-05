@@ -6,24 +6,32 @@ import Icon, { IconType } from "@/components/icon/Common";
 import Colors from "@/styles/Color";
 import HomeStack from "../StackNavigator";
 import { TouchableOpacity } from "react-native";
-import { NavigationContainerRef } from "@react-navigation/native";
-import { RootStackParamList } from "../../../App";
+import MakingPage from "@/pages/Makingpage";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Calendarpage from "@/pages/Calendarpage";
 
 const Tab = createBottomTabNavigator();
 
-type TabNavigatorProps = {
-    navigationRef: React.RefObject<NavigationContainerRef<RootStackParamList>>;
-};
+function TabNavigator() {
+    const insets = useSafeAreaInsets();
 
-function TabNavigator({ navigationRef }: TabNavigatorProps) {
     return (
         <Tab.Navigator
+            backBehavior="history"
             initialRouteName="HomeStack"
-            screenOptions={({ route }) => ({
+            screenOptions={({ route, navigation }) => ({
                 headerShadowVisible: false,
+                headerStyle: {
+                    height: 44 + insets.top,
+                },
+                headerTitleStyle: {
+                    fontWeight: "500",
+                    fontSize: 16,
+                    color: Colors.grayScale600,
+                },
                 headerLeft: () => (
                     <TouchableOpacity
-                        onPress={() => navigationRef.current?.goBack()}
+                        onPress={() => navigation.goBack()}
                         style={{ marginLeft: 20 }}
                     >
                         <Icon type="Before1LineM" />
@@ -31,8 +39,9 @@ function TabNavigator({ navigationRef }: TabNavigatorProps) {
                 ),
                 tabBarStyle: {
                     height: 80,
-                    position: "relative",
+                    position: "absolute",
                     boxShadow: "0px -2px 10px 0px #0428261A",
+                    backgroundColor: "transparent",
                 },
                 tabBarIcon: () => {
                     let iconName = null;
@@ -74,6 +83,24 @@ function TabNavigator({ navigationRef }: TabNavigatorProps) {
                     title: "내 정보",
                     tabBarStyle: { display: "none" },
                     headerTitleAlign: "center",
+                }}
+            />
+            <Tab.Screen
+                name="Makingpage"
+                component={MakingPage}
+                options={{
+                    title: "나의 하루동선",
+                    tabBarButton: () => null,
+                    tabBarStyle: { display: "none" },
+                }}
+            />
+            <Tab.Screen
+                name="Calendarpage"
+                component={Calendarpage}
+                options={{
+                    title: "날짜 등록",
+                    tabBarButton: () => null,
+                    tabBarStyle: { display: "none" },
                 }}
             />
         </Tab.Navigator>

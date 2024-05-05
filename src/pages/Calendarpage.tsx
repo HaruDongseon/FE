@@ -1,22 +1,11 @@
 import Colors from "@/styles/Color";
 import React, { useState } from "react";
-import {
-    ScrollView,
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    TouchableOpacity,
-} from "react-native";
+import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
 import { CalendarList } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
-import Button from "../Button";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Icon from "../icon/Common";
-
-interface CalendarVerticalProps {
-    setShowCalendar: (show: boolean) => void;
-}
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import Button from "@/components/Button";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -65,10 +54,8 @@ LocaleConfig.locales["ko"] = {
 };
 LocaleConfig.defaultLocale = "ko";
 
-const CalendarVertical: React.FC<CalendarVerticalProps> = ({
-    setShowCalendar,
-}) => {
-    const insets = useSafeAreaInsets();
+const Calendarpage: React.FC = () => {
+    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
     const [currentMonth, setCurrentMonth] = useState(todayDate);
     const [selectedDate, setSelectedDate] = useState(todayDate);
@@ -117,23 +104,13 @@ const CalendarVertical: React.FC<CalendarVerticalProps> = ({
     };
 
     return (
-        <View style={[styles.container, { paddingTop: insets.top }]}>
-            <View style={styles.header}>
-                <TouchableOpacity
-                    onPress={() => {
-                        setShowCalendar(false);
-                    }}
-                    style={styles.iconContainer}
-                >
-                    <Icon type="CancelM" />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>날짜 등록</Text>
-            </View>
+        <View style={styles.container}>
             <ScrollView
                 horizontal
                 pagingEnabled
-                onScroll={handleScroll}
+                onScrollEndDrag={handleScroll}
                 scrollEventThrottle={16}
+                scrollEnabled={false}
                 showsHorizontalScrollIndicator={false}
                 style={{ width: screenWidth }}
             >
@@ -147,6 +124,7 @@ const CalendarVertical: React.FC<CalendarVerticalProps> = ({
                     futureScrollRange={50 * 12}
                     markedDates={getMarkedDates()}
                     onDayPress={onDayPress}
+                    enableSwipeMonths={false}
                     theme={{
                         textMonthFontSize: 16,
                         textMonthFontWeight: "700",
@@ -164,7 +142,9 @@ const CalendarVertical: React.FC<CalendarVerticalProps> = ({
                 <Button
                     title="날짜 선택"
                     onPress={() => {
-                        setShowCalendar(false);
+                        navigation.navigate("Makingpage", {
+                            date: selectedDate,
+                        });
                     }}
                     color="Primary"
                     size="l"
@@ -210,4 +190,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CalendarVertical;
+export default Calendarpage;

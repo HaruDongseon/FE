@@ -90,6 +90,20 @@ const Makingpage: React.FC = () => {
         [],
     );
 
+    const handleTagInputBlur = () => {
+        const tags = tagInput
+            .split(" ")
+            .map((word) => {
+                if (!word.startsWith("#") && word.trim() !== "") {
+                    return "#" + word;
+                }
+                return word;
+            })
+            .join(" ");
+        setTagInput(tags);
+        setTagInputFocused(false);
+    };
+
     useEffect(() => {
         if (tagInputFocused) {
             debouncedFetchRouteTags(tagInput);
@@ -139,7 +153,7 @@ const Makingpage: React.FC = () => {
                                     value={tagInput}
                                     onChangeText={setTagInput}
                                     onFocus={() => setTagInputFocused(true)}
-                                    onBlur={() => setTagInputFocused(false)}
+                                    onBlur={handleTagInputBlur}
                                 />
                                 {tagInputFocused && (
                                     <DropBox hashtags={routeTags} />

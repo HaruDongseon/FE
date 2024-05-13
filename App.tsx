@@ -14,6 +14,7 @@ export type RootStackParamList = {
 export default function App() {
     return (
         <SafeAreaProvider>
+            <StatusBar translucent />
             <NavigationContainer>
                 <TabNavigator />
             </NavigationContainer>

@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: "500",
-        fontSize: 16,
+        fontSize: 14,
     },
     iconLeading: {
         marginRight: 4,

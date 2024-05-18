@@ -20,6 +20,7 @@ function TabNavigator() {
             backBehavior="history"
             initialRouteName="HomeStack"
             screenOptions={({ route, navigation }) => ({
+                headerTitleAlign: "center",
                 headerShadowVisible: false,
                 headerStyle: {
                     height: 44 + insets.top,
@@ -38,10 +39,7 @@ function TabNavigator() {
                     </TouchableOpacity>
                 ),
                 tabBarStyle: {
-                    height: 80,
-                    position: "absolute",
-                    boxShadow: "0px -2px 10px 0px #0428261A",
-                    backgroundColor: "transparent",
+                    height: insets.bottom + 56,
                 },
                 tabBarIcon: () => {
                     let iconName = null;
@@ -56,6 +54,7 @@ function TabNavigator() {
                 },
                 tabBarLabelStyle: {
                     fontSize: 11,
+                    marginBottom: 8,
                 },
                 tabBarIconStyle: {},
                 tabBarActiveTintColor: Colors.primary300,

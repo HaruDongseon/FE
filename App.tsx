@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 
 import TabNavigator from "@/components/TabNavigator";

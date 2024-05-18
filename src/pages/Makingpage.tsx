@@ -23,6 +23,7 @@ import Button from "@/components/Button";
 import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
+import NaverMapView from "react-native-nmap";
 
 export type MypageParams = {
     Makingpage: {

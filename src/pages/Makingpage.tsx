@@ -24,6 +24,7 @@ import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
 import NaverMapView from "react-native-nmap";
+import Map from "@/components/Map";
 
 export type MypageParams = {
     Makingpage: {
@@ -212,31 +213,34 @@ const Makingpage: React.FC = () => {
                         />
                     </View>
                 ) : (
-                    <View style={styles.routeMakingContainer}>
-                        <View style={styles.routeMakingHeader}>
-                            <Text style={styles.routeMakingText}>
-                                동선 만들기
-                            </Text>
-                            <Button
-                                title={"장소추가"}
-                                onPress={() => {}}
-                                type={"outline"}
-                                size={"s"}
-                                color={"Gray"}
-                            />
+                    <>
+                        <Map />
+                        <View style={styles.routeMakingContainer}>
+                            <View style={styles.routeMakingHeader}>
+                                <Text style={styles.routeMakingText}>
+                                    동선 만들기
+                                </Text>
+                                <Button
+                                    title={"장소추가"}
+                                    onPress={() => {}}
+                                    type={"outline"}
+                                    size={"s"}
+                                    color={"Gray"}
+                                />
+                            </View>
+                            <View style={styles.buttonContainer}>
+                                <Button
+                                    title={"동선 만들기"}
+                                    onPress={() => setFirstToggleOpen(false)}
+                                    disabled={!title}
+                                    type={"filled"}
+                                    size={"l"}
+                                    color={"Primary"}
+                                    width={320}
+                                />
+                            </View>
                         </View>
-                        <View style={styles.buttonContainer}>
-                            <Button
-                                title={"동선 만들기"}
-                                onPress={() => setFirstToggleOpen(false)}
-                                disabled={!title}
-                                type={"filled"}
-                                size={"l"}
-                                color={"Primary"}
-                                width={320}
-                            />
-                        </View>
-                    </View>
+                    </>
                 )}
             </View>
         </TouchableWithoutFeedback>

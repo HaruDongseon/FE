@@ -83,7 +83,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.harudongseon"
+    namespace "com.ki7348.HaruDongseon"
     defaultConfig {
         applicationId 'com.ki7348.HaruDongseon'
         minSdkVersion rootProject.ext.minSdkVersion

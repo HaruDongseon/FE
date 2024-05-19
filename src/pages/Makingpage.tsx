@@ -222,7 +222,9 @@ const Makingpage: React.FC = () => {
                                 </Text>
                                 <Button
                                     title={"장소추가"}
-                                    onPress={() => {}}
+                                    onPress={() => {
+                                        navigation.navigate("Searchpage");
+                                    }}
                                     type={"outline"}
                                     size={"s"}
                                     color={"Gray"}

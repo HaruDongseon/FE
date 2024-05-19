@@ -9,6 +9,7 @@ import { TouchableOpacity } from "react-native";
 import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Calendarpage from "@/pages/Calendarpage";
+import Searchpage from "@/pages/Searchpage";
 
 const Tab = createBottomTabNavigator();
 
@@ -47,6 +48,8 @@ function TabNavigator() {
                         iconName = "NVHaruM" as IconType;
                     } else if (route.name === "Mypage") {
                         iconName = "NVMypageM" as IconType;
+                    } else if (route.name === "Searchpage") {
+                        iconName = "SearchM" as IconType;
                     } else {
                         return null;
                     }
@@ -74,6 +77,11 @@ function TabNavigator() {
                 name="Mainpage"
                 component={Mainpage}
                 options={{ headerShown: false, title: "홈" }}
+            />
+            <Tab.Screen
+                name="Searchpage"
+                component={Searchpage}
+                options={{ headerShown: false, title: "검색" }}
             />
             <Tab.Screen
                 name="Mypage"

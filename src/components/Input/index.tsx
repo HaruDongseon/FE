@@ -5,6 +5,7 @@ import {
     View,
     Text,
     TextInputProps,
+    TouchableOpacity,
 } from "react-native";
 import Icon from "../icon/Common";
 import Colors from "@/styles/Color";
@@ -18,6 +19,7 @@ type InputState = "default" | "touch" | "pressed" | "error" | "disabled";
 interface InputProps extends TextInputProps {
     size: InputSize;
     placeholder?: string;
+    value?: string;
     onChangeText?: Dispatch<SetStateAction<string>>;
     defaultValue?: string;
     iconPosition?: IconPosition;
@@ -31,6 +33,7 @@ const Input: React.FC<InputProps> = ({
     size,
     placeholder,
     defaultValue,
+    value,
     iconPosition = "default",
     inputState = "default",
     onChangeText,
@@ -67,6 +70,12 @@ const Input: React.FC<InputProps> = ({
         setIsFocused(false);
     };
 
+    const clearInput = () => {
+        if (onChangeText) {
+            onChangeText("");
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View
@@ -85,6 +94,7 @@ const Input: React.FC<InputProps> = ({
                     {...textInputProps}
                     defaultValue={defaultValue}
                     placeholder={placeholder}
+                    value={value}
                     onChangeText={onChangeText}
                     style={inputStyles}
                     onFocus={handleFocus}
@@ -97,11 +107,16 @@ const Input: React.FC<InputProps> = ({
                         style={[styles.icon, styles.iconTrailing]}
                     />
                 ) : null}
-                {iconPosition === "both" && inputState !== "error" ? (
-                    <Icon
-                        type="TextCancelR"
-                        style={[styles.icon, styles.iconTrailing]}
-                    />
+                {iconPosition === "both" && inputState !== "error" && value ? (
+                    <TouchableOpacity
+                        onPress={clearInput}
+                        style={styles.iconButton}
+                    >
+                        <Icon
+                            type="TextCancelR"
+                            style={[styles.icon, styles.iconTrailing]}
+                        />
+                    </TouchableOpacity>
                 ) : null}
                 {iconPosition === "both" && inputState === "error" ? (
                     <Icon
@@ -176,6 +191,10 @@ const styles = StyleSheet.create({
         color: Colors.feedbackR300,
         fontSize: 12,
         marginTop: 2,
+    },
+    iconButton: {
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 

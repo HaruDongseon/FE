@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     StyleSheet,
     Keyboard,
     TouchableWithoutFeedback,
     Text,
-    GestureResponderEvent,
 } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import {
@@ -23,7 +22,6 @@ import Button from "@/components/Button";
 import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
-import NaverMapView from "react-native-nmap";
 import Map from "@/components/Map";
 
 export type MypageParams = {

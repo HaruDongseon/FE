@@ -5,7 +5,7 @@ import {
     View,
     Text,
     TextInputProps,
-    TouchableOpacity,
+    Pressable,
 } from "react-native";
 import Icon from "../icon/Common";
 import Colors from "@/styles/Color";
@@ -108,15 +108,12 @@ const Input: React.FC<InputProps> = ({
                     />
                 ) : null}
                 {iconPosition === "both" && inputState !== "error" && value ? (
-                    <TouchableOpacity
-                        onPress={clearInput}
-                        style={styles.iconButton}
-                    >
+                    <Pressable onPress={clearInput} style={styles.iconButton}>
                         <Icon
                             type="TextCancelR"
                             style={[styles.icon, styles.iconTrailing]}
                         />
-                    </TouchableOpacity>
+                    </Pressable>
                 ) : null}
                 {iconPosition === "both" && inputState === "error" ? (
                     <Icon

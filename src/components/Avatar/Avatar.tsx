@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
+import { View, StyleSheet, Image, Pressable, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "../icon/Common";
 import Colors from "@/styles/Color";
@@ -56,12 +56,9 @@ const Avatar: React.FC<AvatarProps> = ({ avatarUrl, setAvatar }) => {
             ) : (
                 <Icon type="PickOnL" />
             )}
-            <TouchableOpacity
-                onPress={handleSelectImage}
-                style={styles.innerCircle}
-            >
+            <Pressable onPress={handleSelectImage} style={styles.innerCircle}>
                 <Icon type="CameraR" />
-            </TouchableOpacity>
+            </Pressable>
         </View>
     );
 };

@@ -1,13 +1,7 @@
 import { RouteTag } from "@/apis/routeTags";
 import Colors from "@/styles/Color";
 import React, { useState } from "react";
-import {
-    View,
-    Text,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
 
 type DropBoxProps = {
     hashtags: RouteTag[];
@@ -24,7 +18,7 @@ const DropBox: React.FC<DropBoxProps> = ({ hashtags }) => {
                 scrollEnabled={isScrollEnabled}
             >
                 {hashtags.map((hashtag, index) => (
-                    <TouchableOpacity
+                    <Pressable
                         key={hashtag.id}
                         style={[
                             styles.hashtag,
@@ -40,7 +34,7 @@ const DropBox: React.FC<DropBoxProps> = ({ hashtags }) => {
                         <Text style={styles.hashtagCount}>
                             {hashtag.selectCount}
                         </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 ))}
             </ScrollView>
         </View>

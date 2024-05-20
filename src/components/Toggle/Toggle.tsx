@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, Pressable, StyleSheet } from "react-native";
 import Icon from "../icon/Common";
 import Colors from "@/styles/Color";
 
@@ -15,10 +15,10 @@ const Toggle: React.FC<ToggleComponentProps> = ({
     handlePress,
 }) => {
     return (
-        <TouchableOpacity style={styles.container} onPress={handlePress}>
+        <Pressable style={styles.container} onPress={handlePress}>
             <Text style={styles.title}>{title}</Text>
             <Icon type={expanded ? "Up1LineR" : "Down1LineR"} />
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 

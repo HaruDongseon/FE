@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import {
     StyleSheet,
     Text,
-    TouchableOpacity,
+    Pressable,
     View,
     GestureResponderEvent,
 } from "react-native";
@@ -115,7 +115,7 @@ const Button: React.FC<ButtonProps> = ({
     };
 
     return (
-        <TouchableOpacity
+        <Pressable
             onPress={onPress}
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
@@ -152,7 +152,7 @@ const Button: React.FC<ButtonProps> = ({
                     <Icon type="Next1LineM" style={styles.iconTrailing} />
                 )}
             </View>
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 

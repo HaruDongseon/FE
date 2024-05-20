@@ -5,7 +5,7 @@ import Mainpage from "@/pages/Mainpage";
 import Icon, { IconType } from "@/components/icon/Common";
 import Colors from "@/styles/Color";
 import HomeStack from "../StackNavigator";
-import { TouchableOpacity } from "react-native";
+import { Pressable } from "react-native";
 import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Calendarpage from "@/pages/Calendarpage";
@@ -41,12 +41,12 @@ function TabNavigator() {
                     color: Colors.grayScale600,
                 },
                 headerLeft: () => (
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => navigation.goBack()}
                         style={{ marginLeft: 20 }}
                     >
                         <Icon type="Before1LineM" />
-                    </TouchableOpacity>
+                    </Pressable>
                 ),
                 tabBarStyle: {
                     height: insets.bottom + 56,

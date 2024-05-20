@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    Keyboard,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    View,
-} from "react-native";
+import { Keyboard, Pressable, StyleSheet, Text, View } from "react-native";
 import Avatar from "@/components/Avatar/Avatar";
 import Colors from "@/styles/Color";
 import Icon from "@/components/icon/Common";
@@ -98,7 +92,7 @@ const Mypage = () => {
     };
 
     return (
-        <TouchableWithoutFeedback
+        <Pressable
             style={{ flex: 1 }}
             onPress={Keyboard.dismiss}
             accessible={false}
@@ -140,7 +134,7 @@ const Mypage = () => {
                     />
                 </View>
             </View>
-        </TouchableWithoutFeedback>
+        </Pressable>
     );
 };
 

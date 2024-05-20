@@ -6,9 +6,9 @@ export interface RouteTag {
     selectCount: number;
 }
 
-export async function getRouteTags(keyword: string): Promise<RouteTag[]> {
+export const getRouteTags = async (keyword: string): Promise<RouteTag[]> => {
     try {
-        const response = await axiosInstance.get(
+        const response = await axiosInstance.get<{ routeTags: RouteTag[] }>(
             `${API_BASE_URL}/route-tags/search?keyword=${keyword}`,
         );
         return response.data.routeTags;
@@ -16,4 +16,4 @@ export async function getRouteTags(keyword: string): Promise<RouteTag[]> {
         console.error("Error fetching route tags:", error);
         throw error;
     }
-}
+};

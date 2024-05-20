@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    View,
-    StyleSheet,
-    Keyboard,
-    TouchableWithoutFeedback,
-    Text,
-} from "react-native";
+import { View, StyleSheet, Keyboard, Text, Pressable } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import {
     ParamListBase,
@@ -115,7 +109,7 @@ const Makingpage: React.FC = () => {
     }, [tagInputFocused, tagInput, debouncedFetchRouteTags]);
 
     return (
-        <TouchableWithoutFeedback
+        <Pressable
             style={{ flex: 1 }}
             onPress={Keyboard.dismiss}
             accessible={false}
@@ -243,7 +237,7 @@ const Makingpage: React.FC = () => {
                     </>
                 )}
             </View>
-        </TouchableWithoutFeedback>
+        </Pressable>
     );
 };
 

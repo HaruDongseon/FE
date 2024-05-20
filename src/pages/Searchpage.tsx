@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-    Keyboard,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    View,
-} from "react-native";
+import { Keyboard, Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
 import { SearchedPlace, getRecentSearchedPlaces } from "@/apis/searchedPlaces";
@@ -30,7 +24,7 @@ const Searchpage: React.FC = () => {
     }, []);
 
     return (
-        <TouchableWithoutFeedback
+        <Pressable
             style={{ flex: 1 }}
             onPress={Keyboard.dismiss}
             accessible={false}
@@ -64,7 +58,7 @@ const Searchpage: React.FC = () => {
                     <Text style={styles.subText}>보관 장소가 없습니다.</Text>
                 </View>
             </View>
-        </TouchableWithoutFeedback>
+        </Pressable>
     );
 };
 

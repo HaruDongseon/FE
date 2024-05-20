@@ -5,9 +5,11 @@ export interface SearchedPlace {
     keyword: string;
 }
 
-export async function addSearchedPlace(keyword: string) {
+export const addSearchedPlace = async (
+    keyword: string,
+): Promise<SearchedPlace> => {
     try {
-        const response = await axiosInstance.post(
+        const response = await axiosInstance.post<SearchedPlace>(
             `${API_BASE_URL}/searched-places`,
             {
                 keyword,
@@ -18,26 +20,27 @@ export async function addSearchedPlace(keyword: string) {
         console.error("Error adding searched place:", error);
         throw error;
     }
-}
+};
 
-export async function getRecentSearchedPlaces(): Promise<SearchedPlace[]> {
+export const getRecentSearchedPlaces = async (): Promise<SearchedPlace[]> => {
     try {
-        const response = await axiosInstance.get(
-            `${API_BASE_URL}/searched-places/recent`,
-        );
+        const response = await axiosInstance.get<{
+            searchedPlaces: SearchedPlace[];
+        }>(`${API_BASE_URL}/searched-places/recent`);
         return response.data.searchedPlaces;
     } catch (error) {
         console.error("Error fetching recent searched places:", error);
         throw error;
     }
-}
+};
 
-export async function removeSearchedPlace(searchedPlaceId: number) {
+export const removeSearchedPlace = async (
+    searchedPlaceId: number,
+): Promise<void> => {
     try {
-        const response = await axiosInstance.delete(
+        await axiosInstance.delete(
             `${API_BASE_URL}/searched-places/${searchedPlaceId}`,
         );
-        return response.data;
     } catch (error) {
         console.error(
             `Error removing searched place with ID ${searchedPlaceId}:`,
@@ -45,16 +48,13 @@ export async function removeSearchedPlace(searchedPlaceId: number) {
         );
         throw error;
     }
-}
+};
 
-export async function removeSearchedPlaceAll() {
+export const removeSearchedPlaceAll = async (): Promise<void> => {
     try {
-        const response = await axiosInstance.delete(
-            `${API_BASE_URL}/searched-places`,
-        );
-        return response.data;
+        await axiosInstance.delete(`${API_BASE_URL}/searched-places`);
     } catch (error) {
         console.error("Error removing all searched places:", error);
         throw error;
     }
-}
+};

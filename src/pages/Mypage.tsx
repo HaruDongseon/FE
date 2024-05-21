@@ -17,19 +17,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { getUserProfile, updateUserProfile } from "@/apis/member";
 import { AxiosError } from "axios";
 import { validNicknameRegex } from "@/utils/authUtils";
+import { RouteName, Tab } from "@/types/route";
 
-export type MypageParams = {
-    Mypage: {
-        snsType: SNSType;
-    };
-};
-
-const Mypage = () => {
+const Mypage: Tab<RouteName.Mypage> = ({ route }) => {
     const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
     const [avatar, setAvatar] = useState("");
     const [error, setError] = useState("");
-    const route = useRoute<RouteProp<MypageParams, "Mypage">>();
     const snsType = route.params?.snsType;
 
     useEffect(() => {

@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
 import { CalendarList } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { ParamListBase, useNavigation } from "@react-navigation/native";
 import Button from "@/components/Button";
+import { RouteName, Tab } from "@/types/route";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -54,9 +53,7 @@ LocaleConfig.locales["ko"] = {
 };
 LocaleConfig.defaultLocale = "ko";
 
-const Calendarpage: React.FC = () => {
-    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
+const Calendarpage: Tab<RouteName.CalendarPage> = ({ navigation }) => {
     const [currentMonth, setCurrentMonth] = useState(todayDate);
     const [selectedDate, setSelectedDate] = useState(todayDate);
 
@@ -142,7 +139,7 @@ const Calendarpage: React.FC = () => {
                 <Button
                     title="날짜 선택"
                     onPress={() => {
-                        navigation.navigate("Makingpage", {
+                        navigation.navigate(RouteName.MakingPage, {
                             date: selectedDate,
                         });
                     }}

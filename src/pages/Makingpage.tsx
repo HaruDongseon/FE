@@ -1,10 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-    View,
-    StyleSheet,
-    Keyboard,
-    TouchableWithoutFeedback,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Keyboard, Text, Pressable } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import {
     ParamListBase,
@@ -21,6 +16,7 @@ import Button from "@/components/Button";
 import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Map from "@/components/Map";
 
 export type MypageParams = {
     Makingpage: {
@@ -36,7 +32,6 @@ const Makingpage: React.FC = () => {
     const route = useRoute<RouteProp<MypageParams, "Makingpage">>();
     const date = route.params?.date;
     const [firstToggleOpen, setFirstToggleOpen] = useState(true);
-    const [secondToggleOpen, setSecondToggleOpen] = useState(false);
     const [tagInputFocused, setTagInputFocused] = useState(false);
     const [tagInput, setTagInput] = useState("");
     const [title, setTitle] = useState("");
@@ -114,7 +109,7 @@ const Makingpage: React.FC = () => {
     }, [tagInputFocused, tagInput, debouncedFetchRouteTags]);
 
     return (
-        <TouchableWithoutFeedback
+        <Pressable
             style={{ flex: 1 }}
             onPress={Keyboard.dismiss}
             accessible={false}
@@ -141,6 +136,7 @@ const Makingpage: React.FC = () => {
                         </Frame>
                         <Frame title="제목">
                             <Input
+                                value={title}
                                 size={"M"}
                                 placeholder={"제목을 입력해주세요"}
                                 onChangeText={setTitle}
@@ -191,24 +187,57 @@ const Makingpage: React.FC = () => {
                 <View style={styles.gap} />
                 <Toggle
                     title="동선 만들기"
-                    expanded={secondToggleOpen}
+                    expanded={!firstToggleOpen}
                     handlePress={() => {
-                        setSecondToggleOpen((prev) => !prev);
+                        setFirstToggleOpen((prev) => !prev);
                     }}
                 />
-                <View style={styles.buttonContainer}>
-                    <Button
-                        title={"동선 만들기"}
-                        onPress={() => {}}
-                        disabled={!title}
-                        type={"filled"}
-                        size={"l"}
-                        color={"Primary"}
-                        width={320}
-                    />
-                </View>
+                {firstToggleOpen ? (
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            title={"동선 만들기"}
+                            onPress={() => setFirstToggleOpen(false)}
+                            disabled={!title}
+                            type={"filled"}
+                            size={"l"}
+                            color={"Primary"}
+                            width={320}
+                        />
+                    </View>
+                ) : (
+                    <>
+                        <Map />
+                        <View style={styles.routeMakingContainer}>
+                            <View style={styles.routeMakingHeader}>
+                                <Text style={styles.routeMakingText}>
+                                    동선 만들기
+                                </Text>
+                                <Button
+                                    title={"장소추가"}
+                                    onPress={() => {
+                                        navigation.navigate("Searchpage");
+                                    }}
+                                    type={"outline"}
+                                    size={"s"}
+                                    color={"Gray"}
+                                />
+                            </View>
+                            <View style={styles.buttonContainer}>
+                                <Button
+                                    title={"동선 만들기"}
+                                    onPress={() => setFirstToggleOpen(false)}
+                                    disabled={!title}
+                                    type={"filled"}
+                                    size={"l"}
+                                    color={"Primary"}
+                                    width={320}
+                                />
+                            </View>
+                        </View>
+                    </>
+                )}
             </View>
-        </TouchableWithoutFeedback>
+        </Pressable>
     );
 };
 
@@ -237,6 +266,31 @@ const styles = StyleSheet.create({
         position: "absolute",
         alignSelf: "center",
         bottom: 34,
+    },
+    routeMakingContainer: {
+        height: 232,
+        position: "absolute",
+        bottom: 0,
+        backgroundColor: Colors.white,
+        width: "100%",
+        paddingTop: 24,
+        paddingHorizontal: 20,
+        borderRadius: 16,
+        shadowColor: "#042826",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: -6 },
+        shadowRadius: 10,
+    },
+    routeMakingHeader: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    routeMakingText: {
+        color: Colors.grayScale600,
+        fontSize: 16,
+        fontWeight: "500",
+        lineHeight: 24,
     },
 });
 

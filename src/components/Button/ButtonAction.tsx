@@ -1,6 +1,6 @@
 import Colors from "@/styles/Color";
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet } from "react-native";
 
 type ButtonActionProps = {
     title: string;
@@ -17,13 +17,13 @@ const ButtonAction: React.FC<ButtonActionProps> = ({
     const textStyle = textStyles[status];
 
     return (
-        <TouchableOpacity
+        <Pressable
             style={[styles.button, style]}
             disabled={status === "disabled"}
             onPress={onPress}
         >
             <Text style={[styles.text, textStyle]}>{title}</Text>
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 

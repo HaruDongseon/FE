@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/styles/Color";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
@@ -19,20 +19,20 @@ const Mainpage: React.FC = () => {
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.headerContainer}>
                 <View style={styles.header}>
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => navigation.navigate("Calendarpage")}
                     >
                         <Icon type="AddL" />
-                    </TouchableOpacity>
+                    </Pressable>
                     <Text style={styles.monthYearText}>
                         {currentDate.getFullYear()}년{" "}
                         {currentDate.getMonth() + 1}월
                     </Text>
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => setMonthlyCalendarOpen((prev) => !prev)}
                     >
                         <Icon type="CalendarL" />
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 {monthlyCalendarOpen ? (
                     <MonthlyCalendar

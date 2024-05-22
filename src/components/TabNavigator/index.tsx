@@ -5,12 +5,22 @@ import Mainpage from "@/pages/Mainpage";
 import Icon, { IconType } from "@/components/icon/Common";
 import Colors from "@/styles/Color";
 import HomeStack from "../StackNavigator";
-import { TouchableOpacity } from "react-native";
+import { Pressable } from "react-native";
 import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Calendarpage from "@/pages/Calendarpage";
+import Searchpage from "@/pages/Searchpage";
 
 const Tab = createBottomTabNavigator();
+
+enum TabName {
+    HomeStack = "HomeStack",
+    Mainpage = "Mainpage",
+    Mypage = "Mypage",
+    Searchpage = "Searchpage",
+    Makingpage = "Makingpage",
+    Calendarpage = "Calendarpage",
+}
 
 function TabNavigator() {
     const insets = useSafeAreaInsets();
@@ -18,8 +28,9 @@ function TabNavigator() {
     return (
         <Tab.Navigator
             backBehavior="history"
-            initialRouteName="HomeStack"
+            initialRouteName={TabName.HomeStack}
             screenOptions={({ route, navigation }) => ({
+                headerTitleAlign: "center",
                 headerShadowVisible: false,
                 headerStyle: {
                     height: 44 + insets.top,
@@ -30,32 +41,36 @@ function TabNavigator() {
                     color: Colors.grayScale600,
                 },
                 headerLeft: () => (
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => navigation.goBack()}
                         style={{ marginLeft: 20 }}
                     >
                         <Icon type="Before1LineM" />
-                    </TouchableOpacity>
+                    </Pressable>
                 ),
                 tabBarStyle: {
-                    height: 80,
-                    position: "absolute",
-                    boxShadow: "0px -2px 10px 0px #0428261A",
-                    backgroundColor: "transparent",
+                    height: insets.bottom + 56,
                 },
                 tabBarIcon: () => {
                     let iconName = null;
-                    if (route.name === "Mainpage") {
-                        iconName = "NVHaruM" as IconType;
-                    } else if (route.name === "Mypage") {
-                        iconName = "NVMypageM" as IconType;
-                    } else {
-                        return null;
+                    switch (route.name) {
+                        case TabName.Mainpage:
+                            iconName = "NVHaruM" as IconType;
+                            break;
+                        case TabName.Mypage:
+                            iconName = "NVMypageM" as IconType;
+                            break;
+                        case TabName.Searchpage:
+                            iconName = "SearchM" as IconType;
+                            break;
+                        default:
+                            return null;
                     }
                     return <Icon type={iconName} />;
                 },
                 tabBarLabelStyle: {
                     fontSize: 11,
+                    marginBottom: 8,
                 },
                 tabBarIconStyle: {},
                 tabBarActiveTintColor: Colors.primary300,
@@ -63,7 +78,7 @@ function TabNavigator() {
             })}
         >
             <Tab.Screen
-                name="HomeStack"
+                name={TabName.HomeStack}
                 component={HomeStack}
                 options={{
                     tabBarButton: () => null,
@@ -72,12 +87,17 @@ function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name="Mainpage"
+                name={TabName.Mainpage}
                 component={Mainpage}
                 options={{ headerShown: false, title: "홈" }}
             />
             <Tab.Screen
-                name="Mypage"
+                name={TabName.Searchpage}
+                component={Searchpage}
+                options={{ headerShown: false, title: "검색" }}
+            />
+            <Tab.Screen
+                name={TabName.Mypage}
                 component={Mypage}
                 options={{
                     title: "내 정보",
@@ -86,7 +106,7 @@ function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name="Makingpage"
+                name={TabName.Makingpage}
                 component={MakingPage}
                 options={{
                     title: "나의 하루동선",
@@ -95,7 +115,7 @@ function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name="Calendarpage"
+                name={TabName.Calendarpage}
                 component={Calendarpage}
                 options={{
                     title: "날짜 등록",

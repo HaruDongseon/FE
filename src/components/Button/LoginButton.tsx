@@ -1,7 +1,7 @@
 import Colors from "@/styles/Color";
 import React, { useState } from "react";
 import {
-    TouchableOpacity,
+    Pressable,
     Text,
     ViewStyle,
     StyleSheet,
@@ -50,10 +50,10 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     }
 
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
+        <Pressable onPress={onPress} style={[styles.container, style]}>
             {IconComponent && <IconComponent />}
             <Text style={[styles.text, textStyle]}>{text}</Text>
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 

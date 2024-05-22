@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: "500",
         color: Colors.grayScale400,
-        width: 52,
+        minWidth: 52,
         marginRight: 16,
     },
     childrenContainer: {

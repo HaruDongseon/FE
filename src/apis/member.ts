@@ -15,12 +15,12 @@ interface UserResponseProfileImage {
     imageUrl: string;
 }
 
-export async function updateUserProfile({
+export const updateUserProfile = async ({
     nickname,
     profileImageUrl,
-}: UserRequestProfile) {
+}: UserRequestProfile): Promise<UserResponseProfile> => {
     try {
-        const response = await axiosInstance.patch(
+        const response = await axiosInstance.patch<UserResponseProfile>(
             `${API_BASE_URL}/members/me`,
             {
                 nickname,
@@ -32,23 +32,25 @@ export async function updateUserProfile({
         console.error("Error updating profile:", error);
         throw error;
     }
-}
+};
 
-export async function getUserProfile(): Promise<UserResponseProfile> {
+export const getUserProfile = async (): Promise<UserResponseProfile> => {
     try {
-        const response = await axiosInstance.get(`${API_BASE_URL}/members/me`);
+        const response = await axiosInstance.get<UserResponseProfile>(
+            `${API_BASE_URL}/members/me`,
+        );
         return response.data;
     } catch (error) {
         console.error("Error getting profile:", error);
         throw error;
     }
-}
+};
 
-export async function uploadUserProfileImage(
+export const uploadUserProfileImage = async (
     formData: FormData,
-): Promise<UserResponseProfileImage> {
+): Promise<UserResponseProfileImage> => {
     try {
-        const response = await axiosInstance.post(
+        const response = await axiosInstance.post<UserResponseProfileImage>(
             `${API_BASE_URL}/members/image`,
             formData,
             {
@@ -62,4 +64,4 @@ export async function uploadUserProfileImage(
         console.error("Error uploading profile image:", error);
         throw error;
     }
-}
+};

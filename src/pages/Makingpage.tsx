@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Keyboard, Text, Pressable } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
-import {
-    ParamListBase,
-    RouteProp,
-    useNavigation,
-    useRoute,
-} from "@react-navigation/native";
 import Frame from "@/components/Frame/Frame";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
@@ -17,6 +11,7 @@ import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Map from "@/components/Map";
+import { RouteName, Tab } from "@/types/route";
 
 export type MypageParams = {
     Makingpage: {
@@ -26,10 +21,7 @@ export type MypageParams = {
 
 type TransportType = "대중교통" | "도보" | "자전거" | "자동차";
 
-const Makingpage: React.FC = () => {
-    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
-    const route = useRoute<RouteProp<MypageParams, "Makingpage">>();
+const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
     const date = route.params?.date;
     const [firstToggleOpen, setFirstToggleOpen] = useState(true);
     const [tagInputFocused, setTagInputFocused] = useState(false);
@@ -130,7 +122,7 @@ const Makingpage: React.FC = () => {
                                 readOnly={true}
                                 defaultValue={formatDate(date)}
                                 onTouchStart={() =>
-                                    navigation.navigate("Calendarpage")
+                                    navigation.navigate(RouteName.CalendarPage)
                                 }
                             />
                         </Frame>
@@ -215,7 +207,9 @@ const Makingpage: React.FC = () => {
                                 <Button
                                     title={"장소추가"}
                                     onPress={() => {
-                                        navigation.navigate("Searchpage");
+                                        navigation.navigate(
+                                            RouteName.SearchPage,
+                                        );
                                     }}
                                     type={"outline"}
                                     size={"s"}

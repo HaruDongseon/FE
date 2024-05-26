@@ -9,18 +9,9 @@ import { Pressable } from "react-native";
 import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Calendarpage from "@/pages/Calendarpage";
-import Searchpage from "@/pages/Searchpage";
+import { RouteName, RouteParamList } from "@/types/route";
 
-const Tab = createBottomTabNavigator();
-
-enum TabName {
-    HomeStack = "HomeStack",
-    Mainpage = "Mainpage",
-    Mypage = "Mypage",
-    Searchpage = "Searchpage",
-    Makingpage = "Makingpage",
-    Calendarpage = "Calendarpage",
-}
+const Tab = createBottomTabNavigator<RouteParamList>();
 
 function TabNavigator() {
     const insets = useSafeAreaInsets();
@@ -28,7 +19,7 @@ function TabNavigator() {
     return (
         <Tab.Navigator
             backBehavior="history"
-            initialRouteName={TabName.HomeStack}
+            initialRouteName={RouteName.HomeStack}
             screenOptions={({ route, navigation }) => ({
                 headerTitleAlign: "center",
                 headerShadowVisible: false,
@@ -54,13 +45,13 @@ function TabNavigator() {
                 tabBarIcon: () => {
                     let iconName = null;
                     switch (route.name) {
-                        case TabName.Mainpage:
+                        case RouteName.Mainpage:
                             iconName = "NVHaruM" as IconType;
                             break;
-                        case TabName.Mypage:
+                        case RouteName.Mypage:
                             iconName = "NVMypageM" as IconType;
                             break;
-                        case TabName.Searchpage:
+                        case RouteName.SearchPage:
                             iconName = "SearchM" as IconType;
                             break;
                         default:
@@ -78,7 +69,7 @@ function TabNavigator() {
             })}
         >
             <Tab.Screen
-                name={TabName.HomeStack}
+                name={RouteName.HomeStack}
                 component={HomeStack}
                 options={{
                     tabBarButton: () => null,
@@ -87,17 +78,12 @@ function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name={TabName.Mainpage}
+                name={RouteName.Mainpage}
                 component={Mainpage}
                 options={{ headerShown: false, title: "홈" }}
             />
             <Tab.Screen
-                name={TabName.Searchpage}
-                component={Searchpage}
-                options={{ headerShown: false, title: "검색" }}
-            />
-            <Tab.Screen
-                name={TabName.Mypage}
+                name={RouteName.Mypage}
                 component={Mypage}
                 options={{
                     title: "내 정보",
@@ -106,7 +92,7 @@ function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name={TabName.Makingpage}
+                name={RouteName.MakingPage}
                 component={MakingPage}
                 options={{
                     title: "나의 하루동선",
@@ -115,7 +101,7 @@ function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name={TabName.Calendarpage}
+                name={RouteName.CalendarPage}
                 component={Calendarpage}
                 options={{
                     title: "날짜 등록",

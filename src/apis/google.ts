@@ -1,16 +1,16 @@
 import axios from "axios";
-import { axiosInstance } from "./apiClient";
 import { GOOGLE_API_KEY } from "@env";
 
-export interface DisplayName {
+export interface LanguageWithText {
     text: string;
     languageCode: string;
 }
 
 export interface GooglePlace {
+    id: string;
     formattedAddress: string;
-    displayName: DisplayName;
-    priceLevel?: number;
+    displayName: LanguageWithText;
+    primaryTypeDisplayName?: LanguageWithText;
 }
 
 export const getGooglePlaces = async (
@@ -21,7 +21,7 @@ export const getGooglePlaces = async (
         "X-Goog-Api-Key": GOOGLE_API_KEY,
         "Content-Type": "application/json",
         "X-Goog-FieldMask":
-            "places.displayName,places.formattedAddress,places.priceLevel",
+            "places.id,places.displayName,places.formattedAddress,places.primaryTypeDisplayName",
     };
     const data = {
         textQuery: query,

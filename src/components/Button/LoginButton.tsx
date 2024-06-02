@@ -33,7 +33,6 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     onPress,
 }) => {
     let IconComponent = null;
-    const [loginVisible, setLoginVisible] = useState<SNSType | null>(null);
 
     switch (type) {
         case "KAKAO":

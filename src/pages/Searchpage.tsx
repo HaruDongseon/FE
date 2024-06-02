@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
-import {
-    Keyboard,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-    FlatList,
-} from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
 import { SearchedPlace, getRecentSearchedPlaces } from "@/apis/searchedPlaces";
 import { GooglePlace, getGooglePlaces } from "@/apis/google";
+import Place from "@/components/Place";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from "@/components/icon/Common";
 
 const Searchpage: React.FC = () => {
     const [searchInput, setSearchInput] = useState<string>("");
     const [recentSearchedPlaces, setRecentSearchedPlaces] = useState<
         SearchedPlace[]
     >([]);
-    const [googlePlaces, setGooglePlaces] = useState<GooglePlace[]>([]);
+    const [places, setPlaces] = useState<GooglePlace[]>([]);
+
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         async function fetchRecentSearchedPlaces() {
@@ -37,7 +35,7 @@ const Searchpage: React.FC = () => {
             if (searchInput.trim().length > 0) {
                 searchPlaces(searchInput);
             }
-        }, 500);
+        }, 300);
 
         return () => clearTimeout(delayDebounceFn);
     }, [searchInput]);
@@ -46,52 +44,78 @@ const Searchpage: React.FC = () => {
         try {
             const data = await getGooglePlaces(query);
             if (data && data.length > 0) {
-                setGooglePlaces(data);
+                setPlaces(data);
             } else {
-                setGooglePlaces([]);
+                setPlaces([]);
             }
         } catch (error) {
             console.error("Error fetching places:", error);
-            setGooglePlaces([]);
+            setPlaces([]);
         }
     };
 
+    const renderPlace = ({ item }: { item: GooglePlace }) => (
+        <Place
+            name={item.displayName.text}
+            address={item.formattedAddress}
+            primaryType={item?.primaryTypeDisplayName?.text}
+            id={item.id}
+        />
+    );
     return (
-        <Pressable
-            style={{ flex: 1 }}
-            onPress={Keyboard.dismiss}
-            accessible={false}
-        >
-            <View style={styles.container}>
-                <View style={styles.inputContainer}>
-                    <Input
-                        onChangeText={setSearchInput}
-                        size={"M"}
-                        value={searchInput}
-                        placeholder={"장소를 검색하세요"}
-                        iconPosition={"both"}
-                    />
-                </View>
-                <View style={styles.firstSection}>
-                    <Text style={styles.headerText}>최근 검색 장소</Text>
-                    {recentSearchedPlaces.length > 0 ? (
-                        recentSearchedPlaces.map((place) => (
-                            <Text key={place.id} style={styles.subText}>
-                                {place.keyword}
-                            </Text>
-                        ))
+        <View style={[styles.container, { paddingTop: insets.top }]}>
+            <View style={styles.inputContainer}>
+                <Input
+                    onChangeText={setSearchInput}
+                    size={"M"}
+                    value={searchInput}
+                    placeholder={"장소를 검색하세요"}
+                    iconPosition={"both"}
+                />
+            </View>
+            {searchInput ? (
+                <View style={styles.resultContainer}>
+                    <Text style={styles.headerText}>검색결과</Text>
+                    {places.length > 0 ? (
+                        <FlatList
+                            data={places}
+                            renderItem={renderPlace}
+                            keyExtractor={(item) => item.id}
+                        />
                     ) : (
-                        <Text style={styles.subText}>
-                            최근 검색어가 없습니다.
-                        </Text>
+                        <View style={styles.noResultContainer}>
+                            <Icon type="Sad" />
+                            <Text style={styles.noResultsText}>
+                                검색 결과가 없어요.
+                            </Text>
+                        </View>
                     )}
                 </View>
-                <View style={styles.secondSection}>
-                    <Text style={styles.headerText}>보관 장소</Text>
-                    <Text style={styles.subText}>보관 장소가 없습니다.</Text>
-                </View>
-            </View>
-        </Pressable>
+            ) : (
+                <>
+                    <View style={styles.recentPlacesContainer}>
+                        <Text style={styles.headerText}>최근 검색 장소</Text>
+                        {recentSearchedPlaces.length > 0 ? (
+                            recentSearchedPlaces.map((place) => (
+                                <Text key={place.id} style={styles.subText}>
+                                    {place.keyword}
+                                </Text>
+                            ))
+                        ) : (
+                            <Text style={styles.subText}>
+                                최근 검색어가 없습니다.
+                            </Text>
+                        )}
+                    </View>
+                    <View style={styles.storedPlacesContainer}>
+                        <Text style={styles.headerText}>보관 장소</Text>
+                        <Text style={styles.subText}>
+                            보관 장소가 없습니다.
+                        </Text>
+                    </View>
+                </>
+            )}
+        </View>
     );
 };
 
@@ -107,10 +131,10 @@ const styles = StyleSheet.create({
     inputContainer: {
         paddingVertical: 16,
     },
-    firstSection: {
+    recentPlacesContainer: {
         marginTop: 8,
     },
-    secondSection: {
+    storedPlacesContainer: {
         marginTop: 44,
     },
     headerText: {
@@ -125,5 +149,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
         color: Colors.grayScale300,
+    },
+    resultContainer: {
+        width: "100%",
+        flex: 1,
+    },
+    noResultsText: {
+        fontSize: 16,
+        fontWeight: "400",
+        lineHeight: 24,
+        color: Colors.grayScale300,
+    },
+    noResultContainer: {
+        alignItems: "center",
+        marginTop: 156,
     },
 });

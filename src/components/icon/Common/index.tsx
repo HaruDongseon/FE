@@ -60,7 +60,8 @@ export type IconType =
     | "SNSGoogleM"
     | "MessageErrorR"
     | "MessageSuccessR"
-    | "MessageInfoR";
+    | "MessageInfoR"
+    | "Sad";
 
 interface IconProps extends SvgProps {
     type: IconType;
@@ -739,7 +740,22 @@ const Icon: React.FC<IconProps> = ({ type, color = "#1D1F1F", ...props }) => {
                     />
                 </Svg>
             );
-
+        case "Sad":
+            return (
+                <Svg width={32} height={32} fill="none" {...props}>
+                    <Circle cx={16} cy={16} r={12} fill="#FFC700" />
+                    <Circle cx={12.25} cy={15} r={1} fill="#1D1F1F" />
+                    <Circle cx={19.75} cy={15} r={1} fill="#1D1F1F" />
+                    <Path
+                        fill="#FF8600"
+                        d="M18.003 19.359h-3.992c-.185 0-.288-.21-.16-.343.532-.549 1.163-.766 2.163-.766.921 0 1.657.315 2.14.78.132.127.032.329-.15.329Z"
+                    />
+                    <Path
+                        fill="#E4F2FF"
+                        d="M14.126 19.539a1.876 1.876 0 0 1-3.752 0c0-1.001.643-1.657 1.758-2.996a.151.151 0 0 1 .234.002c1.02 1.26 1.76 1.995 1.76 2.994Z"
+                    />
+                </Svg>
+            );
         default:
             return null; // 아이콘 타입이 지정되지 않은 경우 null 반환
     }

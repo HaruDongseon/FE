@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Keyboard, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+    Keyboard,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+    FlatList,
+} from "react-native";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
 import { SearchedPlace, getRecentSearchedPlaces } from "@/apis/searchedPlaces";
+import { GooglePlace, getGooglePlaces } from "@/apis/google";
 
 const Searchpage: React.FC = () => {
-    const [searchInput, setSearchInput] = useState("");
+    const [searchInput, setSearchInput] = useState<string>("");
     const [recentSearchedPlaces, setRecentSearchedPlaces] = useState<
         SearchedPlace[]
     >([]);
+    const [googlePlaces, setGooglePlaces] = useState<GooglePlace[]>([]);
 
     useEffect(() => {
         async function fetchRecentSearchedPlaces() {
@@ -22,6 +31,30 @@ const Searchpage: React.FC = () => {
 
         fetchRecentSearchedPlaces();
     }, []);
+
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if (searchInput.trim().length > 0) {
+                searchPlaces(searchInput);
+            }
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchInput]);
+
+    const searchPlaces = async (query: string) => {
+        try {
+            const data = await getGooglePlaces(query);
+            if (data && data.length > 0) {
+                setGooglePlaces(data);
+            } else {
+                setGooglePlaces([]);
+            }
+        } catch (error) {
+            console.error("Error fetching places:", error);
+            setGooglePlaces([]);
+        }
+    };
 
     return (
         <Pressable

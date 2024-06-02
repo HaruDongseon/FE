@@ -62,6 +62,7 @@ const Searchpage: React.FC = () => {
             id={item.id}
         />
     );
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.inputContainer}>

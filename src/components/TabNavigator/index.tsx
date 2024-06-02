@@ -10,6 +10,7 @@ import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Calendarpage from "@/pages/Calendarpage";
 import Searchpage from "@/pages/Searchpage";
+import PlaceDetailpage from "@/pages/PlaceDetailpage";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +21,7 @@ enum TabName {
     Searchpage = "Searchpage",
     Makingpage = "Makingpage",
     Calendarpage = "Calendarpage",
+    PlaceDetailpage = "PlaceDetailpage",
 }
 
 function TabNavigator() {
@@ -119,6 +121,15 @@ function TabNavigator() {
                 component={Calendarpage}
                 options={{
                     title: "날짜 등록",
+                    tabBarButton: () => null,
+                    tabBarStyle: { display: "none" },
+                }}
+            />
+            <Tab.Screen
+                name={TabName.PlaceDetailpage}
+                component={PlaceDetailpage}
+                options={{
+                    title: "",
                     tabBarButton: () => null,
                     tabBarStyle: { display: "none" },
                 }}

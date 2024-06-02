@@ -13,6 +13,31 @@ export interface GooglePlace {
     primaryTypeDisplayName?: LanguageWithText;
 }
 
+export interface Coordinate {
+    latitude: number;
+    longitude: number;
+}
+
+export interface Time {
+    openNow: boolean;
+    periods: any;
+    weekdayDescriptions: string[];
+}
+
+export interface PlaceDetail {
+    id: string;
+    displayName: LanguageWithText;
+    location: Coordinate;
+    formattedAddress: string;
+    nationalPhoneNumber?: string;
+    primaryTypeDisplayName?: LanguageWithText;
+    parkingOptions?: boolean;
+    reservable?: boolean;
+    websiteUri?: string;
+    currentOpeningHours?: Time;
+    photos?: string;
+}
+
 export const getGooglePlaces = async (
     query: string,
 ): Promise<GooglePlace[]> => {
@@ -32,6 +57,29 @@ export const getGooglePlaces = async (
             headers,
         });
         return response.data.places;
+    } catch (error) {
+        console.error("Error fetching places:", error);
+        throw error;
+    }
+};
+
+export const getGooglePlaceDetail = async (
+    placeId: string,
+): Promise<PlaceDetail> => {
+    const apiURl = `https://places.googleapis.com/v1/places/${placeId}`;
+
+    const headers = {
+        "X-Goog-Api-Key": GOOGLE_API_KEY,
+        "Content-Type": "application/json",
+        "X-Goog-FieldMask":
+            "id,displayName,formattedAddress,nationalPhoneNumber,location,primaryTypeDisplayName,parkingOptions,reservable,websiteUri,currentOpeningHours,photos",
+    };
+
+    try {
+        const response = await axios.get(apiURl, {
+            headers,
+        });
+        return response.data;
     } catch (error) {
         console.error("Error fetching places:", error);
         throw error;

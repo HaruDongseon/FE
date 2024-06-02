@@ -1,7 +1,9 @@
 import Colors from "@/styles/Color";
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import Icon from "../icon/Common";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 interface PlaceProps {
     id: string;
@@ -10,32 +12,38 @@ interface PlaceProps {
     primaryType?: string;
 }
 
-const Place: React.FC<PlaceProps> = ({ name, address, primaryType }) => {
+const Place: React.FC<PlaceProps> = ({ id, name, address, primaryType }) => {
+    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
     return (
-        <View style={styles.container}>
-            <View style={styles.iconContainer}>
-                <Icon type="LocationM" />
+        <Pressable
+            onPress={() => navigation.navigate("PlaceDetailpage", { id })}
+        >
+            <View style={styles.container}>
+                <View style={styles.iconContainer}>
+                    <Icon type="LocationM" />
+                </View>
+                <View style={styles.textContainer}>
+                    <Text style={styles.name}>{name}</Text>
+                    <Text
+                        style={styles.address}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                    >
+                        {address}
+                    </Text>
+                </View>
+                <View style={styles.typeContainer}>
+                    <Text
+                        style={styles.primaryType}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                    >
+                        {primaryType}
+                    </Text>
+                </View>
             </View>
-            <View style={styles.textContainer}>
-                <Text style={styles.name}>{name}</Text>
-                <Text
-                    style={styles.address}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                >
-                    {address}
-                </Text>
-            </View>
-            <View style={styles.typeContainer}>
-                <Text
-                    style={styles.primaryType}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                >
-                    {primaryType}
-                </Text>
-            </View>
-        </View>
+        </Pressable>
     );
 };
 

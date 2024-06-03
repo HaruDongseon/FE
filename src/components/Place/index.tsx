@@ -4,6 +4,7 @@ import { Text, View, StyleSheet, Pressable } from "react-native";
 import Icon from "../icon/Common";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { addSearchedPlace } from "@/apis/searchedPlaces";
 
 interface PlaceProps {
     id: string;
@@ -15,10 +16,16 @@ interface PlaceProps {
 const Place: React.FC<PlaceProps> = ({ id, name, address, primaryType }) => {
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+    const handlePress = async () => {
+        try {
+            await addSearchedPlace(name);
+            navigation.navigate("PlaceDetailpage", { id });
+        } catch (error) {
+            console.error("Failed to add searched place:", error);
+        }
+    };
     return (
-        <Pressable
-            onPress={() => navigation.navigate("PlaceDetailpage", { id })}
-        >
+        <Pressable onPress={handlePress}>
             <View style={styles.container}>
                 <View style={styles.iconContainer}>
                     <Icon type="LocationM" />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
 import { SearchedPlace, getRecentSearchedPlaces } from "@/apis/searchedPlaces";
@@ -7,6 +7,7 @@ import { GooglePlace, getGooglePlaces } from "@/apis/google";
 import Place from "@/components/Place";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "@/components/icon/Common";
+import PlaceNameButton from "@/components/PlaceNameButton";
 
 const Searchpage: React.FC = () => {
     const [searchInput, setSearchInput] = useState<string>("");
@@ -28,7 +29,7 @@ const Searchpage: React.FC = () => {
         }
 
         fetchRecentSearchedPlaces();
-    }, []);
+    }, [searchInput]);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
@@ -96,12 +97,20 @@ const Searchpage: React.FC = () => {
                 <>
                     <View style={styles.recentPlacesContainer}>
                         <Text style={styles.headerText}>최근 검색 장소</Text>
+
                         {recentSearchedPlaces.length > 0 ? (
-                            recentSearchedPlaces.map((place) => (
-                                <Text key={place.id} style={styles.subText}>
-                                    {place.keyword}
-                                </Text>
-                            ))
+                            <ScrollView
+                                style={styles.placeButtonContainer}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                            >
+                                {recentSearchedPlaces.map((place) => (
+                                    <PlaceNameButton
+                                        key={place.id}
+                                        name={place.keyword}
+                                    />
+                                ))}
+                            </ScrollView>
                         ) : (
                             <Text style={styles.subText}>
                                 최근 검색어가 없습니다.
@@ -164,5 +173,8 @@ const styles = StyleSheet.create({
     noResultContainer: {
         alignItems: "center",
         marginTop: 156,
+    },
+    placeButtonContainer: {
+        flexDirection: "row",
     },
 });

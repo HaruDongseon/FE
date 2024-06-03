@@ -1,9 +1,20 @@
 import { PlaceDetail, getGooglePlaceDetail } from "@/apis/google";
+import Button from "@/components/Button";
+import Map from "@/components/Map";
 import Icon from "@/components/icon/Common";
 import Colors from "@/styles/Color";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Pressable, Linking } from "react-native";
+import {
+    View,
+    StyleSheet,
+    Text,
+    Pressable,
+    Linking,
+    GestureResponderEvent,
+    ScrollView,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type PlaceDetailpageParams = {
     PlaceDetailpage: {
@@ -15,6 +26,7 @@ const PlaceDetailpage = () => {
     const route =
         useRoute<RouteProp<PlaceDetailpageParams, "PlaceDetailpage">>();
     const id = route.params?.id;
+    const insets = useSafeAreaInsets();
 
     const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null);
 
@@ -51,7 +63,7 @@ const PlaceDetailpage = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.titleContainer}>
                 {placeDetail?.primaryTypeDisplayName && (
                     <Text style={styles.primaryType}>
@@ -85,6 +97,7 @@ const PlaceDetailpage = () => {
                             {placeDetail.currentOpeningHours.weekdayDescriptions.map(
                                 (description) => (
                                     <Text
+                                        key={description}
                                         style={[
                                             styles.detailText,
                                             { marginBottom: 6 },
@@ -125,7 +138,28 @@ const PlaceDetailpage = () => {
                     </View>
                 )}
             </View>
-        </View>
+            <View
+                style={[
+                    styles.mapContainer,
+                    { paddingBottom: 8 + insets.bottom },
+                ]}
+            >
+                <Text style={styles.mapText}>지도</Text>
+                <Map
+                    latitude={placeDetail?.location.latitude}
+                    longitude={placeDetail?.location.longitude}
+                    height={200}
+                    style={{ marginBottom: 32, borderRadius: 12 }}
+                />
+                <Button
+                    title={"동선 추가"}
+                    onPress={() => {}}
+                    type={"outline"}
+                    size={"l"}
+                    color={"Primary"}
+                />
+            </View>
+        </ScrollView>
     );
 };
 
@@ -133,13 +167,12 @@ export default PlaceDetailpage;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grayScale25,
         flex: 1,
     },
     titleContainer: {
         flexDirection: "column",
         marginTop: 8,
-        backgroundColor: "#F3F5F5",
         padding: 20,
     },
     primaryType: {
@@ -154,8 +187,11 @@ const styles = StyleSheet.create({
         fontWeight: "500",
     },
     detailContainer: {
-        marginTop: 24,
+        backgroundColor: Colors.white,
+        paddingVertical: 24,
         paddingHorizontal: 20,
+        marginBottom: 8,
+        gap: 12,
     },
     detailText: {
         color: Colors.grayScale700,
@@ -171,11 +207,23 @@ const styles = StyleSheet.create({
         textDecorationLine: "underline",
     },
     detailFrame: {
-        marginBottom: 12,
         flexDirection: "row",
         alignItems: "center",
     },
     weekdayContainer: {
         flexDirection: "column",
+    },
+    mapContainer: {
+        backgroundColor: Colors.white,
+        paddingTop: 20,
+        paddingBottom: 10,
+        paddingHorizontal: 20,
+    },
+    mapText: {
+        fontWeight: "500",
+        fontSize: 16,
+        lineHeight: 24,
+        color: Colors.grayScale800,
+        marginBottom: 8,
     },
 });

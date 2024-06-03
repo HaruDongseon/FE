@@ -24,6 +24,7 @@ const Place: React.FC<PlaceProps> = ({ id, name, address, primaryType }) => {
             console.error("Failed to add searched place:", error);
         }
     };
+
     return (
         <Pressable onPress={handlePress}>
             <View style={styles.container}>

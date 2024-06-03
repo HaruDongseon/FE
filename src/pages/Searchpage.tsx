@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+    FlatList,
+    GestureResponderEvent,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
-import { SearchedPlace, getRecentSearchedPlaces } from "@/apis/searchedPlaces";
+import {
+    SearchedPlace,
+    getRecentSearchedPlaces,
+    removeSearchedPlaceAll,
+} from "@/apis/searchedPlaces";
 import { GooglePlace, getGooglePlaces } from "@/apis/google";
 import Place from "@/components/Place";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "@/components/icon/Common";
 import PlaceNameButton from "@/components/PlaceNameButton";
+import Button from "@/components/Button";
 
 const Searchpage: React.FC = () => {
     const [searchInput, setSearchInput] = useState<string>("");
@@ -18,16 +30,16 @@ const Searchpage: React.FC = () => {
 
     const insets = useSafeAreaInsets();
 
-    useEffect(() => {
-        async function fetchRecentSearchedPlaces() {
-            try {
-                const places = await getRecentSearchedPlaces();
-                setRecentSearchedPlaces(places);
-            } catch (error) {
-                console.error("Failed to fetch recent searched places:", error);
-            }
+    const fetchRecentSearchedPlaces = async () => {
+        try {
+            const places = await getRecentSearchedPlaces();
+            setRecentSearchedPlaces(places);
+        } catch (error) {
+            console.error("Failed to fetch recent searched places:", error);
         }
+    };
 
+    useEffect(() => {
         fetchRecentSearchedPlaces();
     }, [searchInput]);
 
@@ -52,6 +64,15 @@ const Searchpage: React.FC = () => {
         } catch (error) {
             console.error("Error fetching places:", error);
             setPlaces([]);
+        }
+    };
+
+    const handleRemoveAll = async () => {
+        try {
+            await removeSearchedPlaceAll();
+            fetchRecentSearchedPlaces();
+        } catch (error) {
+            console.error("Failed to remove all searched places:", error);
         }
     };
 
@@ -96,8 +117,18 @@ const Searchpage: React.FC = () => {
             ) : (
                 <>
                     <View style={styles.recentPlacesContainer}>
-                        <Text style={styles.headerText}>최근 검색 장소</Text>
-
+                        <View style={styles.headerContainer}>
+                            <Text style={styles.headerText}>
+                                최근 검색 장소
+                            </Text>
+                            <Button
+                                title={"전체 삭제"}
+                                onPress={handleRemoveAll}
+                                type={"text"}
+                                size={"s"}
+                                color={"Gray"}
+                            />
+                        </View>
                         {recentSearchedPlaces.length > 0 ? (
                             <ScrollView
                                 style={styles.placeButtonContainer}
@@ -107,7 +138,9 @@ const Searchpage: React.FC = () => {
                                 {recentSearchedPlaces.map((place) => (
                                     <PlaceNameButton
                                         key={place.id}
+                                        id={place.id}
                                         name={place.keyword}
+                                        onRemove={fetchRecentSearchedPlaces} // 콜백 함수 전달
                                     />
                                 ))}
                             </ScrollView>
@@ -152,7 +185,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         color: Colors.grayScale800,
-        marginBottom: 16,
     },
     subText: {
         fontWeight: "400",
@@ -176,5 +208,11 @@ const styles = StyleSheet.create({
     },
     placeButtonContainer: {
         flexDirection: "row",
+    },
+    headerContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: 16,
     },
 });

@@ -1,16 +1,35 @@
 import Colors from "@/styles/Color";
-import { Text, View, StyleSheet } from "react-native";
+import React from "react";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import Icon from "../icon/Common";
+import { removeSearchedPlace } from "@/apis/searchedPlaces";
 
 interface PlaceNameButtonProps {
     name: string;
+    id: number;
+    onRemove: () => void;
 }
 
-const PlaceNameButton: React.FC<PlaceNameButtonProps> = ({ name }) => {
+const PlaceNameButton: React.FC<PlaceNameButtonProps> = ({
+    name,
+    id,
+    onRemove,
+}) => {
+    const handleRemove = async () => {
+        try {
+            await removeSearchedPlace(id);
+            onRemove();
+        } catch (error) {
+            console.error("Failed to remove searched place:", error);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.name}>{name}</Text>
-            <Icon type="CancelS" />
+            <Pressable onPress={handleRemove}>
+                <Icon type="CancelS" />
+            </Pressable>
         </View>
     );
 };

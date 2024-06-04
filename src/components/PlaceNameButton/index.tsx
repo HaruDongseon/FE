@@ -7,6 +7,7 @@ import { removeSearchedPlace } from "@/apis/searchedPlaces";
 interface PlaceNameButtonProps {
     name: string;
     id: number;
+    onPress: (name: string) => void;
     onRemove: () => void;
 }
 
@@ -14,6 +15,7 @@ const PlaceNameButton: React.FC<PlaceNameButtonProps> = ({
     name,
     id,
     onRemove,
+    onPress,
 }) => {
     const handleRemove = async () => {
         try {
@@ -26,7 +28,9 @@ const PlaceNameButton: React.FC<PlaceNameButtonProps> = ({
 
     return (
         <View style={styles.container}>
-            <Text style={styles.name}>{name}</Text>
+            <Pressable onPress={() => onPress(name)}>
+                <Text style={styles.name}>{name}</Text>
+            </Pressable>
             <Pressable onPress={handleRemove}>
                 <Icon type="CancelS" />
             </Pressable>

@@ -138,6 +138,7 @@ const Searchpage: React.FC = () => {
                                 {recentSearchedPlaces.map((place) => (
                                     <PlaceNameButton
                                         key={place.id}
+                                        onPress={(name) => setSearchInput(name)}
                                         id={place.id}
                                         name={place.keyword}
                                         onRemove={fetchRecentSearchedPlaces} // 콜백 함수 전달

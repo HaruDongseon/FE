@@ -16,6 +16,8 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
     children,
     variant = "default",
 }) => {
+    const isBottomSheet = variant === "bottomSheet";
+
     if (!isOpen) return null;
 
     return (
@@ -35,10 +37,19 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
                     <Pressable style={{ flex: 1 }} onPress={onPressBackdrop} />
                 </MotiView>
                 <MotiView
-                    style={styles.content}
-                    from={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    style={[
+                        styles.content,
+                        isBottomSheet && styles.bottomSheet,
+                    ]}
+                    from={{
+                        opacity: 0,
+                    }}
+                    animate={{
+                        opacity: 1,
+                    }}
+                    exit={{
+                        opacity: 0,
+                    }}
                 >
                     {children}
                 </MotiView>
@@ -75,6 +86,10 @@ const styles = StyleSheet.create({
     content: {
         padding: 16,
         paddingTop: 32,
+    },
+    bottomSheet: {
+        marginTop: "auto",
+        width: "100%",
     },
 });
 

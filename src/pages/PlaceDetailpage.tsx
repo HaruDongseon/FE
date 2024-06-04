@@ -29,6 +29,11 @@ const PlaceDetailpage = () => {
     const insets = useSafeAreaInsets();
 
     const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null);
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const handleToggle = () => {
+        setIsExpanded(!isExpanded);
+    };
 
     useEffect(() => {
         const fetchPlaceDetail = async () => {
@@ -51,6 +56,11 @@ const PlaceDetailpage = () => {
         }
     };
 
+    const getTodayIndex = () => {
+        const today = new Date().getDay();
+        return today === 0 ? 6 : today - 1;
+    };
+
     const renderReservableParking = () => {
         if (placeDetail?.reservable && placeDetail?.parkingOptions) {
             return "주차 가능, 예약 가능";
@@ -61,6 +71,8 @@ const PlaceDetailpage = () => {
         }
         return null;
     };
+
+    const todayIndex = getTodayIndex();
 
     return (
         <ScrollView style={styles.container}>
@@ -94,19 +106,61 @@ const PlaceDetailpage = () => {
                     >
                         <Icon type="TimeR" />
                         <View style={styles.weekdayContainer}>
-                            {placeDetail.currentOpeningHours.weekdayDescriptions.map(
-                                (description) => (
+                            {placeDetail.currentOpeningHours
+                                .weekdayDescriptions[todayIndex] && (
+                                <View style={styles.todayContainer}>
+                                    <View style={styles.toggleContainer}>
+                                        <Text
+                                            style={[
+                                                styles.detailText,
+                                                styles.boldText,
+                                            ]}
+                                        >
+                                            {
+                                                placeDetail.currentOpeningHours
+                                                    .weekdayDescriptions[
+                                                    todayIndex
+                                                ]
+                                            }
+                                        </Text>
+                                        <Pressable onPress={handleToggle}>
+                                            <Icon
+                                                type={
+                                                    isExpanded
+                                                        ? "Up1LineR"
+                                                        : "Down1LineR"
+                                                }
+                                            />
+                                        </Pressable>
+                                    </View>
                                     <Text
-                                        key={description}
                                         style={[
-                                            styles.detailText,
-                                            { marginBottom: 6 },
+                                            styles.additionalInfoText,
+                                            isExpanded &&
+                                                styles.additionalInfoTextExpanded,
                                         ]}
                                     >
-                                        {description}
+                                        휴무일, 브레이크 타임 등 자세한 정보는
+                                        매장 확인 바랍니다.
                                     </Text>
-                                ),
+                                </View>
                             )}
+                            {isExpanded &&
+                                placeDetail.currentOpeningHours.weekdayDescriptions.map(
+                                    (description, index) => (
+                                        <Text
+                                            key={description}
+                                            style={[
+                                                styles.detailText,
+                                                { marginBottom: 6 },
+                                                index === todayIndex &&
+                                                    styles.boldText,
+                                            ]}
+                                        >
+                                            {description}
+                                        </Text>
+                                    ),
+                                )}
                         </View>
                     </View>
                 )}
@@ -225,5 +279,24 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         color: Colors.grayScale800,
         marginBottom: 8,
+    },
+    boldText: {
+        fontWeight: "700",
+    },
+    todayContainer: {
+        flexDirection: "column",
+        justifyContent: "center",
+        marginBottom: 2,
+    },
+    toggleContainer: {
+        flexDirection: "row",
+    },
+    additionalInfoText: {
+        fontSize: 11,
+        color: Colors.feedbackR200,
+        marginLeft: 12,
+    },
+    additionalInfoTextExpanded: {
+        marginBottom: 12,
     },
 });

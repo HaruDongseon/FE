@@ -14,6 +14,7 @@ import {
     Linking,
     ScrollView,
     Image,
+    Dimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -73,6 +74,50 @@ const PlaceDetailpage = () => {
         return null;
     };
 
+    const renderItem = (
+        item: { name: string },
+        index: number,
+        length: number,
+    ) => (
+        <Image
+            key={index}
+            source={{
+                uri: `https://places.googleapis.com/v1/${item.name}/media?maxHeightPx=400&maxWidthPx=400&key=${GOOGLE_API_KEY}`,
+            }}
+            style={length > 1 ? styles.carouselItem : styles.photo}
+        />
+    );
+
+    const renderCarousel = () => {
+        if (
+            !placeDetail ||
+            !placeDetail.photos ||
+            placeDetail.photos.length === 0
+        )
+            return null;
+
+        if (placeDetail.photos.length === 1) {
+            return renderItem(placeDetail.photos[0], 0, 1);
+        } else {
+            return (
+                <ScrollView
+                    horizontal
+                    pagingEnabled
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.carouselContainer}
+                >
+                    {placeDetail.photos.map((photo, index) =>
+                        renderItem(
+                            photo,
+                            index,
+                            placeDetail.photos?.length || 0,
+                        ),
+                    )}
+                </ScrollView>
+            );
+        }
+    };
+
     const todayIndex = getTodayIndex();
 
     return (
@@ -86,14 +131,7 @@ const PlaceDetailpage = () => {
                 <Text style={styles.displayName}>
                     {placeDetail?.displayName.text}
                 </Text>
-                {placeDetail?.photos && placeDetail.photos.length > 0 && (
-                    <Image
-                        source={{
-                            uri: `https://places.googleapis.com/v1/${placeDetail.photos[0].name}/media?maxHeightPx=400&maxWidthPx=400&key=${GOOGLE_API_KEY}`,
-                        }}
-                        style={styles.photo}
-                    />
-                )}
+                {renderCarousel()}
             </View>
             <View style={styles.detailContainer}>
                 <View style={styles.detailFrame}>
@@ -251,7 +289,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         lineHeight: 28,
         fontWeight: "500",
-        marginBottom: 16,
     },
     detailContainer: {
         backgroundColor: Colors.white,
@@ -314,6 +351,17 @@ const styles = StyleSheet.create({
     },
     photo: {
         width: "100%",
+        height: 156,
+        resizeMode: "cover",
+        borderRadius: 12,
+    },
+    carouselContainer: {
+        flexDirection: "row",
+        marginTop: 16,
+        gap: 8,
+    },
+    carouselItem: {
+        width: 156,
         height: 156,
         resizeMode: "cover",
         borderRadius: 12,

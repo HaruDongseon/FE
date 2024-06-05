@@ -48,7 +48,7 @@ const Searchpage: React.FC = () => {
             if (searchInput.trim().length > 0) {
                 searchPlaces(searchInput);
             }
-        }, 300);
+        }, 200);
 
         return () => clearTimeout(delayDebounceFn);
     }, [searchInput]);

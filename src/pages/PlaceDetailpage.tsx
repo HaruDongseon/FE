@@ -14,7 +14,6 @@ import {
     Linking,
     ScrollView,
     Image,
-    Dimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -123,14 +122,19 @@ const PlaceDetailpage = () => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.titleContainer}>
-                {placeDetail?.primaryTypeDisplayName && (
-                    <Text style={styles.primaryType}>
-                        {placeDetail.primaryTypeDisplayName?.text}
-                    </Text>
-                )}
-                <Text style={styles.displayName}>
-                    {placeDetail?.displayName.text}
-                </Text>
+                <View style={styles.titleTopContainer}>
+                    <View style={styles.titleTextContainer}>
+                        {placeDetail?.primaryTypeDisplayName && (
+                            <Text style={styles.primaryType}>
+                                {placeDetail.primaryTypeDisplayName?.text}
+                            </Text>
+                        )}
+                        <Text style={styles.displayName}>
+                            {placeDetail?.displayName.text}
+                        </Text>
+                    </View>
+                    <Icon type="SharingL" />
+                </View>
                 {renderCarousel()}
             </View>
             <View style={styles.detailContainer}>
@@ -366,4 +370,10 @@ const styles = StyleSheet.create({
         resizeMode: "cover",
         borderRadius: 12,
     },
+    titleTopContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    titleTextContainer: {},
 });

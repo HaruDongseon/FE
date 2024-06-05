@@ -24,6 +24,10 @@ export interface Time {
     weekdayDescriptions: string[];
 }
 
+export interface Photo {
+    name: string;
+}
+
 export interface PlaceDetail {
     id: string;
     displayName: LanguageWithText;
@@ -35,7 +39,7 @@ export interface PlaceDetail {
     reservable?: boolean;
     websiteUri?: string;
     currentOpeningHours?: Time;
-    photos?: string;
+    photos?: Photo[];
 }
 
 export const getGooglePlaces = async (

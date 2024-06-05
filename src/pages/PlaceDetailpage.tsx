@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import Map from "@/components/Map";
 import Icon from "@/components/icon/Common";
 import Colors from "@/styles/Color";
+import { GOOGLE_API_KEY } from "@env";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
@@ -11,8 +12,8 @@ import {
     Text,
     Pressable,
     Linking,
-    GestureResponderEvent,
     ScrollView,
+    Image,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -85,6 +86,14 @@ const PlaceDetailpage = () => {
                 <Text style={styles.displayName}>
                     {placeDetail?.displayName.text}
                 </Text>
+                {placeDetail?.photos && placeDetail.photos.length > 0 && (
+                    <Image
+                        source={{
+                            uri: `https://places.googleapis.com/v1/${placeDetail.photos[0].name}/media?maxHeightPx=400&maxWidthPx=400&key=${GOOGLE_API_KEY}`,
+                        }}
+                        style={styles.photo}
+                    />
+                )}
             </View>
             <View style={styles.detailContainer}>
                 <View style={styles.detailFrame}>
@@ -115,6 +124,8 @@ const PlaceDetailpage = () => {
                                                 styles.detailText,
                                                 styles.boldText,
                                             ]}
+                                            numberOfLines={1}
+                                            ellipsizeMode="tail"
                                         >
                                             {
                                                 placeDetail.currentOpeningHours
@@ -150,6 +161,8 @@ const PlaceDetailpage = () => {
                                     (description, index) => (
                                         <Text
                                             key={description}
+                                            numberOfLines={1}
+                                            ellipsizeMode="tail"
                                             style={[
                                                 styles.detailText,
                                                 { marginBottom: 6 },
@@ -226,7 +239,6 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         flexDirection: "column",
-        marginTop: 8,
         padding: 20,
     },
     primaryType: {
@@ -239,6 +251,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         lineHeight: 28,
         fontWeight: "500",
+        marginBottom: 16,
     },
     detailContainer: {
         backgroundColor: Colors.white,
@@ -298,5 +311,11 @@ const styles = StyleSheet.create({
     },
     additionalInfoTextExpanded: {
         marginBottom: 12,
+    },
+    photo: {
+        width: "100%",
+        height: 156,
+        resizeMode: "cover",
+        borderRadius: 12,
     },
 });

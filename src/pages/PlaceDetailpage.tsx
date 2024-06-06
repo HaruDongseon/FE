@@ -93,7 +93,11 @@ const PlaceDetailpage = () => {
             !placeDetail.photos ||
             placeDetail.photos.length === 0
         )
-            return null;
+            return (
+                <View style={styles.emptyContainmer}>
+                    <Icon type="Lock" />
+                </View>
+            );
 
         if (placeDetail.photos.length === 1) {
             return renderItem(placeDetail.photos[0], 0, 1);
@@ -376,4 +380,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     titleTextContainer: {},
+    emptyContainmer: {
+        width: "100%",
+        height: 156,
+        backgroundColor: Colors.white,
+        borderRadius: 12,
+        marginTop: 16,
+        justifyContent: "center",
+        alignItems: "center",
+    },
 });

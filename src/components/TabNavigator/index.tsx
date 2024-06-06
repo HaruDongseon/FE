@@ -96,7 +96,11 @@ function TabNavigator() {
             <Tab.Screen
                 name={TabName.Searchpage}
                 component={Searchpage}
-                options={{ headerShown: false, title: "검색" }}
+                options={{
+                    headerShown: false,
+                    title: "검색",
+                    tabBarStyle: { display: "none" },
+                }}
             />
             <Tab.Screen
                 name={TabName.Mypage}

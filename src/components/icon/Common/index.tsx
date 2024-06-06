@@ -62,7 +62,8 @@ export type IconType =
     | "MessageErrorR"
     | "MessageSuccessR"
     | "MessageInfoR"
-    | "Sad";
+    | "Sad"
+    | "Lock";
 
 interface IconProps extends SvgProps {
     type: IconType;
@@ -773,6 +774,20 @@ const Icon: React.FC<IconProps> = ({ type, color = "#1D1F1F", ...props }) => {
                     <Path
                         fill="#E4F2FF"
                         d="M14.126 19.539a1.876 1.876 0 0 1-3.752 0c0-1.001.643-1.657 1.758-2.996a.151.151 0 0 1 .234.002c1.02 1.26 1.76 1.995 1.76 2.994Z"
+                    />
+                </Svg>
+            );
+        case "Lock":
+            return (
+                <Svg width={32} height={32} fill="none" {...props}>
+                    <Path
+                        stroke="#838A8A"
+                        strokeWidth={2}
+                        d="M20.735 10.695V9.013a4 4 0 0 0-4-4h-1.47a4 4 0 0 0-4 4v1.682"
+                    />
+                    <Path
+                        fill="#72E0D8"
+                        d="M7.126 11.355a2 2 0 0 1 1.997-1.892h13.754a2 2 0 0 1 1.997 1.892l.73 13.524a2 2 0 0 1-1.996 2.108H8.392a2 2 0 0 1-1.997-2.107l.731-13.525Z"
                     />
                 </Svg>
             );

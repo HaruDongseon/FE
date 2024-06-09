@@ -16,6 +16,7 @@ import {
     SafeAreaView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import PlaceCard from "./PlaceCard";
 
 interface PlaceDetailProps {
     goBack: () => void;
@@ -32,6 +33,7 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({
 
     const [placeDetail, setPlaceDetail] = useState<PlaceInfo | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isScaleUp, setIsScaleUp] = useState(false);
 
     const handleToggle = () => {
         setIsExpanded(!isExpanded);
@@ -124,14 +126,52 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({
 
     const todayIndex = getTodayIndex();
 
+    if (isScaleUp) {
+        return (
+            <SafeAreaView style={styles.safeAreaContainer}>
+                <View style={styles.navigator}>
+                    <Pressable onPress={() => setIsScaleUp(false)}>
+                        <Icon type="Before1LineM" />
+                    </Pressable>
+                    <Text style={styles.centerText}>장소 보기</Text>
+                </View>
+                <Map
+                    latitude={placeDetail?.location.latitude}
+                    longitude={placeDetail?.location.longitude}
+                    style={{ flex: 1 }}
+                />
+                <View style={[styles.hoverContainer, { bottom: 86 }]}>
+                    <PlaceCard
+                        imageUrl={
+                            placeDetail?.photos && placeDetail?.photos[0].name
+                        }
+                        displayName={placeDetail?.displayName.text}
+                        address={placeDetail?.formattedAddress}
+                        onPress={() => setIsScaleUp(false)}
+                    />
+                </View>
+                <View style={[styles.hoverContainer, { bottom: 10 }]}>
+                    <Button
+                        title={"동선 추가"}
+                        onPress={() => {}}
+                        type={"outline"}
+                        width={320}
+                        size={"l"}
+                        color={"Primary"}
+                    />
+                </View>
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <ScrollView style={styles.container}>
-                <Pressable onPress={goBack}>
-                    <View style={styles.goBackContainer}>
+                <View style={styles.navigator}>
+                    <Pressable onPress={goBack}>
                         <Icon type="Before1LineM" />
-                    </View>
-                </Pressable>
+                    </Pressable>
+                </View>
                 <View style={styles.titleContainer}>
                     <View style={styles.titleTopContainer}>
                         <View style={styles.titleTextContainer}>
@@ -267,7 +307,16 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({
                         { paddingBottom: 8 + insets.bottom },
                     ]}
                 >
-                    <Text style={styles.mapText}>지도</Text>
+                    <View style={styles.mapTextContainer}>
+                        <Text style={styles.mapText}>지도</Text>
+                        <Button
+                            title={"크게 보기"}
+                            onPress={() => setIsScaleUp(true)}
+                            type={"text"}
+                            size={"s"}
+                            color={"Gray"}
+                        />
+                    </View>
                     <Map
                         latitude={placeDetail?.location.latitude}
                         longitude={placeDetail?.location.longitude}
@@ -292,19 +341,36 @@ export default PlaceDetail;
 const styles = StyleSheet.create({
     safeAreaContainer: {
         flex: 1,
+        backgroundColor: Colors.white,
     },
     container: {
         backgroundColor: Colors.grayScale25,
         flex: 1,
     },
-    goBackContainer: {
+    hoverContainer: {
+        position: "absolute",
+        zIndex: 9999,
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    navigator: {
+        backgroundColor: "transparent",
+        height: 44,
+        alignItems: "center",
         paddingHorizontal: 20,
-        paddingTop: 10,
+        flexDirection: "row",
+    },
+    centerText: {
+        fontWeight: "500",
+        fontSize: 16,
+        lineHeight: 24,
+        color: Colors.grayScale600,
     },
     titleContainer: {
         flexDirection: "column",
         paddingHorizontal: 20,
-        marginTop: 18,
+        marginTop: 8,
         paddingBottom: 20,
     },
     primaryType: {
@@ -356,7 +422,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         color: Colors.grayScale800,
-        marginBottom: 8,
     },
     boldText: {
         fontWeight: "700",
@@ -382,6 +447,7 @@ const styles = StyleSheet.create({
         height: 156,
         resizeMode: "cover",
         borderRadius: 12,
+        marginBottom: 8,
     },
     carouselContainer: {
         flexDirection: "row",
@@ -407,6 +473,12 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         marginTop: 16,
         justifyContent: "center",
+        alignItems: "center",
+    },
+    mapTextContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 8,
         alignItems: "center",
     },
 });

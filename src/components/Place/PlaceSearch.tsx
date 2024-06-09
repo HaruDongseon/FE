@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
     FlatList,
-    GestureResponderEvent,
+    Pressable,
     ScrollView,
     StyleSheet,
     Text,
@@ -11,6 +11,7 @@ import Colors from "@/styles/Color";
 import Input from "@/components/Input";
 import {
     SearchedPlace,
+    addSearchedPlace,
     getRecentSearchedPlaces,
     removeSearchedPlaceAll,
 } from "@/apis/searchedPlaces";
@@ -20,13 +21,19 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "@/components/icon/Common";
 import PlaceNameButton from "@/components/PlaceNameButton";
 import Button from "@/components/Button";
+import PlaceDetail from "./PlaceDetail";
 
-const Searchpage: React.FC = () => {
+interface PlaceSearchProps {
+    handleEvent: () => void;
+}
+
+const PlaceSearch: React.FC<PlaceSearchProps> = ({ handleEvent }) => {
     const [searchInput, setSearchInput] = useState<string>("");
     const [recentSearchedPlaces, setRecentSearchedPlaces] = useState<
         SearchedPlace[]
     >([]);
     const [places, setPlaces] = useState<GooglePlace[]>([]);
+    const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
 
     const insets = useSafeAreaInsets();
 
@@ -76,14 +83,39 @@ const Searchpage: React.FC = () => {
         }
     };
 
-    const renderPlace = ({ item }: { item: GooglePlace }) => (
-        <Place
-            name={item.displayName.text}
-            address={item.formattedAddress}
-            primaryType={item?.primaryTypeDisplayName?.text}
-            id={item.id}
-        />
-    );
+    const renderPlace = ({ item }: { item: GooglePlace }) => {
+        const handlePress = async () => {
+            try {
+                await addSearchedPlace(item.displayName.text);
+                setSelectedPlaceId(item.id);
+            } catch (error) {
+                console.error("Failed to add searched place:", error);
+            }
+        };
+
+        return (
+            <Pressable onPress={handlePress}>
+                <Place
+                    name={item.displayName.text}
+                    address={item.formattedAddress}
+                    primaryType={item?.primaryTypeDisplayName?.text}
+                    id={item.id}
+                />
+            </Pressable>
+        );
+    };
+
+    if (selectedPlaceId) {
+        return (
+            <PlaceDetail
+                goBack={() => {
+                    setSelectedPlaceId(null);
+                }}
+                handleEvent={handleEvent}
+                id={selectedPlaceId}
+            />
+        );
+    }
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -141,7 +173,7 @@ const Searchpage: React.FC = () => {
                                         onPress={(name) => setSearchInput(name)}
                                         id={place.id}
                                         name={place.keyword}
-                                        onRemove={fetchRecentSearchedPlaces} // 콜백 함수 전달
+                                        onRemove={fetchRecentSearchedPlaces}
                                     />
                                 ))}
                             </ScrollView>
@@ -163,7 +195,7 @@ const Searchpage: React.FC = () => {
     );
 };
 
-export default Searchpage;
+export default PlaceSearch;
 
 const styles = StyleSheet.create({
     container: {

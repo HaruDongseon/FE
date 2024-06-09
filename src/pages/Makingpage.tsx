@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Keyboard, Text, Pressable } from "react-native";
+import {
+    View,
+    StyleSheet,
+    Keyboard,
+    Text,
+    Pressable,
+    Modal,
+} from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import {
     ParamListBase,
@@ -17,6 +24,7 @@ import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Map from "@/components/Map";
+import PlaceSearch from "@/components/Place/PlaceSearch";
 
 export type MypageParams = {
     Makingpage: {
@@ -42,6 +50,7 @@ const Makingpage: React.FC = () => {
         자전거: "default",
         자동차: "default",
     });
+    const [modalVisible, setModalVisible] = useState(false);
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
@@ -108,137 +117,152 @@ const Makingpage: React.FC = () => {
         return () => debouncedFetchRouteTags.cancel();
     }, [tagInputFocused, tagInput, debouncedFetchRouteTags]);
 
-    return (
-        <Pressable
-            style={{ flex: 1 }}
-            onPress={Keyboard.dismiss}
-            accessible={false}
-        >
-            <View style={styles.container}>
-                <Toggle
-                    title="동선 기본 정보"
-                    expanded={firstToggleOpen}
-                    handlePress={() => {
-                        setFirstToggleOpen((prev) => !prev);
-                    }}
-                />
-                {firstToggleOpen && (
-                    <View style={styles.frameContainer}>
-                        <Frame title="날짜">
-                            <Input
-                                size={"M"}
-                                readOnly={true}
-                                defaultValue={formatDate(date)}
-                                onTouchStart={() =>
-                                    navigation.navigate("Calendarpage")
-                                }
-                            />
-                        </Frame>
-                        <Frame title="제목">
-                            <Input
-                                value={title}
-                                size={"M"}
-                                placeholder={"제목을 입력해주세요"}
-                                onChangeText={setTitle}
-                                maxLength={15}
-                            />
-                        </Frame>
-                        <View style={styles.tagConatiner}>
-                            <Frame title="태그">
+    if (!modalVisible) {
+        return (
+            <Pressable
+                style={{ flex: 1 }}
+                onPress={Keyboard.dismiss}
+                accessible={false}
+            >
+                <View style={styles.container}>
+                    <Toggle
+                        title="동선 기본 정보"
+                        expanded={firstToggleOpen}
+                        handlePress={() => {
+                            setFirstToggleOpen((prev) => !prev);
+                        }}
+                    />
+                    {firstToggleOpen && (
+                        <View style={styles.frameContainer}>
+                            <Frame title="날짜">
                                 <Input
                                     size={"M"}
-                                    placeholder={"#태그를 입력해주세요"}
-                                    value={tagInput}
-                                    onChangeText={setTagInput}
-                                    onFocus={() => setTagInputFocused(true)}
-                                    onBlur={handleTagInputBlur}
+                                    readOnly={true}
+                                    defaultValue={formatDate(date)}
+                                    onTouchStart={() =>
+                                        navigation.navigate("Calendarpage")
+                                    }
                                 />
-                                {tagInputFocused && (
-                                    <DropBox hashtags={routeTags} />
-                                )}
+                            </Frame>
+                            <Frame title="제목">
+                                <Input
+                                    value={title}
+                                    size={"M"}
+                                    placeholder={"제목을 입력해주세요"}
+                                    onChangeText={setTitle}
+                                    maxLength={15}
+                                />
+                            </Frame>
+                            <View style={styles.tagConatiner}>
+                                <Frame title="태그">
+                                    <Input
+                                        size={"M"}
+                                        placeholder={"#태그를 입력해주세요"}
+                                        value={tagInput}
+                                        onChangeText={setTagInput}
+                                        onFocus={() => setTagInputFocused(true)}
+                                        onBlur={handleTagInputBlur}
+                                    />
+                                    {tagInputFocused && (
+                                        <DropBox hashtags={routeTags} />
+                                    )}
+                                </Frame>
+                            </View>
+                            <Frame title="이동수단">
+                                {(
+                                    [
+                                        "대중교통",
+                                        "도보",
+                                        "자전거",
+                                        "자동차",
+                                    ] as TransportType[]
+                                ).map((transport) => (
+                                    <ButtonAction
+                                        key={transport}
+                                        title={transport}
+                                        status={
+                                            buttonStates[transport] as
+                                                | "default"
+                                                | "active"
+                                                | "disabled"
+                                        }
+                                        onPress={() =>
+                                            handleButtonAction(transport)
+                                        }
+                                    />
+                                ))}
                             </Frame>
                         </View>
-                        <Frame title="이동수단">
-                            {(
-                                [
-                                    "대중교통",
-                                    "도보",
-                                    "자전거",
-                                    "자동차",
-                                ] as TransportType[]
-                            ).map((transport) => (
-                                <ButtonAction
-                                    key={transport}
-                                    title={transport}
-                                    status={
-                                        buttonStates[transport] as
-                                            | "default"
-                                            | "active"
-                                            | "disabled"
-                                    }
-                                    onPress={() =>
-                                        handleButtonAction(transport)
-                                    }
-                                />
-                            ))}
-                        </Frame>
-                    </View>
-                )}
-                <View style={styles.gap} />
-                <Toggle
-                    title="동선 만들기"
-                    expanded={!firstToggleOpen}
-                    handlePress={() => {
-                        setFirstToggleOpen((prev) => !prev);
+                    )}
+                    <View style={styles.gap} />
+                    <Toggle
+                        title="동선 만들기"
+                        expanded={!firstToggleOpen}
+                        handlePress={() => {
+                            setFirstToggleOpen((prev) => !prev);
+                        }}
+                    />
+                    {firstToggleOpen ? (
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                title={"동선 만들기"}
+                                onPress={() => setFirstToggleOpen(false)}
+                                disabled={!title}
+                                type={"filled"}
+                                size={"l"}
+                                color={"Primary"}
+                                width={320}
+                            />
+                        </View>
+                    ) : (
+                        <>
+                            <Map />
+                            <View style={styles.routeMakingContainer}>
+                                <View style={styles.routeMakingHeader}>
+                                    <Text style={styles.routeMakingText}>
+                                        동선 만들기
+                                    </Text>
+                                    <Button
+                                        title={"장소추가"}
+                                        onPress={() => {
+                                            setModalVisible(true);
+                                        }}
+                                        type={"outline"}
+                                        size={"s"}
+                                        color={"Gray"}
+                                    />
+                                </View>
+                                <View style={styles.buttonContainer}>
+                                    <Button
+                                        title={"동선 만들기"}
+                                        onPress={() =>
+                                            setFirstToggleOpen(false)
+                                        }
+                                        disabled={!title}
+                                        type={"filled"}
+                                        size={"l"}
+                                        color={"Primary"}
+                                        width={320}
+                                    />
+                                </View>
+                            </View>
+                        </>
+                    )}
+                </View>
+            </Pressable>
+        );
+    }
+    if (modalVisible) {
+        return (
+            <Modal visible={true} transparent={false} animationType="slide">
+                <PlaceSearch
+                    handleEvent={() => {
+                        setModalVisible(false);
                     }}
                 />
-                {firstToggleOpen ? (
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            title={"동선 만들기"}
-                            onPress={() => setFirstToggleOpen(false)}
-                            disabled={!title}
-                            type={"filled"}
-                            size={"l"}
-                            color={"Primary"}
-                            width={320}
-                        />
-                    </View>
-                ) : (
-                    <>
-                        <Map />
-                        <View style={styles.routeMakingContainer}>
-                            <View style={styles.routeMakingHeader}>
-                                <Text style={styles.routeMakingText}>
-                                    동선 만들기
-                                </Text>
-                                <Button
-                                    title={"장소추가"}
-                                    onPress={() => {
-                                        navigation.navigate("Searchpage");
-                                    }}
-                                    type={"outline"}
-                                    size={"s"}
-                                    color={"Gray"}
-                                />
-                            </View>
-                            <View style={styles.buttonContainer}>
-                                <Button
-                                    title={"동선 만들기"}
-                                    onPress={() => setFirstToggleOpen(false)}
-                                    disabled={!title}
-                                    type={"filled"}
-                                    size={"l"}
-                                    color={"Primary"}
-                                    width={320}
-                                />
-                            </View>
-                        </View>
-                    </>
-                )}
-            </View>
-        </Pressable>
-    );
+            </Modal>
+        );
+    }
 };
 
 const styles = StyleSheet.create({

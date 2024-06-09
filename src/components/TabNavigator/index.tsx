@@ -9,8 +9,6 @@ import { Pressable } from "react-native";
 import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Calendarpage from "@/pages/Calendarpage";
-import Searchpage from "@/pages/Searchpage";
-import PlaceDetailpage from "@/pages/PlaceDetailpage";
 
 const Tab = createBottomTabNavigator();
 
@@ -93,15 +91,7 @@ function TabNavigator() {
                 component={Mainpage}
                 options={{ headerShown: false, title: "홈" }}
             />
-            <Tab.Screen
-                name={TabName.Searchpage}
-                component={Searchpage}
-                options={{
-                    headerShown: false,
-                    title: "검색",
-                    tabBarStyle: { display: "none" },
-                }}
-            />
+
             <Tab.Screen
                 name={TabName.Mypage}
                 component={Mypage}
@@ -125,15 +115,6 @@ function TabNavigator() {
                 component={Calendarpage}
                 options={{
                     title: "날짜 등록",
-                    tabBarButton: () => null,
-                    tabBarStyle: { display: "none" },
-                }}
-            />
-            <Tab.Screen
-                name={TabName.PlaceDetailpage}
-                component={PlaceDetailpage}
-                options={{
-                    title: "",
                     tabBarButton: () => null,
                     tabBarStyle: { display: "none" },
                 }}

@@ -28,7 +28,7 @@ export interface Photo {
     name: string;
 }
 
-export interface PlaceDetail {
+export interface PlaceInfo {
     id: string;
     displayName: LanguageWithText;
     location: Coordinate;
@@ -69,7 +69,7 @@ export const getGooglePlaces = async (
 
 export const getGooglePlaceDetail = async (
     placeId: string,
-): Promise<PlaceDetail> => {
+): Promise<PlaceInfo> => {
     const apiURl = `https://places.googleapis.com/v1/places/${placeId}`;
 
     const headers = {

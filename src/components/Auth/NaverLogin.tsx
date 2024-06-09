@@ -33,6 +33,7 @@ const NaverLogin: React.FC<{
                 token,
                 deviceId: "123",
             });
+            console.log(accessToken);
             await SecureStore.setItemAsync("accessToken", accessToken);
 
             setLoginVisible(null);

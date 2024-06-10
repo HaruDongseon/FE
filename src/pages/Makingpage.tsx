@@ -34,6 +34,11 @@ export type MypageParams = {
 
 type TransportType = "대중교통" | "도보" | "자전거" | "자동차";
 
+interface RouteType {
+    displayName: string;
+    primaryTypeDisplayName?: string;
+}
+
 const Makingpage: React.FC = () => {
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -51,6 +56,7 @@ const Makingpage: React.FC = () => {
         자동차: "default",
     });
     const [modalVisible, setModalVisible] = useState(false);
+    const [addedRoute, setAddedRoute] = useState<RouteType[]>([]);
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
@@ -104,6 +110,17 @@ const Makingpage: React.FC = () => {
             }
         }
     }, 500);
+
+    const handlePlaceSearchEvent = (
+        displayName: string,
+        primaryTypeDisplayName?: string,
+    ) => {
+        setModalVisible(false);
+        setAddedRoute((prev) => [
+            ...prev,
+            { displayName, primaryTypeDisplayName },
+        ]);
+    };
 
     useEffect(() => {
         if (tagInputFocused) {
@@ -256,9 +273,15 @@ const Makingpage: React.FC = () => {
         return (
             <Modal visible={true} transparent={false} animationType="slide">
                 <PlaceSearch
-                    handleEvent={() => {
-                        setModalVisible(false);
-                    }}
+                    handleEvent={(
+                        displayName: string,
+                        primaryTypeDisplayName: string | undefined,
+                    ) =>
+                        handlePlaceSearchEvent(
+                            displayName,
+                            primaryTypeDisplayName,
+                        )
+                    }
                 />
             </Modal>
         );

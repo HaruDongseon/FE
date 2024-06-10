@@ -20,7 +20,7 @@ import PlaceCard from "./PlaceCard";
 
 interface PlaceDetailProps {
     goBack: () => void;
-    handleEvent: () => void;
+    handleEvent: (displayName: string, primaryTypeDisplayName?: string) => void;
     id: string;
 }
 
@@ -169,7 +169,7 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({
             <ScrollView style={styles.container}>
                 <View style={styles.navigator}>
                     <Pressable onPress={goBack}>
-                        <Icon type="Before1LineM" />
+                        <Icon type="Before1LineM" style={{ width: "100%" }} />
                     </Pressable>
                 </View>
                 <View style={styles.titleContainer}>
@@ -325,7 +325,12 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({
                     />
                     <Button
                         title={"동선 추가"}
-                        onPress={handleEvent}
+                        onPress={() =>
+                            handleEvent(
+                                placeDetail?.displayName.text || "",
+                                placeDetail?.primaryTypeDisplayName?.text,
+                            )
+                        }
                         type={"outline"}
                         size={"l"}
                         color={"Primary"}

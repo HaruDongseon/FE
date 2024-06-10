@@ -24,7 +24,7 @@ import Button from "@/components/Button";
 import PlaceDetail from "./PlaceDetail";
 
 interface PlaceSearchProps {
-    handleEvent: () => void;
+    handleEvent: (displayName: string, primaryTypeDisplayName?: string) => void;
 }
 
 const PlaceSearch: React.FC<PlaceSearchProps> = ({ handleEvent }) => {

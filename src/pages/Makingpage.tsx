@@ -6,6 +6,7 @@ import {
     Text,
     Pressable,
     Modal,
+    ScrollView,
 } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import {
@@ -25,6 +26,7 @@ import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Map from "@/components/Map";
 import PlaceSearch from "@/components/Place/PlaceSearch";
+import PlaceMovement from "@/components/Place/PlaceMovement";
 
 export type MypageParams = {
     Makingpage: {
@@ -234,7 +236,12 @@ const Makingpage: React.FC = () => {
                     ) : (
                         <>
                             <Map />
-                            <View style={styles.routeMakingContainer}>
+                            <View
+                                style={[
+                                    styles.routeMakingContainer,
+                                    addedRoute && { height: 368 },
+                                ]}
+                            >
                                 <View style={styles.routeMakingHeader}>
                                     <Text style={styles.routeMakingText}>
                                         동선 만들기
@@ -249,7 +256,19 @@ const Makingpage: React.FC = () => {
                                         color={"Gray"}
                                     />
                                 </View>
-                                <View style={styles.buttonContainer}>
+                                <ScrollView style={{ flex: 1 }}>
+                                    {addedRoute.map((route, idx) => (
+                                        <PlaceMovement
+                                            key={idx}
+                                            idx={idx}
+                                            displayName={route.displayName}
+                                            primaryTypeDisplayName={
+                                                route.primaryTypeDisplayName
+                                            }
+                                        />
+                                    ))}
+                                </ScrollView>
+                                {/* <View style={styles.buttonContainer}>
                                     <Button
                                         title={"동선 만들기"}
                                         onPress={() =>
@@ -261,7 +280,7 @@ const Makingpage: React.FC = () => {
                                         color={"Primary"}
                                         width={320}
                                     />
-                                </View>
+                                </View> */}
                             </View>
                         </>
                     )}
@@ -338,6 +357,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         lineHeight: 24,
+    },
+    scrollViewContainer: {
+        marginTop: 4,
     },
 });
 

@@ -1,12 +1,16 @@
+import Colors from "@/styles/Color";
 import { AnimatePresence, MotiView } from "moti";
 import { FC, PropsWithChildren, memo } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, View, Text } from "react-native";
+import Icon from "../icon/Common";
 
 interface ModalProps {
     isOpen: boolean;
     onPressBackdrop?: () => void;
     onPressClose?: () => void;
     variant?: "default" | "bottomSheet";
+    title?: string;
+    headerHidden?: boolean;
 }
 
 const Modal: FC<PropsWithChildren<ModalProps>> = ({
@@ -15,6 +19,8 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
     onPressClose,
     children,
     variant = "default",
+    title,
+    headerHidden = false,
 }) => {
     const isBottomSheet = variant === "bottomSheet";
 
@@ -51,6 +57,21 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
                         opacity: 0,
                     }}
                 >
+                    {!headerHidden && (
+                        <View style={styles.header}>
+                            <View style={styles.titleContainer}>
+                                <Text style={styles.title}>{title}</Text>
+                            </View>
+                            {onPressClose && (
+                                <Pressable
+                                    style={styles.closeButton}
+                                    onPress={onPressClose}
+                                >
+                                    <Icon type="CancelM" />
+                                </Pressable>
+                            )}
+                        </View>
+                    )}
                     {children}
                 </MotiView>
             </MotiView>
@@ -82,6 +103,33 @@ const styles = StyleSheet.create({
         zIndex: -1,
         backgroundColor: "#1D1F1F33",
         opacity: 0.2,
+    },
+    header: {
+        position: "relative",
+        paddingTop: 14,
+        paddingBottom: 14,
+        paddingRight: 25,
+        paddingLeft: 25,
+    },
+    titleContainer: {
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: "50%",
+        right: "50%",
+    },
+    title: {
+        color: Colors.grayScale600,
+        fontSize: 16,
+        fontWeight: "500",
+        lineHeight: 24,
+        textAlign: "center",
+    },
+    closeButton: {
+        position: "absolute",
+        right: 25,
+        top: 0,
+        left: 0,
     },
     content: {
         padding: 16,

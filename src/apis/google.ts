@@ -45,7 +45,7 @@ export interface PlaceInfo {
 export const getGooglePlaces = async (
     query: string,
 ): Promise<GooglePlace[]> => {
-    const apiURl = `https://places.googleapis.com/v1/places:searchText`;
+    const apiURL = `https://places.googleapis.com/v1/places:searchText`;
     const headers = {
         "X-Goog-Api-Key": GOOGLE_API_KEY,
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export const getGooglePlaces = async (
     };
 
     try {
-        const response = await axios.post(apiURl, data, {
+        const response = await axios.post(apiURL, data, {
             headers,
         });
         return response.data.places;
@@ -70,7 +70,7 @@ export const getGooglePlaces = async (
 export const getGooglePlaceDetail = async (
     placeId: string,
 ): Promise<PlaceInfo> => {
-    const apiURl = `https://places.googleapis.com/v1/places/${placeId}`;
+    const apiURL = `https://places.googleapis.com/v1/places/${placeId}`;
 
     const headers = {
         "X-Goog-Api-Key": GOOGLE_API_KEY,
@@ -80,7 +80,7 @@ export const getGooglePlaceDetail = async (
     };
 
     try {
-        const response = await axios.get(apiURl, {
+        const response = await axios.get(apiURL, {
             headers,
         });
         return response.data;

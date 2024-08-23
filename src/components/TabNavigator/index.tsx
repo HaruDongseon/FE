@@ -9,6 +9,7 @@ import { Pressable } from "react-native";
 import MakingPage from "@/pages/Makingpage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Calendarpage from "@/pages/Calendarpage";
+
 import { RouteName, RouteParamList } from "@/types/route";
 
 const Tab = createBottomTabNavigator<RouteParamList>();
@@ -82,6 +83,7 @@ function TabNavigator() {
                 component={Mainpage}
                 options={{ headerShown: false, title: "홈" }}
             />
+
             <Tab.Screen
                 name={RouteName.Mypage}
                 component={Mypage}

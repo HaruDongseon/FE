@@ -92,7 +92,7 @@ const Button: React.FC<ButtonProps> = ({
         const state = disabled ? "disabled" : isPressed ? "pressed" : "default";
         return type === "filled"
             ? colors[color].background[state]
-            : "transparent";
+            : Colors.white;
     };
 
     const getTextStyle = () => {

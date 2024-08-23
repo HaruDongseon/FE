@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Keyboard, Text, Pressable } from "react-native";
+import {
+    View,
+    StyleSheet,
+    Keyboard,
+    Text,
+    Pressable,
+    Modal,
+    ScrollView,
+} from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
 import Frame from "@/components/Frame/Frame";
 import Colors from "@/styles/Color";
@@ -11,6 +19,8 @@ import { RouteTag, getRouteTags } from "@/apis/routeTags";
 import debounce from "lodash.debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Map from "@/components/Map";
+import PlaceSearch from "@/components/Place/PlaceSearch";
+import PlaceMovement from "@/components/Place/PlaceMovement";
 import { RouteName, Tab } from "@/types/route";
 
 export type MypageParams = {
@@ -20,6 +30,12 @@ export type MypageParams = {
 };
 
 type TransportType = "대중교통" | "도보" | "자전거" | "자동차";
+
+interface RouteType {
+    displayName: string;
+    primaryTypeDisplayName?: string;
+}
+
 
 const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
     const date = route.params?.date;
@@ -34,6 +50,8 @@ const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
         자전거: "default",
         자동차: "default",
     });
+    const [modalVisible, setModalVisible] = useState(false);
+    const [addedRoute, setAddedRoute] = useState<RouteType[]>([]);
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
@@ -88,6 +106,17 @@ const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
         }
     }, 500);
 
+    const handlePlaceSearchEvent = (
+        displayName: string,
+        primaryTypeDisplayName?: string,
+    ) => {
+        setModalVisible(false);
+        setAddedRoute((prev) => [
+            ...prev,
+            { displayName, primaryTypeDisplayName },
+        ]);
+    };
+
     useEffect(() => {
         if (tagInputFocused) {
             const splittedTagInput = tagInput.split(" ");
@@ -100,12 +129,13 @@ const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
         return () => debouncedFetchRouteTags.cancel();
     }, [tagInputFocused, tagInput, debouncedFetchRouteTags]);
 
-    return (
-        <Pressable
-            style={{ flex: 1 }}
-            onPress={Keyboard.dismiss}
-            accessible={false}
-        >
+    if (!modalVisible) {
+        return (
+            // <Pressable
+            //     style={{ flex: 1 }}
+            //     onPress={Keyboard.dismiss}
+            //     accessible={false}
+            // >
             <View style={styles.container}>
                 <Toggle
                     title="동선 기본 정보"
@@ -199,7 +229,12 @@ const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
                 ) : (
                     <>
                         <Map />
-                        <View style={styles.routeMakingContainer}>
+                        <View
+                            style={[
+                                styles.routeMakingContainer,
+                                addedRoute.length > 0 && { height: 368 },
+                            ]}
+                        >
                             <View style={styles.routeMakingHeader}>
                                 <Text style={styles.routeMakingText}>
                                     동선 만들기
@@ -207,15 +242,32 @@ const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
                                 <Button
                                     title={"장소추가"}
                                     onPress={() => {
+                                        setModalVisible(true);
                                         navigation.navigate(
                                             RouteName.SearchPage,
                                         );
+
                                     }}
                                     type={"outline"}
                                     size={"s"}
                                     color={"Gray"}
                                 />
                             </View>
+                            <ScrollView
+                                style={{ flex: 1 }}
+                                showsVerticalScrollIndicator={false}
+                            >
+                                {addedRoute.map((route, idx) => (
+                                    <PlaceMovement
+                                        key={idx}
+                                        idx={idx}
+                                        displayName={route.displayName}
+                                        primaryTypeDisplayName={
+                                            route.primaryTypeDisplayName
+                                        }
+                                    />
+                                ))}
+                            </ScrollView>
                             <View style={styles.buttonContainer}>
                                 <Button
                                     title={"동선 만들기"}
@@ -231,8 +283,26 @@ const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
                     </>
                 )}
             </View>
-        </Pressable>
-    );
+            // </Pressable>
+        );
+    }
+    if (modalVisible) {
+        return (
+            <Modal visible={true} transparent={false} animationType="slide">
+                <PlaceSearch
+                    handleEvent={(
+                        displayName: string,
+                        primaryTypeDisplayName: string | undefined,
+                    ) =>
+                        handlePlaceSearchEvent(
+                            displayName,
+                            primaryTypeDisplayName,
+                        )
+                    }
+                />
+            </Modal>
+        );
+    }
 };
 
 const styles = StyleSheet.create({
@@ -285,6 +355,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         lineHeight: 24,
+    },
+    scrollViewContainer: {
+        marginTop: 4,
     },
 });
 

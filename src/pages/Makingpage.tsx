@@ -9,12 +9,6 @@ import {
     ScrollView,
 } from "react-native";
 import Toggle from "@/components/Toggle/Toggle";
-import {
-    ParamListBase,
-    RouteProp,
-    useNavigation,
-    useRoute,
-} from "@react-navigation/native";
 import Frame from "@/components/Frame/Frame";
 import Colors from "@/styles/Color";
 import Input from "@/components/Input";
@@ -27,6 +21,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Map from "@/components/Map";
 import PlaceSearch from "@/components/Place/PlaceSearch";
 import PlaceMovement from "@/components/Place/PlaceMovement";
+import { RouteName, Tab } from "@/types/route";
 
 export type MypageParams = {
     Makingpage: {
@@ -41,10 +36,8 @@ interface RouteType {
     primaryTypeDisplayName?: string;
 }
 
-const Makingpage: React.FC = () => {
-    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-    const route = useRoute<RouteProp<MypageParams, "Makingpage">>();
+const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
     const date = route.params?.date;
     const [firstToggleOpen, setFirstToggleOpen] = useState(true);
     const [tagInputFocused, setTagInputFocused] = useState(false);
@@ -159,7 +152,7 @@ const Makingpage: React.FC = () => {
                                 readOnly={true}
                                 defaultValue={formatDate(date)}
                                 onTouchStart={() =>
-                                    navigation.navigate("Calendarpage")
+                                    navigation.navigate(RouteName.CalendarPage)
                                 }
                             />
                         </Frame>
@@ -250,6 +243,10 @@ const Makingpage: React.FC = () => {
                                     title={"장소추가"}
                                     onPress={() => {
                                         setModalVisible(true);
+                                        navigation.navigate(
+                                            RouteName.SearchPage,
+                                        );
+
                                     }}
                                     type={"outline"}
                                     size={"s"}

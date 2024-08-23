@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import TabNavigator from "@/components/TabNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "react-native";
 
 export type RootStackParamList = {
     Root: undefined;
@@ -14,6 +15,7 @@ export type RootStackParamList = {
 export default function App() {
     return (
         <SafeAreaProvider>
+            <StatusBar translucent />
             <NavigationContainer>
                 <TabNavigator />
             </NavigationContainer>

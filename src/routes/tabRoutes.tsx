@@ -1,25 +1,58 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Mypage from '@/pages/Mypage';
-import Mainpage from '@/pages/Mainpage';
 import Icon, { IconType } from '@/components/icon/Common';
 import Colors from '@/styles/Color';
-import HomeStack from '../StackNavigator';
 import { Pressable } from 'react-native';
-import MakingPage from '@/pages/Makingpage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Calendarpage from '@/pages/Calendarpage';
 import { RouteName, RouteParamList } from '@/types/route';
+import LoginStack from './stacks/Login';
+import HomeStack from './stacks/Home';
+import useAuthorized from '@/hooks/useAuthorized';
 
 const Tab = createBottomTabNavigator<RouteParamList>();
+
+const UNAUTHORIZED_SCREENS = (
+  <Tab.Screen
+    name={RouteName.LoginStack}
+    component={LoginStack}
+    options={{
+      tabBarStyle: { display: 'none' },
+      headerShown: false,
+    }}
+  />
+);
+
+const AUTHORIZED_SCREENS = (
+  <>
+    <Tab.Screen
+      name={RouteName.HomeStack}
+      component={HomeStack}
+      options={{ headerShown: false, title: '홈' }}
+    />
+    {/* 검색 스택 필요
+    보관함 스택 필요 */}
+    <Tab.Screen
+      name={RouteName.Mypage}
+      component={Mypage}
+      options={{
+        title: '내 정보',
+        tabBarStyle: { display: 'none' },
+        headerTitleAlign: 'center',
+      }}
+    />
+  </>
+);
 
 function TabNavigator() {
   const insets = useSafeAreaInsets();
 
+  const authorized = useAuthorized();
+
   return (
     <Tab.Navigator
       backBehavior="history"
-      initialRouteName={RouteName.HomeStack}
+      initialRouteName={RouteName.Splash}
       screenOptions={({ route, navigation }) => ({
         headerTitleAlign: 'center',
         headerShadowVisible: false,
@@ -45,7 +78,7 @@ function TabNavigator() {
         tabBarIcon: () => {
           let iconName = null;
           switch (route.name) {
-            case RouteName.Mainpage:
+            case RouteName.Home:
               iconName = 'NVHaruM' as IconType;
               break;
             case RouteName.Mypage:
@@ -68,47 +101,7 @@ function TabNavigator() {
         tabBarInactiveTintColor: Colors.grayScale200,
       })}
     >
-      <Tab.Screen
-        name={RouteName.HomeStack}
-        component={HomeStack}
-        options={{
-          tabBarButton: () => null,
-          tabBarStyle: { display: 'none' },
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name={RouteName.Mainpage}
-        component={Mainpage}
-        options={{ headerShown: false, title: '홈' }}
-      />
-      <Tab.Screen
-        name={RouteName.Mypage}
-        component={Mypage}
-        options={{
-          title: '내 정보',
-          tabBarStyle: { display: 'none' },
-          headerTitleAlign: 'center',
-        }}
-      />
-      <Tab.Screen
-        name={RouteName.MakingPage}
-        component={MakingPage}
-        options={{
-          title: '나의 하루동선',
-          tabBarButton: () => null,
-          tabBarStyle: { display: 'none' },
-        }}
-      />
-      <Tab.Screen
-        name={RouteName.CalendarPage}
-        component={Calendarpage}
-        options={{
-          title: '날짜 등록',
-          tabBarButton: () => null,
-          tabBarStyle: { display: 'none' },
-        }}
-      />
+      {authorized ? AUTHORIZED_SCREENS : UNAUTHORIZED_SCREENS}
     </Tab.Navigator>
   );
 }

@@ -1,91 +1,91 @@
-import axios from "axios";
-import { GOOGLE_API_KEY } from "@env";
+import axios from 'axios';
+import { GOOGLE_API_KEY } from '@env';
 
 export interface LanguageWithText {
-    text: string;
-    languageCode: string;
+  text: string;
+  languageCode: string;
 }
 
 export interface GooglePlace {
-    id: string;
-    formattedAddress: string;
-    displayName: LanguageWithText;
-    primaryTypeDisplayName?: LanguageWithText;
+  id: string;
+  formattedAddress: string;
+  displayName: LanguageWithText;
+  primaryTypeDisplayName?: LanguageWithText;
 }
 
 export interface Coordinate {
-    latitude: number;
-    longitude: number;
+  latitude: number;
+  longitude: number;
 }
 
 export interface Time {
-    openNow: boolean;
-    periods: any;
-    weekdayDescriptions: string[];
+  openNow: boolean;
+  periods: any;
+  weekdayDescriptions: string[];
 }
 
 export interface Photo {
-    name: string;
+  name: string;
 }
 
 export interface PlaceInfo {
-    id: string;
-    displayName: LanguageWithText;
-    location: Coordinate;
-    formattedAddress: string;
-    nationalPhoneNumber?: string;
-    primaryTypeDisplayName?: LanguageWithText;
-    parkingOptions?: boolean;
-    reservable?: boolean;
-    websiteUri?: string;
-    currentOpeningHours?: Time;
-    photos?: Photo[];
+  id: string;
+  displayName: LanguageWithText;
+  location: Coordinate;
+  formattedAddress: string;
+  nationalPhoneNumber?: string;
+  primaryTypeDisplayName?: LanguageWithText;
+  parkingOptions?: boolean;
+  reservable?: boolean;
+  websiteUri?: string;
+  currentOpeningHours?: Time;
+  photos?: Photo[];
 }
 
 export const getGooglePlaces = async (
-    query: string,
+  query: string,
 ): Promise<GooglePlace[]> => {
-    const apiURL = `https://places.googleapis.com/v1/places:searchText`;
-    const headers = {
-        "X-Goog-Api-Key": GOOGLE_API_KEY,
-        "Content-Type": "application/json",
-        "X-Goog-FieldMask":
-            "places.id,places.displayName,places.formattedAddress,places.primaryTypeDisplayName",
-    };
-    const data = {
-        textQuery: query,
-    };
+  const apiURL = `https://places.googleapis.com/v1/places:searchText`;
+  const headers = {
+    'X-Goog-Api-Key': GOOGLE_API_KEY,
+    'Content-Type': 'application/json',
+    'X-Goog-FieldMask':
+      'places.id,places.displayName,places.formattedAddress,places.primaryTypeDisplayName',
+  };
+  const data = {
+    textQuery: query,
+  };
 
-    try {
-        const response = await axios.post(apiURL, data, {
-            headers,
-        });
-        return response.data.places;
-    } catch (error) {
-        console.error("Error fetching places:", error);
-        throw error;
-    }
+  try {
+    const response = await axios.post(apiURL, data, {
+      headers,
+    });
+    return response.data.places;
+  } catch (error) {
+    console.error('Error fetching places:', error);
+    throw error;
+  }
 };
 
 export const getGooglePlaceDetail = async (
-    placeId: string,
+  placeId: string,
 ): Promise<PlaceInfo> => {
-    const apiURL = `https://places.googleapis.com/v1/places/${placeId}`;
+  const apiURL = `https://places.googleapis.com/v1/places/${placeId}`;
 
-    const headers = {
-        "X-Goog-Api-Key": GOOGLE_API_KEY,
-        "Content-Type": "application/json",
-        "X-Goog-FieldMask":
-            "id,displayName,formattedAddress,nationalPhoneNumber,location,primaryTypeDisplayName,parkingOptions,reservable,websiteUri,currentOpeningHours,photos",
-    };
+  const headers = {
+    'X-Goog-Api-Key': GOOGLE_API_KEY,
+    'Content-Type': 'application/json',
+    'X-Goog-FieldMask':
+      'id,displayName,formattedAddress,nationalPhoneNumber,location,primaryTypeDisplayName,parkingOptions,reservable,websiteUri,currentOpeningHours,photos',
+  };
 
-    try {
-        const response = await axios.get(apiURL, {
-            headers,
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching places:", error);
-        throw error;
-    }
+  try {
+    const response = await axios.get(apiURL, {
+      headers,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching places:', error);
+    throw error;
+  }
 };

@@ -1,4 +1,4 @@
-package com.ki7348.HaruDongseon
+package com.harudongseon.harudongseon
 
 import android.os.Build
 import android.os.Bundle

@@ -3,7 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import { RouteName, RouteParamList, Tab } from '@/types/route';
+import { RouteName, RouteParamList } from '@/types/route';
 import LoginScreen from '@/screens/LoginScreen';
 
 const Stack = createStackNavigator<RouteParamList>();

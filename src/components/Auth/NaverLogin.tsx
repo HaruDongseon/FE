@@ -28,7 +28,7 @@ const NaverLogin: React.FC<{
         code: requestCode,
         state: Math.random().toString(36).substring(3, 14),
       });
-      const accessToken = await oauthLogin({
+      const { accessToken } = await oauthLogin({
         loginType: 'naver',
         token,
         deviceId: '123',

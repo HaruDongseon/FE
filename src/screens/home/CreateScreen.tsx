@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { View, StyleSheet, Keyboard, Text, Pressable } from 'react-native';
 import Toggle from '@/components/Toggle/Toggle';
 import Frame from '@/components/Frame/Frame';
@@ -12,15 +12,9 @@ import { debounce } from 'es-toolkit';
 import Map from '@/components/Map';
 import { RouteName, Tab } from '@/types/route';
 
-export type MypageParams = {
-  Makingpage: {
-    date: string;
-  };
-};
-
 type TransportType = '대중교통' | '도보' | '자전거' | '자동차';
 
-const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
+const CreateScreen: Tab<RouteName.Create> = ({ navigation, route }) => {
   const date = route.params?.date;
   const [firstToggleOpen, setFirstToggleOpen] = useState(true);
   const [tagInputFocused, setTagInputFocused] = useState(false);
@@ -120,7 +114,7 @@ const Makingpage: Tab<RouteName.MakingPage> = ({ navigation, route }) => {
                 size={'M'}
                 readOnly={true}
                 defaultValue={formatDate(date)}
-                onTouchStart={() => navigation.navigate(RouteName.CalendarPage)}
+                onTouchStart={() => navigation.navigate(RouteName.Calendar)}
               />
             </Frame>
             <Frame title="제목">
@@ -269,4 +263,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Makingpage;
+export default memo(CreateScreen);

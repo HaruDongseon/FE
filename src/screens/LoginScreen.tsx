@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import LoginButton, { SNSType } from '@/components/Button/LoginButton';
 import Logo from '@/components/icon/Logo/Logo';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import KakaoLogin from '@/components/Auth/KakaoLogin';
 import NaverLogin from '@/components/Auth/NaverLogin';
 import { RouteName, Screen } from '@/types/route';
 
-export const Home: Screen<RouteName.Home> = () => {
+const LoginScreen: Screen<RouteName.Login> = () => {
   const [loginVisible, setLoginVisible] = useState<SNSType | null>(null);
 
   return (
@@ -47,6 +47,8 @@ export const Home: Screen<RouteName.Home> = () => {
     </SafeAreaView>
   );
 };
+
+export default memo(LoginScreen);
 
 const styles = StyleSheet.create({
   safeArea: {

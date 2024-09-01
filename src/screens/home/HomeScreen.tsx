@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { StyleSheet, Text, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '@/styles/Color';
@@ -8,7 +8,7 @@ import Icon from '@/components/icon/Common';
 import MonthlyCalendar from '@/components/MonthlyCalendar';
 import { RouteName, Tab } from '@/types/route';
 
-const Mainpage: Tab<RouteName.Mainpage> = ({ navigation: { navigate } }) => {
+const HomeScreen: Tab<RouteName.Home> = ({ navigation: { navigate } }) => {
   const [monthlyCalendarOpen, setMonthlyCalendarOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -16,7 +16,7 @@ const Mainpage: Tab<RouteName.Mainpage> = ({ navigation: { navigate } }) => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.headerContainer}>
         <View style={styles.header}>
-          <Pressable onPress={() => navigate(RouteName.CalendarPage)}>
+          <Pressable onPress={() => navigate(RouteName.Calendar)}>
             <Icon type="AddL" />
           </Pressable>
           <Text style={styles.monthYearText}>
@@ -44,7 +44,7 @@ const Mainpage: Tab<RouteName.Mainpage> = ({ navigation: { navigate } }) => {
       <Button
         color={'Primary'}
         size="l"
-        onPress={() => navigate(RouteName.CalendarPage)}
+        onPress={() => navigate(RouteName.Calendar)}
         title="나의 하루동선 만들기"
         width={216}
         type={'filled'}
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Mainpage;
+export default memo(HomeScreen);

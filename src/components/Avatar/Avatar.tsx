@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { View, StyleSheet, Image, Pressable, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Icon from '../icon/Common';
 import Colors from '@/styles/Color';
 import { uploadUserProfileImage } from '@/apis/member';
+import Icon from '../icon/Common';
 
 interface AvatarProps {
   avatarUrl: string;

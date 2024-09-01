@@ -6,6 +6,11 @@ interface LoginParams {
   deviceId: string;
 }
 
+interface LoginResponse {
+  accessToken: string;
+  isNewMember: boolean;
+}
+
 interface convertCodeToTokenParams {
   grant_type: string;
   client_id: string;
@@ -19,14 +24,14 @@ export const oauthLogin = async ({
   loginType,
   token,
   deviceId,
-}: LoginParams) => {
+}: LoginParams): Promise<LoginResponse> => {
   try {
     const response = await axiosInstance.post(`${API_BASE_URL}/oauth-login`, {
       loginType,
       token,
       deviceId,
     });
-    return response.data.accessToken;
+    return response.data;
   } catch (error) {
     console.error('Login request failed:', error);
     throw error;

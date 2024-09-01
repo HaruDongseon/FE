@@ -4,28 +4,35 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { FC } from 'react';
 
 export enum RouteName {
-  Root = 'Root',
-  Mypage = 'Mypage',
-  Mainpage = 'Mainpage',
+  Splash = 'Splash',
+
+  LoginStack = 'LoginStack',
+  Login = 'Login',
+
   HomeStack = 'HomeStack',
-  MakingPage = 'MakingPage',
-  CalendarPage = 'CalendarPage',
   Home = 'Home',
+  Create = 'Create',
+  Calendar = 'Calendar',
+
+  Mypage = 'Mypage',
   SearchPage = 'SearchPage',
 }
 
 export type RouteParamList = {
-  [RouteName.Root]: undefined;
+  [RouteName.Splash]: undefined;
+
+  [RouteName.LoginStack]: undefined;
+  [RouteName.Login]: undefined;
+
+  [RouteName.HomeStack]: undefined;
   [RouteName.Mypage]: {
     snsType: SNSType;
   };
-  [RouteName.Mainpage]: undefined;
-  [RouteName.HomeStack]: undefined;
-  [RouteName.MakingPage]: {
+  [RouteName.Home]: undefined;
+  [RouteName.Create]: {
     date: string;
   };
-  [RouteName.CalendarPage]: undefined;
-  [RouteName.Home]: undefined;
+  [RouteName.Calendar]: undefined;
   [RouteName.SearchPage]: undefined;
 };
 

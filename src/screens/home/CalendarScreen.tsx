@@ -1,5 +1,5 @@
 import Colors from '@/styles/Color';
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { ScrollView, View, StyleSheet, Dimensions } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
@@ -53,7 +53,7 @@ LocaleConfig.locales['ko'] = {
 };
 LocaleConfig.defaultLocale = 'ko';
 
-const Calendarpage: Tab<RouteName.CalendarPage> = ({ navigation }) => {
+const CalendarScreen: Tab<RouteName.Calendar> = ({ navigation }) => {
   const [currentMonth, setCurrentMonth] = useState(todayDate);
   const [selectedDate, setSelectedDate] = useState(todayDate);
 
@@ -135,7 +135,7 @@ const Calendarpage: Tab<RouteName.CalendarPage> = ({ navigation }) => {
         <Button
           title="날짜 선택"
           onPress={() => {
-            navigation.navigate(RouteName.MakingPage, {
+            navigation.navigate(RouteName.Create, {
               date: selectedDate,
             });
           }}
@@ -183,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Calendarpage;
+export default memo(CalendarScreen);

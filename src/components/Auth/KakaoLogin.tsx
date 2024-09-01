@@ -27,7 +27,7 @@ const KakaoLogin: React.FC<{
         redirect_uri: REDIRECT_URI,
         code: requestCode,
       });
-      const accessToken = await oauthLogin({
+      const { accessToken } = await oauthLogin({
         loginType: 'kakao',
         token,
         deviceId: '123',
